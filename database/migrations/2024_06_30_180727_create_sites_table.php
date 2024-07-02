@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug', 50)->unique();
             $table->enum('document_type', ['cc', 'ce', 'nit', 'ppt']);
             $table->string('document',20);
-            $table->string('logo')->nullable();
+            $table->string('avatar')->nullable();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();

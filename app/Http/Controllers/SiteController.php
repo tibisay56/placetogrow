@@ -16,7 +16,7 @@ class SiteController extends Controller
 
     public function index()
     {
-        $sites = Site::where('user_id', Auth::id())->get();
+        $sites = Site::with('category')->where('user_id', Auth::id())->get();
         return Inertia::render('Site/Index', compact('sites'));
     }
 
@@ -32,15 +32,15 @@ class SiteController extends Controller
     public function store(StoreRequest $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return redirect()->route('avatar');
         }
 
-        $data = $request->except('logo');
+        $data = $request->except('avatar');
 
-        if($request->hasFile('logo')){
-            $file = $request->file('logo');
-            $routeName = $file->store('logos', ['disk'=>'public']);
-            $data['logo'] = $routeName;
+        if($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $routeName = $file->store('avatars', ['disk'=>'public']);
+            $data['avatar'] = $routeName;
         }
         $data['user_id'] = Auth::user()->id;
 
@@ -59,7 +59,10 @@ class SiteController extends Controller
      */
     public function edit(Site $site)
     {
-        return Inertia::render('Site/Edit', compact('site'));
+        return inertia('Site/Edit', [
+            'site' => $site,
+            'categories' => Category::all(),
+        ]);
     }
 
     /**
@@ -67,21 +70,23 @@ class SiteController extends Controller
      */
     public function update(UpdateRequest $request, Site $site)
     {
-        $data = $request->except('logo');
 
-        if($request->hasFile('logo')){
-            $file = $request->file('logo');
-            $routeName = $file->store('logos', ['disk'=>'public']);
-            $data['logo'] = $routeName;
+        $data = $request->except('avatar');
 
-            if($site->logo){
-                Storage::disk('public')->delete($site->logo);
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $routeName = $file->store('avatars', ['disk' => 'public']);
+            $data['avatar'] = $routeName;
+
+            if ($site->avatar) {
+                Storage::disk('public')->delete($site->avatar);
             }
         }
 
         $site->update($data);
 
-        return to_route('site.edit',$site);
+        return to_route('site.index');
+
     }
 
     /**
@@ -89,8 +94,8 @@ class SiteController extends Controller
      */
     public function destroy(Site $site)
     {
-        if($site->logo){
-            Storage::disk('public')->delete($site->logo);
+        if($site->avatar){
+            Storage::disk('public')->delete($site->avatar);
         }
         $site->delete();
         return to_route('site.index');

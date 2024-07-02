@@ -12,17 +12,17 @@ const form = useForm({
     name: "",
     document_type: "",
     document: "",
-    logo: null,
+    avatar: null,
     category_id: "",
     slug: "",
 });
 
-const onSelectLogo = (e) => {
+const onSelectAvatar = (e) => {
     const files = e.target.files;
     if (files.length) {
-        form.logo = files[0];
+        form.avatar = files[0];
     }
-    console.log(form.logo);
+    console.log(form.avatar);
 };
 
 const submit = () => {
@@ -33,8 +33,6 @@ const props = defineProps({
     categories: Array,
 });
 const categories = ref(props.categories);
-
-console.log(categories)
 
 </script>
 
@@ -90,9 +88,9 @@ console.log(categories)
                             <InputError class="mt-2" :message="form.errors.document" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="logo" value="Logo" />
-                            <FileInput name="logo" @change="onSelectLogo"/>
-                            <InputError class="mt-2" :message="form.errors.logo" />
+                            <InputLabel for="avatar" value="avatar" />
+                            <FileInput name="avatar" @change="onSelectAvatar"/>
+                            <InputError class="mt-2" :message="form.errors.avatar" />
                         </div>
                         <div class="flex justify-center">
                             <PrimaryButton>

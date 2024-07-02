@@ -53,10 +53,10 @@ const onDeleteSuccess = (e) => {
                                     {{site.name}}
                                 </th>
                                 <td className="px-6 py-4">
-                                    {{site.document}}
+                                    {{site.category.name}}
                                 </td>
                                 <td className="px-6 py-4">
-                                    <img class="h-16" :src="`/storage/${site.logo}`"/>
+                                    <img class="h-16" :src="`/storage/${site.avatar}`"/>
                                 </td>
                                 <td className="px-6 py-4">
                                     <div class="space-x-4">
