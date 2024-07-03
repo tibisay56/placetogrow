@@ -32,7 +32,10 @@ const submit = () => {
 const props = defineProps({
     types: Array,
 });
+
+
 const types = ref(props.types);
+const currencies = ref(['COP', 'USD']);
 
 </script>
 
@@ -75,8 +78,7 @@ const types = ref(props.types);
                             <InputLabel for="currency" value="Currency" />
                             <select v-model="form.currency" name="currency" id="currency"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option value="COP">COP</option>
-                                <option value="USD">USD</option>
+                                <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.currency" />
                         </div>

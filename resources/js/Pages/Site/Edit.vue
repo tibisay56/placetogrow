@@ -11,6 +11,7 @@ import { ref } from 'vue';
 const page = usePage();
 const site = ref(page.props.site);
 const types = ref(page.props.types);
+const currencies = ref(['COP', 'USD']);
 
 const form = useForm({
     name: site.value.name,
@@ -81,8 +82,7 @@ const props = defineProps({
                             <InputLabel for="currency" value="Currency" />
                             <select v-model="form.currency" name="currency" id="currency"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option value="COP">COP</option>
-                                <option value="USD">USD</option>
+                                <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.currency" />
                         </div>
