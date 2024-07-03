@@ -43,8 +43,8 @@ class SiteController extends Controller
 
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
-            $routeName = $file->store('avatars', ['disk'=>'public']);
-            $data['avatar'] = $routeName;
+            $path = $file->store('avatars', ['disk'=>'public']);
+            $data['avatar'] = $path;
         }
         $data['user_id'] = Auth::user()->id;
 
@@ -79,8 +79,8 @@ class SiteController extends Controller
 
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
-            $routeName = $file->store('avatars', ['disk' => 'public']);
-            $data['avatar'] = $routeName;
+            $path = $file->store('avatars', ['disk' => 'public']);
+            $data['avatar'] = $path;
 
             if ($site->avatar) {
                 Storage::disk('public')->delete($site->avatar);
