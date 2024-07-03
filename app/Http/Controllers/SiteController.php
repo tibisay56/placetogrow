@@ -6,32 +6,36 @@ use App\Http\Requests\Site\StoreRequest;
 use App\Http\Requests\Site\UpdateRequest;
 use App\Models\Category;
 use App\Models\Site;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SiteController extends Controller
 {
 
-    public function index()
+    public function index(): Response
     {
         $sites = Site::with('category')->where('user_id', Auth::id())->get();
+
         return Inertia::render('Site/Index', compact('sites'));
     }
 
-    public function create()
+    public function create(): Response
     {
         $categories = Category::all();
+
         return Inertia::render('Site/Create', [
             'categories' => $categories,
         ]);
 
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         if (!Auth::check()) {
+
             return redirect()->route('avatar');
         }
 
@@ -49,7 +53,7 @@ class SiteController extends Controller
         return to_route('site.index');
     }
 
-    public function show(Site $site)
+    public function show(Site $site): Response
     {
         return Inertia::render('Site/Show', compact('site'));
     }
@@ -57,7 +61,7 @@ class SiteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Site $site)
+    public function edit(Site $site): Response
     {
         return inertia('Site/Edit', [
             'site' => $site,
@@ -68,7 +72,7 @@ class SiteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, Site $site)
+    public function update(UpdateRequest $request, Site $site): RedirectResponse
     {
 
         $data = $request->except('avatar');
@@ -92,12 +96,13 @@ class SiteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Site $site)
+    public function destroy(Site $site): RedirectResponse
     {
         if($site->avatar){
             Storage::disk('public')->delete($site->avatar);
         }
         $site->delete();
+
         return to_route('site.index');
     }
 }
