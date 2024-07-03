@@ -59,10 +59,12 @@ class SiteController extends Controller
     public function show(Site $site): Response
     {
         $types = TypeName::toArray();
+        $currencies = CurrencyType::toArray();
 
         return Inertia::render('Site/Show', [
             'site' => $site,
             'types' => $types,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -72,10 +74,12 @@ class SiteController extends Controller
     public function edit(Site $site): Response
     {
         $types = TypeName::toArray();
+        $currencies = CurrencyType::toArray();
 
         return Inertia::render('Site/Edit', [
             'site' => $site,
             'types' => $types,
+            'currencies' => $currencies,
         ]);
     }
 

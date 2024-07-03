@@ -11,7 +11,7 @@ import { ref } from 'vue';
 const page = usePage();
 const site = ref(page.props.site);
 const types = ref(page.props.types);
-const currencies = ref(['COP', 'USD']);
+const currencies = ref(page.props.currencies);
 
 const form = useForm({
     name: site.value.name,
@@ -38,6 +38,7 @@ const submit = () => {
 }
 const props = defineProps({
     types: Array,
+    currencies: Array,
 });
 
 

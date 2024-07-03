@@ -9,7 +9,7 @@ import { ref } from 'vue';
 const page = usePage()
 const site = ref(page.props.site);
 const types = ref(page.props.types);
-const currencies = ref(['COP', 'USD']);
+const currencies = ref(page.props.currencies);
 
 console.log('types:', types.value);
 
@@ -25,6 +25,7 @@ const form = useForm(initialValues);
 
 const props = defineProps({
     types: Array,
+    currencies: Array,
 });
 
 </script>

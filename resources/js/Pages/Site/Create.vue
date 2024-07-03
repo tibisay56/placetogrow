@@ -93,9 +93,9 @@ const props = defineProps({
     currencies: Array,
 });
 
-
 const types = ref(props.types);
 const currencies = ref(props.currencies);
+
 </script>
 
 
