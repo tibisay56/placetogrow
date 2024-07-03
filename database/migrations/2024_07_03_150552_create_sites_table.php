@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\CurrencyType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,11 +15,11 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('slug', 50)->unique();
-            $table->enum('document_type', ['cc', 'ce', 'nit', 'ppt']);
-            $table->string('document', 20);
             $table->string('avatar')->nullable();
-            $table->foreignId('category_id')->constrained();
+            $table->string('category', 100);
+            $table->enum('currency', array_column(CurrencyType::cases(), 'name'));
+            $table->integer('payment_expiration_time')->default(1440);
+            $table->foreignId('type_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

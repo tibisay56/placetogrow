@@ -37,10 +37,10 @@ const onDeleteSuccess = (e) => {
                                     Name
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Category
+                                    Type
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Avatar
+                                    Logo
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Actions
@@ -53,7 +53,7 @@ const onDeleteSuccess = (e) => {
                                     {{site.name}}
                                 </th>
                                 <td className="px-6 py-4">
-                                    {{site.category.name}}
+                                    {{site.type.name}}
                                 </td>
                                 <td className="px-6 py-4">
                                     <img class="h-16" :src="`/storage/${site.avatar}`"/>

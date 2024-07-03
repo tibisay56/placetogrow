@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,34 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Site extends Model
 {
     use HasFactory;
-    use Sluggable;
 
     protected $fillable = [
-        'category_id',
-        'slug',
         'name',
-        'document_type',
-        'document',
         'avatar',
+        'category',
+        'currency',
+        'payment_expiration_time',
+        'type_id',
         'user_id',
     ];
 
-    public function category(): BelongsTo
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Type::class);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'name',
-            ],
-        ];
-    }
 }

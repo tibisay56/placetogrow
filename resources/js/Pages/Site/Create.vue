@@ -10,10 +10,11 @@ import {ref} from 'vue';
 
 const form = useForm({
     name: "",
-    document_type: "",
-    document: "",
     avatar: null,
-    category_id: "",
+    type_id: "",
+    category: "",
+    currency: "",
+    payment_expiration_time: 30,
 });
 
 const onSelectAvatar = (e) => {
@@ -29,9 +30,9 @@ const submit = () => {
 };
 
 const props = defineProps({
-    categories: Array,
+    types: Array,
 });
-const categories = ref(props.categories);
+const types = ref(props.types);
 
 </script>
 
@@ -58,36 +59,34 @@ const categories = ref(props.categories);
                             <InputError class="mt-2" :message="form.errors.name" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="category_id" value="Category" />
-                            <select v-model="form.category_id" name="category_id" id="category_id"
+                            <InputLabel for="type_id" value="Type" />
+                            <select v-model="form.type_id" name="type_id" id="type_id"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                                <option v-for="(value,key) in types" :key="key" :value="key">{{ value }}</option>
                             </select>
-                            <InputError class="mt-2" :message="form.errors.category_id" />
+                            <InputError class="mt-2" :message="form.errors.type_id" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="slug" value="Slug" />
-                            <TextInput id="slug" type="text" class="mt-1 block w-full" v-model="form.slug" autocomplete="slug" placeholder="Slug"/>
-                            <InputError class="mt-2" :message="form.errors.slug" />
+                            <InputLabel for="category" value="Category" />
+                            <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" />
+                            <InputError class="mt-2" :message="form.errors.category" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="document_type" value="Document Type" />
-                            <select v-model="form.document_type" name="document_type" id="document_type"
+                            <InputLabel for="currency" value="Currency" />
+                            <select v-model="form.currency" name="currency" id="currency"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option value="cc">CC</option>
-                                <option value="ce">CE</option>
-                                <option value="nit">NIT</option>
-                                <option value="ppt">PPT</option>
+                                <option value="COP">COP</option>
+                                <option value="USD">USD</option>
                             </select>
-                            <InputError class="mt-2" :message="form.errors.document_type" />
+                            <InputError class="mt-2" :message="form.errors.currency" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="document" value="Document" />
-                            <TextInput id="document" type="text" class="mt-1 block w-full" v-model="form.document"/>
-                            <InputError class="mt-2" :message="form.errors.document" />
+                            <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
+                            <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
+                            <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                         </div>
                         <div class="mt-4">
-                            <InputLabel for="avatar" value="avatar" />
+                            <InputLabel for="avatar" value="Logo" />
                             <FileInput name="avatar" @change="onSelectAvatar"/>
                             <InputError class="mt-2" :message="form.errors.avatar" />
                         </div>

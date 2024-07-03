@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\TypeName;
 use App\Http\Requests\Site\StoreRequest;
 use App\Http\Requests\Site\UpdateRequest;
-use App\Models\Category;
+use App\Models\Type;
 use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -16,17 +17,17 @@ class SiteController extends Controller
 {
     public function index(): Response
     {
-        $sites = Site::with('category')->where('user_id', Auth::id())->get();
+        $sites = Site::with('type')->where('user_id', Auth::id())->get();
 
         return Inertia::render('Site/Index', compact('sites'));
     }
 
     public function create(): Response
     {
-        $categories = Category::all();
+        $types = TypeName::toArray();
 
         return Inertia::render('Site/Create', [
-            'categories' => $categories,
+            'types' => $types,
         ]);
 
     }
@@ -54,7 +55,12 @@ class SiteController extends Controller
 
     public function show(Site $site): Response
     {
-        return Inertia::render('Site/Show', compact('site'));
+        $types = TypeName::toArray();
+
+        return Inertia::render('Site/Show', [
+            'site' => $site,
+            'types' => $types,
+        ]);
     }
 
     /**
@@ -62,9 +68,11 @@ class SiteController extends Controller
      */
     public function edit(Site $site): Response
     {
-        return inertia('Site/Edit', [
+        $types = TypeName::toArray();
+
+        return Inertia::render('Site/Edit', [
             'site' => $site,
-            'categories' => Category::all(),
+            'types' => $types,
         ]);
     }
 
