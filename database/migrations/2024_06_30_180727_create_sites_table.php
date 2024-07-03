@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100);
+            $table->string('name', 100);
             $table->string('slug', 50)->unique();
             $table->enum('document_type', ['cc', 'ce', 'nit', 'ppt']);
-            $table->string('document',20);
+            $table->string('document', 20);
             $table->string('avatar')->nullable();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('user_id')->constrained();

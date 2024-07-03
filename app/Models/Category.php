@@ -13,9 +13,9 @@ class Category extends Model
     protected $fillable = [
         'name',
     ];
+
     public function sites(): HasMany
     {
         return $this->hasMany(Site::class);
     }
-
 }

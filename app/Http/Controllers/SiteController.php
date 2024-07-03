@@ -14,7 +14,6 @@ use Inertia\Response;
 
 class SiteController extends Controller
 {
-
     public function index(): Response
     {
         $sites = Site::with('category')->where('user_id', Auth::id())->get();
@@ -34,16 +33,16 @@ class SiteController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
 
             return redirect()->route('avatar');
         }
 
         $data = $request->except('avatar');
 
-        if($request->hasFile('avatar')){
+        if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
-            $path = $file->store('avatars', ['disk'=>'public']);
+            $path = $file->store('avatars', ['disk' => 'public']);
             $data['avatar'] = $path;
         }
         $data['user_id'] = Auth::user()->id;
@@ -98,7 +97,7 @@ class SiteController extends Controller
      */
     public function destroy(Site $site): RedirectResponse
     {
-        if($site->avatar){
+        if ($site->avatar) {
             Storage::disk('public')->delete($site->avatar);
         }
         $site->delete();
@@ -106,5 +105,3 @@ class SiteController extends Controller
         return to_route('site.index');
     }
 }
-
-

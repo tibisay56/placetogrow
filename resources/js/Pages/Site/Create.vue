@@ -14,7 +14,6 @@ const form = useForm({
     document: "",
     avatar: null,
     category_id: "",
-    slug: "",
 });
 
 const onSelectAvatar = (e) => {

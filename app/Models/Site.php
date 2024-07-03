@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Cviebrock\EloquentSluggable\Sluggable;
 
 class Site extends Model
 {
@@ -21,10 +21,12 @@ class Site extends Model
         'avatar',
         'user_id',
     ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -39,5 +41,3 @@ class Site extends Model
         ];
     }
 }
-
-
