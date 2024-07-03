@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\CurrencyType;
 use App\Constants\TypeName;
 use App\Http\Requests\Site\StoreRequest;
 use App\Http\Requests\Site\UpdateRequest;
@@ -25,9 +26,11 @@ class SiteController extends Controller
     public function create(): Response
     {
         $types = TypeName::toArray();
+        $currencies = CurrencyType::toArray();
 
         return Inertia::render('Site/Create', [
             'types' => $types,
+            'currencies' => $currencies,
         ]);
 
     }
