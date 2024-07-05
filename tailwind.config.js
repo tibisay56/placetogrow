@@ -8,7 +8,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-
+        './node_modules/preline/preline.js',
     ],
 
     theme: {
@@ -19,5 +19,8 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        require('preline/plugin'),
+        require('@tailwindcss/forms'),
+    ],
 };
