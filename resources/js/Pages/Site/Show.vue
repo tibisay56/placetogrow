@@ -64,7 +64,7 @@ const props = defineProps({
                             <InputLabel for="type_id" value="Type" />
                             <select v-model="form.type_id" name="type_id" id="type_id"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option v-for="(name, id) in types" :key="id" :value="id">{{ name }}</option>
+                                <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ type }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.type_id" />
                         </div>

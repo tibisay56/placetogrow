@@ -19,7 +19,7 @@
                             <InputLabel for="type_id" value="Type" />
                             <select v-model="form.type_id" name="type_id" id="type_id"
                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option v-for="(value,key) in types" :key="key" :value="key">{{ value }}</option>
+                                <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ type }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.type_id" />
                         </div>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="mt-4">
                             <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
-                            <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
+                            <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="text" class="mt-1 block w-full"  />
                             <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                         </div>
                         <div class="mt-4">
@@ -73,7 +73,7 @@ const form = useForm({
     type_id: "",
     category: "",
     currency: "",
-    payment_expiration_time: 30,
+    payment_expiration_time: "",
 });
 
 const onSelectAvatar = (e) => {
