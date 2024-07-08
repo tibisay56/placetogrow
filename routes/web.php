@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -64,6 +65,9 @@ Route::prefix('role')->middleware('auth')->group(function () {
 
 
 //Lang
-Route::get('lang/{locale}', [LangController::class, 'change'])->name('changeLang');
+Route::get('/language/{language}', function ($language) {
+    Session::put('locale', $language);
+    return redirect()->back();
+})->name('language');
 
 require __DIR__.'/auth.php';

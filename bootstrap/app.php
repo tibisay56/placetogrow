@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
         ]);
         $middleware->web(append: [
-            App\Http\Middleware\LanguageManager::class
+            App\Http\Middleware\TranslationsMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

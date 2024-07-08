@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
-class LanguageManager
+class TranslationsMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,9 @@ class LanguageManager
      */
     public function handle(Request $request, Closure $next): Response
     {
+        app()->setLocale(config('app.locale'));
         if(session()->has('locale')) {
-            App::setLocale(session()->get('locale'));
+            app::setLocale(session('locale'));
         }
 
         return $next($request);
