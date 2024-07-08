@@ -14,8 +14,11 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (TypeName::cases() as $type) {
-            Type::create(['name' => $type->value]);
-        }
+        $types = array_map(function (string $name) {
+
+            return ['name' => $name, 'created_at' => now()];
+        }, TypeName::toArray());
+
+        Type::insert($types);
     }
 }
