@@ -4,9 +4,9 @@ namespace App\Constants;
 
 enum TypeName: string
 {
-    case BASIC = 'basic';
-    case INVOICING = 'invoicing';
-    case SUBSCRIPTIONS = 'subscriptions';
+    case BASIC = 'Basic';
+    case INVOICING = 'Invoicing';
+    case SUBSCRIPTIONS = 'Subscriptions';
 
     public static function toArray(): array
     {
@@ -16,9 +16,9 @@ enum TypeName: string
     public function text(): string
     {
         return match ($this) {
-            self::BASIC => trans('types.basic'),
-            self::INVOICING => trans('types.invoicing'),
-            self::SUBSCRIPTIONS => trans('types.subscriptions'),
+            self::BASIC => trans('types.Basic'),
+            self::INVOICING => trans('types.Invoicing'),
+            self::SUBSCRIPTIONS => trans('types.Subscriptions'),
         };
     }
 }
