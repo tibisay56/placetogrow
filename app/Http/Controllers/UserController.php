@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,39 +15,40 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        return inertia('Users/Index', [
-            'users' => User::all(),
+        $users = User::all();
+
+        return inertia('User/Index', [
+            'users' => $users,
         ]);
     }
 
     public function create(): Response
     {
-        return inertia('Users/Create');
+        return inertia('User/Create');
     }
 
-    public function store(StoreUserRequest $request): Response
+    public function store(StoreUserRequest $request): \Illuminate\Http\RedirectResponse
     {
         $user = new User();
-        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make('password');
         $user->save();
 
-        return Redirect::route('users')->with('success', 'User created.');
+        return to_route('user.index');
     }
     public function show(User $user): Response
     {
-        return inertia('Users/Show', [
+        return inertia('User/Show', [
             'user' => $user,
         ]);
     }
 
     public function edit(User $user): Response
     {
-        return inertia('Users/Edit', [
+        return inertia('User/Edit', [
             'user' => [
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
+                'name' => $user->name,
                 'email' => $user->email,
             ]
         ]);
@@ -61,14 +62,14 @@ class UserController extends Controller
             'email' => $request->input('email'),
         ]);
 
-        return redirect()->route('users.show', ['user' => $user->id]);
+        return redirect()->route('user.show', ['user' => $user->id]);
     }
 
     public function destroy(User $user): Response
     {
         $user->delete();
 
-        return inertia('Users/Index');
+        return inertia('User/Index');
     }
 }
 

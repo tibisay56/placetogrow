@@ -1,5 +1,5 @@
 <template>
-    <Head title="Create Sites" />
+    <Head title="Create Roles" />
     <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
@@ -14,23 +14,23 @@
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            Create Roles
+                                            {{ $t('Create Roles') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            Add roles, edit and more.
+                                            {{ $t('Add roles, edit and more.') }}
                                         </p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('site.index')">
+                                            <Link :href="route('role.index')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                View all
+                                                {{ $t('View all') }}
                                             </a>
                                             </Link>
-                                            <Link :href="route('site.create')">
+                                            <Link :href="route('role.create')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                    Add site
+                                                    {{ $t('Add role') }}
                                                 </a>
                                             </Link>
                                         </div>
@@ -46,39 +46,14 @@
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel for="type_id" value="Type" />
-                                                <select v-model="form.type_id" name="type_id" id="type_id"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option v-for="(value,key) in types" :key="key" :value="key">{{ value }}</option>
-                                                </select>
-                                                <InputError class="mt-2" :message="form.errors.type_id" />
+                                                <InputLabel for="status" value="Status" />
+                                                <TextInput v-model="form.status" id="category" type="text" class="mt-1 block w-full"  />
+                                                <InputError class="mt-2" :message="form.errors.status" />
                                             </div>
-                                            <div class="mt-4">
-                                                <InputLabel for="category" value="Category" />
-                                                <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  />
-                                                <InputError class="mt-2" :message="form.errors.category" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel for="currency" value="Currency" />
-                                                <select v-model="form.currency" name="currency" id="currency"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option v-for="(currency, key) in currencies" :key="key" :value="key">{{ currency }}</option>
-                                                </select>
-                                                <InputError class="mt-2" :message="form.errors.currency" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
-                                                <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
-                                                <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel for="avatar" value="Logo" />
-                                                <FileInput name="avatar" @change="onSelectAvatar"/>
-                                                <InputError class="mt-2" :message="form.errors.avatar" />
-                                            </div>
+
                                             <div class="flex justify-center">
                                                 <PrimaryButton>
-                                                    Create Site
+                                                    Create Role
                                                 </PrimaryButton>
                                             </div>
                                         </form>
@@ -107,32 +82,12 @@ import Layout from "@/Components/Layout.vue";
 
 const form = useForm({
     name: "",
-    avatar: null,
-    type_id: "",
-    category: "",
-    currency: "",
-    payment_expiration_time: 30,
 });
-
-const onSelectAvatar = (e) => {
-    const files = e.target.files;
-    if (files.length) {
-        form.avatar = files[0];
-    }
-    console.log(form.avatar);
-};
 
 const submit = () => {
-    form.post(route('site.store'));
+    form.post(route('role.store'));
 };
 
-const props = defineProps({
-    types: Array,
-    currencies: Array,
-});
-
-const types = ref(props.types);
-const currencies = ref(props.currencies);
 
 </script>
 

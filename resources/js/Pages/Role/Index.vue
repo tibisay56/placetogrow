@@ -7,10 +7,10 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
-const sites = ref(page.props.sites);
+const roles = ref(page.props.roles);
 const onDeleteSuccess = (e) => {
     console.log(e)
-    sites.value = e.props.sites;
+    roles.value = e.props.roles;
 }
 
 
@@ -31,23 +31,24 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            Roles
+                                            {{ $t('Roles') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            Add roles, edit and more.
+                                            {{ $t('Add roles, edit and more.') }}
                                         </p>
                                     </div>
 
                                     <div>
                                         <div class="inline-flex gap-x-2">
+                                            <Link :href="route('role.index')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                View all
+                                                {{ $t('View all') }}
                                             </a>
-
-                                            <Link :href="route('site.create')">
+                                        </Link>
+                                            <Link :href="route('role.create')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                Add site
+                                                {{ $t('Add role') }}
                                             </a>
                                             </Link>
                                         </div>
@@ -69,7 +70,7 @@ const onDeleteSuccess = (e) => {
                                         <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                Name
+                                                {{ $t('Name') }}
                                               </span>
                                             </div>
                                         </th>
@@ -77,31 +78,7 @@ const onDeleteSuccess = (e) => {
                                         <th scope="col" class="px-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                Type
-                                              </span>
-                                            </div>
-                                        </th>
-
-                                        <th scope="col" class="px-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                Category
-                                              </span>
-                                            </div>
-                                        </th>
-
-                                        <th scope="col" class="px-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                Logo
-                                              </span>
-                                            </div>
-                                        </th>
-
-                                        <th scope="col" class="px-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                Currency
+                                                {{ $t('Status') }}
                                               </span>
                                             </div>
                                         </th>
@@ -111,7 +88,7 @@ const onDeleteSuccess = (e) => {
                                     </thead>
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                    <tr v-for="site in sites">
+                                    <tr v-for="role in roles">
                                         <td class="size-px whitespace-nowrap">
                                             <div class="ps-6 py-3">
                                                 <label for="hs-at-with-checkboxes-1" class="flex">
@@ -124,36 +101,24 @@ const onDeleteSuccess = (e) => {
                                             <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                                 <div class="flex items-center gap-x-3">
                                                     <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{site.name}}</span>
+                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{role.name}}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="h-px w-72 whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{site.type.name}}</span>
-                                            </div>
-                                        </td>
+
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
                                               <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                 <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                                 </svg>
-                                                {{site.category}}
+                                                {{role.status}}
                                               </span>
                                             </div>
                                         </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <img class="inline-block size-[38px] rounded-full" :src="`/storage/${site.avatar}`"/>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="text-sm text-gray-500 dark:text-neutral-500">{{site.currency}}</span>
-                                            </div>
-                                        </td>
+
+
                                         <td class="size-px whitespace-nowrap">
                                             <Dropdown align="right" width="48">
                                                 <template #trigger>
@@ -162,7 +127,7 @@ const onDeleteSuccess = (e) => {
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                Actions
+                                                {{ $t('Actions') }}
 
                                                 <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
@@ -181,9 +146,9 @@ const onDeleteSuccess = (e) => {
                                                 </template>
 
                                                 <template #content>
-                                                    <DropdownLink :href="route('site.show', site)"> Show </DropdownLink>
-                                                    <DropdownLink :href="route('site.edit', site)"> Edit </DropdownLink>
-                                                    <DropdownLink @success="onDeleteSuccess" :href="route('site.destroy', site)" method="delete" as="button">
+                                                    <DropdownLink :href="route('role.show', role)"> Show </DropdownLink>
+                                                    <DropdownLink :href="route('role.edit', role)"> Edit </DropdownLink>
+                                                    <DropdownLink @success="onDeleteSuccess" :href="route('role.destroy', role)" method="delete" as="button">
                                                         Delete
                                                     </DropdownLink>
                                                 </template>
@@ -198,18 +163,18 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> results
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> {{ $t('results') }}
                                         </p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
                                             <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                                                Prev
+                                                {{ $t('Prev') }}
                                             </button>
 
                                             <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                Next
+                                                {{ $t('Next') }}
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                                             </button>
                                         </div>

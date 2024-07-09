@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -30,14 +31,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Users
+//User
 Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('user.index');
-    Route::get('users/create', [UserController::class, 'create'])->name('site.create');
-    Route::post('users/create', [UserController::class, 'store'])->name('site.store');
-    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('site.edit');
-    Route::patch('users/{user}', [UserController::class, 'update'])->name('site.update');
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('site.destroy');
+    Route::get('users/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('users/create', [UserController::class, 'store'])->name('user.store');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('users/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 });
 
 //Sites
@@ -51,7 +53,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::delete('sites/{site}', [SiteController::class, 'destroy'])->name('site.destroy');
 });
 
-//Roles
+//Role
 Route::prefix('role')->middleware('auth')->group(function () {
     Route::get('roles', [RoleController::class, 'index'])->name('role.index');
     Route::get('roles/create', [RoleController::class, 'create'])->name('role.create');
@@ -62,7 +64,9 @@ Route::prefix('role')->middleware('auth')->group(function () {
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('role.destroy');
 });
 
-
+//Admin
+Route::get('/admin/register', [AdminController::class, 'create'])->name('admin.register');
+Route::post('/admin/register', [AdminController::class, 'store']);
 
 //Lang
 Route::get('/language/{language}', function ($language) {

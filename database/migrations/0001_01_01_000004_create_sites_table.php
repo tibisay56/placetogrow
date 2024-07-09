@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('avatar')->nullable();
             $table->string('category', 100);
-            $table->enum('currency', array_column(CurrencyType::cases(), 'name'));
+            $table->enum('currency', CurrencyType::toArray());
             $table->integer('payment_expiration_time')->default(1440);
             $table->foreignId('type_id')->constrained();
             $table->foreignId('user_id')->constrained();
@@ -33,3 +33,6 @@ return new class extends Migration
         Schema::dropIfExists('sites');
     }
 };
+
+
+
