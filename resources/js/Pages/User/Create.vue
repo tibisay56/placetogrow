@@ -1,5 +1,5 @@
 <template>
-    <Head title="Create Sites" />
+    <Head title="Create Users" />
     <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
@@ -14,23 +14,23 @@
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            {{ $t('Create Sites') }}
+                                            {{ $t('Create Users') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add sites, edit and more.') }}
+                                            {{ $t('Add users, edit and more.') }}
                                         </p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('site.index')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                    {{ $t('View all') }}
-                                                </a>
+                                            <Link :href="route('user.index')">
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
+                                                {{ $t('View all') }}
+                                            </a>
                                             </Link>
-                                            <Link :href="route('site.create')">
+                                            <Link :href="route('user.create')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                    {{ $t('Add site') }}
+                                                    {{ $t('Add user') }}
                                                 </a>
                                             </Link>
                                         </div>
@@ -41,44 +41,33 @@
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                         <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
                                             <div class="mt-4">
-                                                <InputLabel :for="name" :value="$t('Name')" />
+                                                <InputLabel for="first_name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="type_id" :value="$t('Type')" />
-                                                <select v-model="form.type_id" name="type_id" id="type_id"
+                                                <InputLabel for="email" :value="$t('Email')" />
+                                                <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
+                                                <InputError :message="form.errors.email" class="mt-2" />
+                                            </div>
+                                            <div class="mt-4">
+                                                <InputLabel for="role" :value="$t('Role')" />
+                                                <TextInput v-model="form.role" id="role" type="text" class="mt-1 block w-full" autocomplete="role" :placeholder="$t('Role')" />
+                                                <InputError :message="form.errors.role" class="mt-2" />
+                                            </div>
+                                            <div class="mt-4">
+                                                <InputLabel for="status" :value="$t('Status')" />
+                                                <select v-model="form.status" id="status"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
+                                                    <option value="active">{{ $t('Active') }}</option>
+                                                    <option value="inactive">{{ $t('Inactive') }}</option>
+                                                    <option value="pending">{{ $t('Pending') }}</option>
                                                 </select>
-                                                <InputError class="mt-2" :message="form.errors.type_id" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="category" :value="$t('Category')" />
-                                                <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  :placeholder="$t('Category')"/>
-                                                <InputError class="mt-2" :message="form.errors.category" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="currency" :value="$t('Currency')" />
-                                                <select v-model="form.currency" name="currency" id="currency"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option v-for="(currency, key) in currencies" :key="key" :value="key">{{ $t(currency) }}</option>
-                                                </select>
-                                                <InputError class="mt-2" :message="form.errors.currency" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="payment_expiration_time" :value="$t('Payment Expiration Time (in minutes)')" />
-                                                <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
-                                                <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="avatar" :value="$t('Logo')" />
-                                                <FileInput name="avatar" @change="onSelectAvatar"/>
-                                                <InputError class="mt-2" :message="form.errors.avatar" />
+                                                <InputError :message="form.errors.status" class="mt-2" />
                                             </div>
                                             <div class="flex justify-center">
                                                 <PrimaryButton>
-                                                    {{ $t('Create Site') }}
+                                                    {{ $t('Create User') }}
                                                 </PrimaryButton>
                                             </div>
                                         </form>
@@ -96,40 +85,24 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
 
-const form = useForm({
-    name: "",
-    avatar: null,
-    type_id: "",
-    category: "",
-    currency: "",
-    payment_expiration_time: 30,
-});
 
-const onSelectAvatar = (e) => {
-    const files = e.target.files;
-    if (files.length) {
-        form.avatar = files[0];
-    }
-    console.log(form.avatar);
-};
+const form = useForm({
+    name: '',
+    email: '',
+    role: '',
+    status: '',
+});
 
 const submit = () => {
-    form.post(route('site.store'));
+    form.post(route('user.store'));
 };
-
-const props = defineProps({
-    types: Array,
-    currencies: Array,
-});
-
 </script>
 
 

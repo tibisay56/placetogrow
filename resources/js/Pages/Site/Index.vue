@@ -141,7 +141,7 @@ const onDeleteSuccess = (e) => {
                                                 <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                                 </svg>
-                                                {{site.category}}
+                                                {{ $t(site.category) }}
                                               </span>
                                             </div>
                                         </td>
@@ -199,7 +199,7 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> {{ $t('results') }}
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> {{ $t('Results') }}
                                         </p>
                                     </div>
                                     <div>

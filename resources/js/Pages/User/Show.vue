@@ -4,35 +4,23 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
-const page = usePage()
-const site = ref(page.props.site);
-const types = ref(page.props.types);
-const currencies = ref(page.props.currencies);
 
-console.log('types:', types.value);
+const page = usePage();
+const user = ref(page.props.user);
+const roles = ref(page.props.roles);
 
-const initialValues = {
-    name: site.value.name,
-    avatar:null,
-    type_id: site.value.type_id,
-    category: site.value.category,
-    currency: site.value.currency,
-    payment_expiration_time: 30,
-}
-const form = useForm(initialValues);
 
-const props = defineProps({
-    types: Array,
-    currencies: Array,
+const form = useForm({
+    roles_id: user.value.roles ? user.value.roles.map(role => role.id) : [],
 });
 
 </script>
 
 <template>
-    <Head title="Show Sites" />
+    <Head title="Show Users" />
 
     <AuthenticatedLayout>
         <Layout></Layout>
@@ -48,23 +36,23 @@ const props = defineProps({
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            Show Sites
+                                            {{ $t('Show Users') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            Add sites, edit and more.
+                                            {{ $t('Add users, edit and more.') }}
                                         </p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('site.index')">
+                                            <Link :href="route('user.index')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                    View all
+                                                    {{ $t('View all') }}
                                                 </a>
                                             </Link>
-                                            <Link :href="route('site.create')">
+                                            <Link :href="route('user.create')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                    Add site
+                                                    {{ $t('Add user') }}
                                                 </a>
                                             </Link>
                                         </div>
@@ -81,44 +69,33 @@ const props = defineProps({
                                                     leave-active-class="transition ease-in-out"
                                                     leave-to-class="opacity-0"
                                                 >
-                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center" >Site updated</p>
+                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center">User updated</p>
                                                 </Transition>
                                                 <div class="mt-4">
-                                                    <InputLabel for="name" value="Name" />
-                                                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="Name"/>
+                                                    <InputLabel for="name" :value="$t('Name')" />
+                                                    <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="firstname" :placeholder="$t('First name')"/>
                                                     <InputError class="mt-2" :message="form.errors.name" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="type_id" value="Type" />
-                                                    <select v-model="form.type_id" name="type_id" id="type_id"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="(name, id) in types" :key="id" :value="id">{{ name }}</option>
-                                                    </select>
-                                                    <InputError class="mt-2" :message="form.errors.type_id" />
+                                                    <InputLabel for="email" :value="$t('Email')" />
+                                                    <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
+                                                    <InputError :message="form.errors.email" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="category" value="Category" />
-                                                    <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" />
-                                                    <InputError class="mt-2" :message="form.errors.category" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="currency" value="Currency" />
-                                                    <select v-model="form.currency" name="currency" id="currency"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
-                                                    </select>
-                                                    <InputError class="mt-2" :message="form.errors.currency" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
-                                                    <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
-                                                    <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
-                                                </div>
-                                                <div>
-                                                    <img class="h-16" :src="`/storage/${site.avatar}`" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="avatar" value="Logo" />
+                                                    <InputLabel for="roles_id" :value="$t('Roles')" />
+                                                    <div>
+                                                        <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                :id="'role_' + role.id"
+                                                                :value="role.id"
+                                                                v-model="form.roles_id"
+                                                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                            />
+                                                            <label :for="'role_' + role.id">{{ role.name }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <InputError class="mt-2" :message="form.errors.roles_id" />
                                                 </div>
                                             </form>
                                         </div>
@@ -132,4 +109,3 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
-
