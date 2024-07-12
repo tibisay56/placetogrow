@@ -2,28 +2,21 @@
 
 namespace App\Constants;
 
-final class CurrencyType
+enum CurrencyType: string
 {
-    public const COP = 'COP';
-    public const USD = 'USD';
+    case USD = 'USD';
+    case COP = 'COP';
 
     public static function toArray(): array
     {
-        return [
-            self::COP => 'COP',
-            self::USD => 'USD',
-        ];
+        return array_column(self::cases(), 'value');
     }
 
-    public static function text(string $value): string
+    public function text(): string
     {
-        switch ($value) {
-            case self::COP:
-                return trans('currencies.cop');
-            case self::USD:
-                return trans('currencies.usd');
-            default:
-                return '';
-        }
+        return match ($this) {
+            self::USD => trans('currencies.usd'),
+            self::COP => trans('currencies.cop'),
+        };
     }
 }
