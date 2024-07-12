@@ -5,17 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Response;
-use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index(): Response
     {
-        $users = User::all();
+        $users = User::with('roles')->get();
 
         return inertia('User/Index', [
             'users' => $users,
@@ -39,18 +37,24 @@ class UserController extends Controller
     }
     public function show(User $user): Response
     {
+        $roles = $user->roles()->get();
+
         return inertia('User/Show', [
             'user' => $user,
+            'roles' => $roles,
         ]);
     }
 
     public function edit(User $user): Response
     {
+        $roles = Role::all();
         return inertia('User/Edit', [
             'user' => [
+                'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email,
-            ]
+                'roles' => $user->roles,
+            ],
+            'roles' => $roles,
         ]);
     }
 
@@ -59,10 +63,11 @@ class UserController extends Controller
 
         $user->update([
             'name' => $request->input('name'),
-            'email' => $request->input('email'),
         ]);
 
-        return redirect()->route('user.show', ['user' => $user->id]);
+        $user->syncRoles($request->input('roles_id'));
+
+        return to_route('user.index');
     }
 
     public function destroy(User $user): Response

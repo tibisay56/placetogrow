@@ -13,6 +13,7 @@ const onDeleteSuccess = (e) => {
     console.log(e)
     users.value = e.props.users;
 }
+
 </script>
 
 <template>
@@ -83,18 +84,11 @@ const onDeleteSuccess = (e) => {
                             <th scope="col" class="px-6 py-3 text-start">
                                 <div class="flex items-center gap-x-2">
                                       <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                         {{ $t('Position') }}
+                                         {{ $t('Role') }}
                                       </span>
                                 </div>
                             </th>
 
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        {{ $t('Owner') }}
-                                      </span>
-                                </div>
-                            </th>
 
                             <th scope="col" class="px-6 py-3 text-end"></th>
                         </tr>
@@ -127,14 +121,11 @@ const onDeleteSuccess = (e) => {
                             </td>
                             <td class="size-px whitespace-nowrap">
                                 <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $t('Position') }}</span>
-                                </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <div class="flex items-center gap-x-3">
-                                        <span class="block text-sm text-gray-500 dark:text-neutral-500"> {{user.owner}}</span>
-                                    </div>
+                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                        <template v-for="role in user.roles" :key="role.id">
+                                            {{ role.name }}<span v-if="!$last"> </span>
+                                        </template>
+                                    </span>
                                 </div>
                             </td>
                             <td class="size-px whitespace-nowrap">
@@ -181,7 +172,7 @@ const onDeleteSuccess = (e) => {
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                         <div>
                             <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> {{ $t('results') }}
+                                <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> {{ $t('Results') }}
                             </p>
                         </div>
 

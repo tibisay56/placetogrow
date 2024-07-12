@@ -102,7 +102,6 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
 const form = useForm({
@@ -130,9 +129,6 @@ const props = defineProps({
     types: Array,
     currencies: Array,
 });
-
-const types = ref(props.types);
-const currencies = ref(props.currencies);
 
 </script>
 

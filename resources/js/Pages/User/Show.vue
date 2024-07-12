@@ -4,20 +4,17 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
-const page = usePage()
+
+const page = usePage();
 const user = ref(page.props.user);
+const roles = ref(page.props.roles);
 
-const initialValues = {
-    name: user.value.name,
-    email: user.value.email,
-}
-const form = useForm(initialValues);
 
-const props = defineProps({
-    users: Array,
+const form = useForm({
+    roles_id: user.value.roles ? user.value.roles.map(role => role.id) : [],
 });
 
 </script>
@@ -83,6 +80,22 @@ const props = defineProps({
                                                     <InputLabel for="email" :value="$t('Email')" />
                                                     <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
                                                     <InputError :message="form.errors.email" class="mt-2" />
+                                                </div>
+                                                <div class="mt-4">
+                                                    <InputLabel for="roles_id" :value="$t('Roles')" />
+                                                    <div>
+                                                        <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                :id="'role_' + role.id"
+                                                                :value="role.id"
+                                                                v-model="form.roles_id"
+                                                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                            />
+                                                            <label :for="'role_' + role.id">{{ role.name }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <InputError class="mt-2" :message="form.errors.roles_id" />
                                                 </div>
                                             </form>
                                         </div>

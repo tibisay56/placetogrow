@@ -4,31 +4,35 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { ref } from 'vue';
+import {ref, watchEffect} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
 const page = usePage();
 const user = ref(page.props.user);
-
+const roles = ref(page.props.roles);
 
 const form = useForm({
     name: user.value.name,
-    email: user.value.email,
+    roles_id: user.value.roles.map(role => role.id),
 });
 
+watchEffect(() => {
+    if (page.props.user) {
+        user.value = page.props.user;
+        roles.value = page.props.roles;
+        form.name = user.value.name;
+        form.roles_id = user.value.roles.map(role => role.id);
+    }
+});
 
 const submit = () => {
-    form.post(route('user.update', user.value),{
+    form.put(route('user.update', { user: user.value.id }), {
         onSuccess: (e) => {
             user.value = e.props.contact;
         }
     })
 }
-const props = defineProps({
-    users: Array,
-});
 
 
 </script>
@@ -82,10 +86,18 @@ const props = defineProps({
                                                         <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="firstname" :placeholder="$t('First name')"/>
                                                         <InputError class="mt-2" :message="form.errors.name" />
                                                     </div>
-                                                    <div class="mt-4">
-                                                        <InputLabel for="email" :value="$t('Email')" />
-                                                        <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
-                                                        <InputError :message="form.errors.email" class="mt-2" />
+                                                    <div>
+                                                        <label>Roles</label>
+                                                        <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1"
+                                                                :id="'role_' + role.id"
+                                                                :value="role.id"
+                                                                v-model="form.roles_id"
+                                                            />
+                                                            <label :for="'role_' + role.id">{{ role.name }}</label>
+                                                        </div>
                                                     </div>
                                                     <div class="flex justify-center">
                                                         <PrimaryButton>
