@@ -35,7 +35,6 @@ const props = defineProps({
     <Head title="Show Sites" />
 
     <AuthenticatedLayout>
-
         <Layout></Layout>
         <!-- Content -->
         <div class="w-full lg:ps-64">
@@ -49,23 +48,23 @@ const props = defineProps({
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            {{ $t('Show Sites') }}
+                                            Show Sites
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add sites, edit and more.') }}
+                                            Add sites, edit and more.
                                         </p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
                                             <Link :href="route('site.index')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                    {{ $t('View all') }}
+                                                    View all
                                                 </a>
                                             </Link>
                                             <Link :href="route('site.create')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                    {{ $t('Add site') }}
+                                                    Add site
                                                 </a>
                                             </Link>
                                         </div>
@@ -82,36 +81,36 @@ const props = defineProps({
                                                     leave-active-class="transition ease-in-out"
                                                     leave-to-class="opacity-0"
                                                 >
-                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center">Site updated</p>
+                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center" >Site updated</p>
                                                 </Transition>
                                                 <div class="mt-4">
-                                                    <InputLabel for="name" :value="$t('Name')" />
-                                                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" :placeholder="$t('Name')" />
+                                                    <InputLabel for="name" value="Name" />
+                                                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="Name"/>
                                                     <InputError class="mt-2" :message="form.errors.name" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="type_id" :value="$t('Type')" />
+                                                    <InputLabel for="type_id" value="Type" />
                                                     <select v-model="form.type_id" name="type_id" id="type_id"
                                                             class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
+                                                        <option v-for="(name, id) in types" :key="id" :value="id">{{ name }}</option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.type_id" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="category" :value="$t('Category')" />
+                                                    <InputLabel for="category" value="Category" />
                                                     <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" />
                                                     <InputError class="mt-2" :message="form.errors.category" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="currency" :value="$t('Currency')" />
+                                                    <InputLabel for="currency" value="Currency" />
                                                     <select v-model="form.currency" name="currency" id="currency"
                                                             class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="currency in currencies" :key="currency" :value="currency">{{ $t(currency) }}</option>
+                                                        <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.currency" />
                                                 </div>
                                                 <div class="mt-4">
-                                                    <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                    <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
                                                     <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
                                                     <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                                 </div>
@@ -126,65 +125,6 @@ const props = defineProps({
                                     </div>
                                 </div>
                             </div>
-
-        <template #header>
-            <div class= "flex justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Show Sites</h2>
-                <Link :href="route('site.index')">
-                    List sites
-                </Link>
-            </div>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form class="w-1/3 py-5 space-y-3">
-                        <Transition
-                            enter-active-class="transition ease-in-out"
-                            enter-from-class="opacity-0"
-                            leave-active-class="transition ease-in-out"
-                            leave-to-class="opacity-0"
-                        >
-                            <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center">Site updated</p>
-                        </Transition>
-                        <div class="mt-4">
-                            <InputLabel for="name" value="Name" />
-                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="Name"/>
-                            <InputError class="mt-2" :message="form.errors.name" />
-                        </div>
-                        <div class="mt-4">
-                            <InputLabel for="type_id" value="Type" />
-                            <select v-model="form.type_id" name="type_id" id="type_id"
-                                    class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ type }}</option>
-                            </select>
-                            <InputError class="mt-2" :message="form.errors.type_id" />
-                        </div>
-                        <div class="mt-4">
-                            <InputLabel for="category" value="Category" />
-                            <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" />
-                            <InputError class="mt-2" :message="form.errors.category" />
-                        </div>
-                        <div class="mt-4">
-                            <InputLabel for="currency" value="Currency" />
-                            <select v-model="form.currency" name="currency" id="currency"
-                                    class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
-                            </select>
-                            <InputError class="mt-2" :message="form.errors.currency" />
-                        </div>
-                        <div class="mt-4">
-                            <InputLabel for="payment_expiration_time" value="Payment Expiration Time (in minutes)" />
-                            <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
-                            <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
-                        </div>
-                        <div>
-                            <img class="h-16" :src="`/storage/${site.avatar}`" />
-                        </div>
-                        <div class="mt-4">
-                            <InputLabel for="avatar" value="Logo" />
-
                         </div>
                     </div>
                 </div>
@@ -192,3 +132,4 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
+
