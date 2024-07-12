@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->enum('name', TypeName::toArray())->unique();;
+            $table->enum('name', TypeName::toArray());
             $table->timestamps();
         });
     }
