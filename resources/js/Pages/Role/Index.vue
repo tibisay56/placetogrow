@@ -8,6 +8,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
 const roles = ref(page.props.roles);
+
 const onDeleteSuccess = (e) => {
     console.log(e)
     roles.value = e.props.roles;
@@ -146,7 +147,7 @@ const onDeleteSuccess = (e) => {
                                                 </template>
 
                                                 <template #content>
-                                                    <DropdownLink :href="route('role.show', role)"> {{ $t('Show') }} </DropdownLink>
+                                                    <DropdownLink :href="route('role.show', { role: role.id })"> {{ $t('Show') }} </DropdownLink>
                                                     <DropdownLink :href="route('role.edit', role)"> {{ $t('Edit') }} </DropdownLink>
                                                     <DropdownLink @success="onDeleteSuccess" :href="route('role.destroy', role)" method="delete" as="button">
                                                         {{ $t('Delete') }}

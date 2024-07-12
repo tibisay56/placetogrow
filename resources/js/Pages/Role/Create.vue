@@ -41,19 +41,19 @@
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                         <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
                                             <div class="mt-4">
-                                                <InputLabel for="name" value="Name" />
-                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full"  autocomplete="name" placeholder="Name"/>
+                                                <InputLabel for="name" :value="$t('Name')" />
+                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full"  autocomplete="name" :placeholder="$t('Name')"/>
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel for="status" value="Status" />
+                                                <InputLabel for="status" :value="$t('Status')" />
                                                 <TextInput v-model="form.status" id="category" type="text" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.status" />
                                             </div>
 
                                             <div class="flex justify-center">
                                                 <PrimaryButton>
-                                                    Create Role
+                                                    {{ $t('Create Role') }}
                                                 </PrimaryButton>
                                             </div>
                                         </form>
@@ -75,9 +75,7 @@ import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
 const form = useForm({

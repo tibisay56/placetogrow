@@ -34,16 +34,13 @@ class RoleController extends Controller
         return to_route('role.index');
     }
 
-    public function assign(Request $request)
+    public function show(Role $role): Response
     {
-        $user = User::find($request->user_id);
-        $role = Role::findByName($request->role);
-
-        if ($user && $role) {
-            $user->syncRoles([$role]);
-        }
-
-        return redirect()->route('role.index')->with('success', 'Role assigned successfully');
+        return inertia('Role/Show', [
+            'role' => $role,
+        ]);
     }
+
+
 }
 
