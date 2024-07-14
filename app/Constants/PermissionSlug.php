@@ -18,7 +18,12 @@ final class PermissionSlug
     public const string SITES_UPDATE = 'sites_update';
     public const string SITES_DELETE = 'sites_delete';
 
-
+    public const string ROLES_VIEW_ANY = 'roles_view_any';
+    public const string ROLES_VIEW = 'roles_view';
+    public const string ROLES_SHOW = 'roles_show';
+    public const string ROLES_CREATE = 'roles_create';
+    public const string ROLES_UPDATE = 'roles_update';
+    public const string ROLES_DELETE = 'roles_delete';
 
     public static function toArray(): array
     {
