@@ -1,18 +1,26 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, usePage} from '@inertiajs/vue3';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
 const sites = ref(page.props.sites);
+const user = computed(() => page.props.auth.user);
+const roles = computed(() => page.props.roles);
 const onDeleteSuccess = (e) => {
     console.log(e)
     sites.value = e.props.sites;
 }
 
+const hasRole = (roleName) => {
+    if (!user.value || !roles.value) {
+        return false;
+    }
+    return roles.value.some(role => role.name === roleName);
+};
 
 </script>
 
@@ -182,9 +190,9 @@ const onDeleteSuccess = (e) => {
                                                 </template>
 
                                                 <template #content>
-                                                    <DropdownLink :href="route('site.show', site)"> {{ $t('Show') }} </DropdownLink>
-                                                    <DropdownLink :href="route('site.edit', site)"> {{ $t('Edit') }} </DropdownLink>
-                                                    <DropdownLink @success="onDeleteSuccess" :href="route('site.destroy', site)" method="delete" as="button">
+                                                    <DropdownLink  :href="route('site.show', site)"> {{ $t('Show') }} </DropdownLink>
+                                                    <DropdownLink  :href="route('site.edit', site)"> {{ $t('Edit') }} </DropdownLink>
+                                                    <DropdownLink  @success="onDeleteSuccess" :href="route('site.destroy', site)" method="delete" as="button">
                                                         {{ $t('Delete') }}
                                                     </DropdownLink>
                                                 </template>
