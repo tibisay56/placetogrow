@@ -253,5 +253,26 @@
     "Yes": "Yes",
     "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account.",
     "You're logged in!": "You're logged in!",
-    "Your email address is unverified.": "Your email address is unverified."
+    "Your email address is unverified.": "Your email address is unverified.",
+
+    "users_view_any": "View any user",
+    "users_view": "View user",
+    "users_show": "Show user",
+    "users_create": "Create user",
+    "users_update": "Update user",
+    "users_delete": "Delete user",
+
+    "sites_view_any": "View any site",
+    "sites_view": "View site",
+    "sites_show": "Show site",
+    "sites_create": "Create site",
+    "sites_update": "Update site",
+    "sites_delete": "Delete site",
+
+    "roles_view_any": "View any role",
+    "roles_view": "View role",
+    "roles_show": "Show role",
+    "roles_create": "Create role",
+    "roles_update": "Update role",
+    "roles_delete": "Delete role"
 }

@@ -58,8 +58,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('roles', [RoleController::class, 'index'])->name('role.index');
     Route::get('roles/create', [RoleController::class, 'create'])->name('role.create');
-    Route::post('roles/create', [RoleController::class, 'create'])->name('role.store');
-    Route::get('roles/{role}', [RoleController::class, 'create'])->name('role.show');
+    Route::post('roles/create', [RoleController::class, 'store'])->name('role.store');
+    Route::get('roles/{role}', [RoleController::class, 'show'])->name('role.show');
     Route::get('roles/{role}/edit', [RoleController::class, 'edit'])->name('role.edit');
     Route::patch('roles/{role}', [RoleController::class, 'update'])->name('role.update');
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('role.destroy');
