@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 namespace App\Constants;
+use Illuminate\Support\Facades\Lang;
+
 final class PermissionSlug
 {
     public const string USERS_VIEW_ANY = 'users_view_any';
@@ -25,8 +27,11 @@ final class PermissionSlug
     public const string ROLES_UPDATE = 'roles_update';
     public const string ROLES_DELETE = 'roles_delete';
 
+
+
     public static function toArray(): array
     {
-        return(new \ReflectionClass(self::class))->getConstants();
+        return (new \ReflectionClass(self::class))->getConstants();
     }
+
 }

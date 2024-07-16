@@ -23,12 +23,12 @@
                                     <div>
                                         <div class="inline-flex gap-x-2">
                                             <Link :href="route('role.index')">
-                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
-                                                {{ $t('View all') }}
-                                            </a>
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                    {{ $t('View all') }}
+                                                </a>
                                             </Link>
                                             <Link :href="route('role.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                     {{ $t('Add role') }}
                                                 </a>
@@ -39,20 +39,52 @@
                                 <!-- End Header -->
                                 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                        <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
-                                            <div class="mt-4">
-                                                <InputLabel for="name" :value="$t('Name')" />
-                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full"  autocomplete="name" :placeholder="$t('Name')"/>
-                                                <InputError class="mt-2" :message="form.errors.name" />
-                                            </div>
-                                            <div class="mt-4">
-                                                <InputLabel for="status" :value="$t('Status')" />
-                                                <TextInput v-model="form.status" id="category" type="text" class="mt-1 block w-full"  />
-                                                <InputError class="mt-2" :message="form.errors.status" />
+                                        <form @submit.prevent="submit" class="w-full space-y-6 p-6">
+                                            <div class="flex flex-col space-y-4">
+                                                <div>
+                                                    <InputLabel for="name" :value="$t('Role Name')" />
+                                                    <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" :placeholder="$t('Enter the role name')" />
+                                                    <InputError :message="form.errors.name" class="mt-2" />
+                                                </div>
+                                                <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4">{{ $t('Assign Permissions') }}</p>
                                             </div>
 
-                                            <div class="flex justify-center">
-                                                <PrimaryButton>
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <!-- Columna 1: Users -->
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('User Management') }}</p>
+                                                        <div v-for="permission in filteredPermissions('users')" :key="permission.id">
+                                                            <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                                <input type="checkbox" v-model="selectedPermissions" :value="permission.id" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-in-form">
+                                                                <span class="ml-2 text-sm text-gray-500 dark:text-neutral-400">{{ $t(permission.name) }}</span>
+                                                            </label>
+                                                        </div>
+                                            </div>
+                                            <!-- Columna 2: Sites -->
+                                            <div>
+                                                <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Sites Management') }}</p>
+                                                <div v-for="permission in filteredPermissions('sites')" :key="permission.id">
+                                                    <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                        <input type="checkbox" v-model="selectedPermissions" :value="permission.id" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-in-form">
+                                                        <span class="ml-2 text-sm text-gray-500 dark:text-neutral-400">{{ $t(permission.name) }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Columna 3: Roles -->
+                                            <div>
+                                                <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Roles Management') }}</p>
+                                                <div v-for="permission in filteredPermissions('roles')" :key="permission.id">
+                                                    <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                        <input type="checkbox" v-model="selectedPermissions" :value="permission.id" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-in-form">
+                                                        <span class="ml-2 text-sm text-gray-500 dark:text-neutral-400">{{ $t(permission.name) }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="flex justify-center mt-6">
+                                                <PrimaryButton type="submit">
                                                     {{ $t('Create Role') }}
                                                 </PrimaryButton>
                                             </div>
@@ -71,22 +103,33 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
+import {ref} from "vue";
 
 const form = useForm({
-    name: "",
+    name: '',
+    permissions: [],
 });
 
 const submit = () => {
+    form.permissions = selectedPermissions;
     form.post(route('role.store'));
 };
 
+const props = defineProps({
+    permissions: Array,
+});
 
+const selectedPermissions = ref([]);
+
+const filteredPermissions = (category) => {
+    return props.permissions.filter(permission => permission.name.startsWith(`${category}_`));
+};
 </script>
 
 

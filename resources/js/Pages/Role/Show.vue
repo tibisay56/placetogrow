@@ -1,23 +1,37 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import { ref } from 'vue';
 import Layout from "@/Components/Layout.vue";
 
-const page = usePage()
-const roles = ref(page.props.roles);
+const page = usePage();
+const role = ref(page.props.role);
+const permissions = ref(page.props.permissions);
+const selectedPermissions = ref(role.value.permissions.map(p => p.id));
 
-const initialValues = {
+const form = useForm({
     name: role.value.name,
-}
-const form = useForm(initialValues);
+    permissions: selectedPermissions.value,
+});
+
+
+const togglePermission = (permissionId) => {
+    const index = selectedPermissions.value.indexOf(permissionId);
+    if (index !== -1) {
+        selectedPermissions.value.splice(index, 1);
+    } else {
+        selectedPermissions.value.push(permissionId);
+    }
+    form.permissions = selectedPermissions.value;
+};
 
 const props = defineProps({
     roles: Array,
 });
+
+const filteredPermissions = (category) => {
+    return permissions.value.filter(permission => permission.name.startsWith(`${category}_`));
+};
 
 </script>
 
@@ -41,7 +55,7 @@ const props = defineProps({
                                             {{ $t('Show Roles') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add roles, edit and more.') }}
+                                            {{ $t('Add roles, show and more.') }}
                                         </p>
                                     </div>
                                     <div>
@@ -52,8 +66,11 @@ const props = defineProps({
                                                 </a>
                                             </Link>
                                             <Link :href="route('role.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M5 12h14"/>
+                                                        <path d="M12 5v14"/>
+                                                    </svg>
                                                     {{ $t('Add role') }}
                                                 </a>
                                             </Link>
@@ -63,23 +80,46 @@ const props = defineProps({
                                 <!-- End Header -->
                                 <div class="py-12">
                                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                                        <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4">
+                                            {{ $t('Role') }}: {{ $t(role.name) }}
+                                        </p>
+
                                         <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                            <form class="w-1/3 py-5 space-y-3">
-                                                <Transition
-                                                    enter-active-class="transition ease-in-out"
-                                                    enter-from-class="opacity-0"
-                                                    leave-active-class="transition ease-in-out"
-                                                    leave-to-class="opacity-0"
-                                                >
-                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center">Role updated</p>
-                                                </Transition>
-                                                <div class="mt-4">
-                                                    <InputLabel for="name" :value="$t('Name')" />
-                                                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="Name"/>
-                                                    <InputError class="mt-2" :message="form.errors.name" />
+                                            <div class="grid sm:grid-cols-3 gap-2 gap-x-10">
+
+                                                <!-- Columna 1: Users -->
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('User Management') }}</p>
+                                                    <div v-for="permission in filteredPermissions('users')" :key="permission.id">
+                                                        <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-in-form"/>
+                                                            <span class="ml-2 text-sm text-gray-500 ms-3 dark:text-neutral-400">{{ $t(permission.name) }}</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
 
-                                            </form>
+                                                <!-- Columna 2: Sites -->
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Sites Management') }}</p>
+                                                    <div v-for="permission in filteredPermissions('sites')" :key="permission.id">
+                                                        <label for="hs-checkbox-group-1" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-group-1" />
+                                                            <span class="ml-2">{{ $t(permission.name) }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Columna 3: Roles -->
+                                                <div>
+                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Roles Management') }}</p>
+                                                    <div v-for="permission in filteredPermissions('roles')" :key="permission.id">
+                                                        <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
+                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-group-1" />
+                                                            <span class="ml-2">{{ $t(permission.name) }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -91,3 +131,4 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
+

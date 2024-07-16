@@ -29,9 +29,6 @@ class SiteController extends Controller
 
     public function create(): Response
     {
-        if(!Auth::user()->can(PermissionSlug::SITES_CREATE)){
-            abort(403);
-        }
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
