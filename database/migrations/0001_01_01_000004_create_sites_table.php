@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('currency', CurrencyType::toArray());
             $table->integer('payment_expiration_time')->default(1440);
             $table->foreignId('type_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -33,6 +33,3 @@ return new class extends Migration
         Schema::dropIfExists('sites');
     }
 };
-
-
-

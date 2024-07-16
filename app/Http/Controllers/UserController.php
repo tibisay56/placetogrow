@@ -7,6 +7,7 @@ use App\Constants\PolicyName;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Response;
@@ -91,14 +92,14 @@ class UserController extends Controller
         return to_route('user.index');
     }
 
-    public function destroy(User $user): Response
+    public function destroy(User $user): RedirectResponse
     {
         if(!Auth::user()->can(PermissionSlug::USERS_DELETE)){
             abort(403);
         }
         $user->delete();
 
-        return inertia('User/Index');
+        return to_route('user.index');
     }
 }
 
