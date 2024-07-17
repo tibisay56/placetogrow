@@ -24,4 +24,5 @@ class SiteFactory extends Factory
             'user_id' => User::all()->random()->id,
         ];
     }
+
 }

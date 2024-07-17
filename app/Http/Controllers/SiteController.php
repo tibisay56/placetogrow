@@ -22,7 +22,7 @@ class SiteController extends Controller
     public function index(): Response
     {
 
-        $sites = Site::with('type')->where('user_id', Auth::id())->get();
+        $sites = Site::with('type')->get();
 
         return Inertia::render('Site/Index', compact('sites'));
     }

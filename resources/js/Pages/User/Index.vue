@@ -6,6 +6,7 @@ import Layout from "@/Components/Layout.vue";
 import {ref} from "vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
+import index from "@/Pages/User/Index.vue";
 
 const page = usePage()
 const users = ref(page.props.users);
@@ -114,7 +115,7 @@ const onDeleteSuccess = (e) => {
                                     </div>
                                 </div>
                             </td>
-                            <td class="h-px w-72 whitespace-nowrap">
+                            <td class="size-px whitespace-nowrap">
                                 <div class="px-6 py-3">
                                     <span class="block text-sm text-gray-500 dark:text-neutral-500"> {{user.email}}</span>
                                 </div>
@@ -123,7 +124,7 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-3">
                                     <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
                                         <template v-for="role in user.roles" :key="role.id">
-                                            {{ role.name }}<span v-if="!$last"> </span>
+                                            {{ role.name }}<span v-if="index !== user.roles.length - 1"> </span>
                                         </template>
                                     </span>
                                 </div>

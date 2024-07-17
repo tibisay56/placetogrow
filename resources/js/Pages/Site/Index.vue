@@ -8,19 +8,12 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
 const sites = ref(page.props.sites);
-const user = computed(() => page.props.auth.user);
-const roles = computed(() => page.props.roles);
+
 const onDeleteSuccess = (e) => {
     console.log(e)
     sites.value = e.props.sites;
 }
 
-const hasRole = (roleName) => {
-    if (!user.value || !roles.value) {
-        return false;
-    }
-    return roles.value.some(role => role.name === roleName);
-};
 
 </script>
 
@@ -75,6 +68,14 @@ const hasRole = (roleName) => {
                                             </label>
                                         </th>
 
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Logo') }}
+                                              </span>
+                                            </div>
+                                        </th>
+
                                         <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -102,14 +103,6 @@ const hasRole = (roleName) => {
                                         <th scope="col" class="px-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Logo') }}
-                                              </span>
-                                            </div>
-                                        </th>
-
-                                        <th scope="col" class="px-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                                                 {{ $t('Currency') }}
                                               </span>
                                             </div>
@@ -129,6 +122,11 @@ const hasRole = (roleName) => {
                                                 </label>
                                             </div>
                                         </td>
+                                        <td class="size-px whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <img class="inline-block size-[38px] rounded-full" :src="`/storage/${site.avatar}`"/>
+                                        </div>
+                                        </td>
                                         <td   class="size-px whitespace-nowrap">
                                             <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                                 <div class="flex items-center gap-x-3">
@@ -138,7 +136,7 @@ const hasRole = (roleName) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="h-px w-72 whitespace-nowrap">
+                                        <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
                                                 <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $t(site.type.name) }}</span>
                                             </div>
@@ -153,11 +151,7 @@ const hasRole = (roleName) => {
                                               </span>
                                             </div>
                                         </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <img class="inline-block size-[38px] rounded-full" :src="`/storage/${site.avatar}`"/>
-                                            </div>
-                                        </td>
+
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
                                                 <span class="text-sm text-gray-500 dark:text-neutral-500">{{site.currency}}</span>
