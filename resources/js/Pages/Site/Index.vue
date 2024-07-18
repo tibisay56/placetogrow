@@ -100,14 +100,6 @@ const onDeleteSuccess = (e) => {
                                             </div>
                                         </th>
 
-                                        <th scope="col" class="px-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Currency') }}
-                                              </span>
-                                            </div>
-                                        </th>
-
                                         <th scope="col" class="px-6 py-3 text-end"></th>
                                     </tr>
                                     </thead>
@@ -149,12 +141,6 @@ const onDeleteSuccess = (e) => {
                                                 </svg>
                                                 {{ $t(site.category) }}
                                               </span>
-                                            </div>
-                                        </td>
-
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="text-sm text-gray-500 dark:text-neutral-500">{{site.currency}}</span>
                                             </div>
                                         </td>
                                         <td class="size-px whitespace-nowrap">

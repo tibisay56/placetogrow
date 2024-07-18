@@ -6,6 +6,7 @@ use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class UserController extends Controller
             ABORT(403);
         }
 
-        $users = User::with('roles')->get();
+        $users = User::with(['site', 'roles'])->get();
 
         return inertia('User/Index', [
             'users' => $users,
@@ -33,7 +34,12 @@ class UserController extends Controller
         if(!Auth::user()->can(PermissionSlug::USERS_CREATE)){
             abort(403);
         }
-        return inertia('User/Create');
+
+        $sites = Site::all();
+
+        return inertia('User/Create', [
+        'sites' => $sites
+    ]);
     }
 
     public function store(StoreUserRequest $request): \Illuminate\Http\RedirectResponse
@@ -54,11 +60,12 @@ class UserController extends Controller
         if(!Auth::user()->can(PermissionSlug::USERS_VIEW)){
             abort(403);
         }
-        $roles = $user->roles()->get();
+        $user->load(['roles', 'site']);
 
         return inertia('User/Show', [
             'user' => $user,
-            'roles' => $roles,
+            'roles' => $user->roles,
+            'site' => $user->site ?: null,
         ]);
     }
 

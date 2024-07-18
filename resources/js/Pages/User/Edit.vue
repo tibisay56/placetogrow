@@ -11,10 +11,13 @@ import Layout from "@/Components/Layout.vue";
 const page = usePage();
 const user = ref(page.props.user);
 const roles = ref(page.props.roles);
+const site = ref(page.props.site);
 
 const form = useForm({
     name: user.value.name,
+    email: user.value.email,
     roles_id: user.value.roles.map(role => role.id),
+    site_id: site.value ? site.value.id : null,
 });
 
 watchEffect(() => {
@@ -22,6 +25,7 @@ watchEffect(() => {
         user.value = page.props.user;
         roles.value = page.props.roles;
         form.name = user.value.name;
+        form.email = user.value.email;
         form.roles_id = user.value.roles.map(role => role.id);
     }
 });
@@ -80,12 +84,39 @@ const submit = () => {
                                     <div class="py-12">
                                         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                                             <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                                <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
+                                                <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                                     <div class="mt-4">
                                                         <InputLabel for="name" :value="$t('Name')" />
                                                         <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="firstname" :placeholder="$t('First name')"/>
                                                         <InputError class="mt-2" :message="form.errors.name" />
                                                     </div>
+                                                        <div class="mt-4">
+                                                            <InputLabel for="email" :value="$t('Email')" />
+                                                            <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
+                                                            <InputError :message="form.errors.email" class="mt-2" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                                    <div>
+                                                        <InputLabel for="site_id" :value="$t('Site')" />
+                                                        <select v-model="form.site_id" name="site_id" id="site_id"
+                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                            <option :value="site?.id">{{ site?.name }}</option>
+                                                        </select>
+                                                        <InputError class="mt-2" :message="form.errors.site_id" />
+                                                    </div>
+                                                    <div>
+                                                        <InputLabel for="status" :value="$t('Status')" />
+                                                        <select v-model="form.status" id="status"
+                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                            <option value="active">{{ $t('Active') }}</option>
+                                                            <option value="inactive">{{ $t('Inactive') }}</option>
+                                                            <option value="pending">{{ $t('Pending') }}</option>
+                                                        </select>
+                                                        <InputError :message="form.errors.status" class="mt-2" />
+                                                    </div>
+                                            </div>
                                                     <div>
                                                         <label>Roles</label>
                                                         <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">

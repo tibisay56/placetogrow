@@ -74,7 +74,7 @@ const props = defineProps({
                                 <div class="py-12">
                                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                                         <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                            <form class="w-1/3 py-5 space-y-3">
+                                            <form class="w-1/2 py-5 space-y-3">
                                                 <Transition
                                                     enter-active-class="transition ease-in-out"
                                                     enter-from-class="opacity-0"
@@ -83,12 +83,13 @@ const props = defineProps({
                                                 >
                                                     <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center" >{{ $t('Site updated') }} </p>
                                                 </Transition>
-                                                <div class="mt-4">
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                                <div>
                                                     <InputLabel for="name" :value="$t('Name')" />
                                                     <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />
                                                     <InputError class="mt-2" :message="form.errors.name" />
                                                 </div>
-                                                <div class="mt-4">
+                                                <div>
                                                     <InputLabel for="type_id" :value="$t('Type')" />
                                                     <select v-model="form.type_id" name="type_id" id="type_id"
                                                             class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -96,12 +97,14 @@ const props = defineProps({
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.type_id" />
                                                 </div>
-                                                <div class="mt-4">
+                                                </div>
+                                                <div>
                                                     <InputLabel for="category" :value="$t('Category')" />
                                                     <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" />
                                                     <InputError class="mt-2" :message="form.errors.category" />
                                                 </div>
-                                                <div class="mt-4">
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                                <div>
                                                     <InputLabel for="currency" :value="$t('Currency')" />
                                                     <select v-model="form.currency" name="currency" id="currency"
                                                             class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -109,10 +112,11 @@ const props = defineProps({
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.currency" />
                                                 </div>
-                                                <div class="mt-4">
+                                                <div>
                                                     <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
                                                     <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
                                                     <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
+                                                </div>
                                                 </div>
                                                 <div>
                                                     <img class="h-16" :src="`/storage/${site.avatar}`" />

@@ -64,7 +64,7 @@ class SiteController extends Controller
 
     public function show(Site $site): Response
     {
-
+        $site->load('user');
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
 
@@ -83,6 +83,7 @@ class SiteController extends Controller
         if(!Auth::user()->can(PermissionSlug::SITES_UPDATE)){
             abort(403);
         }
+        $site->load('user');
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
 

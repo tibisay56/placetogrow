@@ -39,23 +39,35 @@
                                 <!-- End Header -->
                                 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                        <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
-                                            <div class="mt-4">
+                                        <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                            <div>
                                                 <InputLabel for="first_name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
-                                            <div class="mt-4">
+                                            <div>
                                                 <InputLabel for="email" :value="$t('Email')" />
                                                 <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
                                                 <InputError :message="form.errors.email" class="mt-2" />
                                             </div>
-                                            <div class="mt-4">
+                                            </div>
+                                            <div>
+                                                <InputLabel for="site" :value="$t('Site')" />
+                                                <select v-model="form.site_id" id="site"
+                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                    <option :value="null"/>
+                                                    <option v-for="site in props.sites" :key="site.id" :value="site.id">{{ site.name }}</option>
+                                                </select>
+                                                <InputError :message="form.errors.status" class="mt-2" />
+                                            </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                            <div>
                                                 <InputLabel for="role" :value="$t('Role')" />
                                                 <TextInput v-model="form.role" id="role" type="text" class="mt-1 block w-full" autocomplete="role" :placeholder="$t('Role')" />
                                                 <InputError :message="form.errors.role" class="mt-2" />
                                             </div>
-                                            <div class="mt-4">
+                                            <div>
                                                 <InputLabel for="status" :value="$t('Status')" />
                                                 <select v-model="form.status" id="status"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -64,6 +76,7 @@
                                                     <option value="pending">{{ $t('Pending') }}</option>
                                                 </select>
                                                 <InputError :message="form.errors.status" class="mt-2" />
+                                            </div>
                                             </div>
                                             <div class="flex justify-center">
                                                 <PrimaryButton>
@@ -92,6 +105,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
 
+const { props } = usePage();
 
 const form = useForm({
     name: '',
