@@ -15,12 +15,12 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->string('slug', 50)->nullable()->unique();
             $table->string('avatar')->nullable();
             $table->string('category', 100);
             $table->enum('currency', CurrencyType::toArray());
             $table->integer('payment_expiration_time')->default(1440);
             $table->foreignId('type_id')->constrained();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

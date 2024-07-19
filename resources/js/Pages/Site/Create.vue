@@ -39,7 +39,8 @@
                                 <!-- End Header -->
                                 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                        <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
+                                        <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                             <div class="mt-4">
                                                 <InputLabel :for="name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
@@ -53,12 +54,14 @@
                                                 </select>
                                                 <InputError class="mt-2" :message="form.errors.type_id" />
                                             </div>
+                                            </div>
                                             <div class="mt-4">
                                                 <InputLabel :for="category" :value="$t('Category')" />
                                                 <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  :placeholder="$t('Category')"/>
                                                 <InputError class="mt-2" :message="form.errors.category" />
                                             </div>
-                                            <div class="mt-4">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                            <div>
                                                 <InputLabel :for="currency" :value="$t('Currency')" />
                                                 <select v-model="form.currency" name="currency" id="currency"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -66,15 +69,22 @@
                                                 </select>
                                                 <InputError class="mt-2" :message="form.errors.currency" />
                                             </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="payment_expiration_time" :value="$t('Payment Expiration Time (in minutes)')" />
+                                            <div>
+                                                <InputLabel :for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
                                                 <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                             </div>
-                                            <div class="mt-4">
-                                                <InputLabel :for="avatar" :value="$t('Logo')" />
-                                                <FileInput name="avatar" @change="onSelectAvatar"/>
-                                                <InputError class="mt-2" :message="form.errors.avatar" />
+                                            </div>
+                                            <div>
+                                                <form class="max-w-sm">
+                                                    <InputLabel for="avatar" value="Logo" />
+                                                    <FileInput name="avatar" @change="onSelectAvatar" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
+                                                                file:bg-gray-50 file:border-0
+                                                                file:me-4
+                                                                file:py-3 file:px-4
+                                                                dark:file:bg-neutral-700 dark:file:text-neutral-400"/>
+                                                    <InputError class="mt-2" :message="form.errors.avatar" />
+                                                </form>
                                             </div>
                                             <div class="flex justify-center">
                                                 <PrimaryButton>

@@ -6,6 +6,7 @@ use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class UserController extends Controller
             ABORT(403);
         }
 
-        $users = User::with('roles')->get();
+        $users = User::with(['sites', 'roles'])->get();
 
         return inertia('User/Index', [
             'users' => $users,
@@ -33,7 +34,14 @@ class UserController extends Controller
         if(!Auth::user()->can(PermissionSlug::USERS_CREATE)){
             abort(403);
         }
-        return inertia('User/Create');
+
+        $sites = Site::all();
+        $roles = Role::all();
+
+        return inertia('User/Create', [
+            'sites' => $sites,
+            'roles' => $roles,
+    ]);
     }
 
     public function store(StoreUserRequest $request): \Illuminate\Http\RedirectResponse
@@ -47,6 +55,11 @@ class UserController extends Controller
         $user->password = Hash::make('password');
         $user->save();
 
+        $user->roles()->sync($request->roles);
+        if ($request->site_id) {
+            $user->sites()->sync([$request->site_id]);
+        }
+
         return to_route('user.index');
     }
     public function show(User $user): Response
@@ -54,11 +67,12 @@ class UserController extends Controller
         if(!Auth::user()->can(PermissionSlug::USERS_VIEW)){
             abort(403);
         }
-        $roles = $user->roles()->get();
+        $user->load(['roles', 'sites']);
 
         return inertia('User/Show', [
             'user' => $user,
-            'roles' => $roles,
+            'roles' => $user->roles,
+            'sites' => $user->sites,
         ]);
     }
 
@@ -67,14 +81,14 @@ class UserController extends Controller
         if(!Auth::user()->can(PermissionSlug::USERS_UPDATE)){
             abort(403);
         }
+        $user->load(['roles', 'sites']);
         $roles = Role::all();
+        $sites = Site::all();
+
         return inertia('User/Edit', [
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'roles' => $user->roles,
-            ],
+            'user' => $user,
             'roles' => $roles,
+            'sites' => $sites,
         ]);
     }
 
@@ -85,9 +99,11 @@ class UserController extends Controller
         }
         $user->update([
             'name' => $request->input('name'),
+            'email' => $request->input('email'),
         ]);
 
         $user->syncRoles($request->input('roles_id'));
+        $user->sites()->sync($request->input('site_id'));
 
         return to_route('user.index');
     }

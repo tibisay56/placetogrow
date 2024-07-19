@@ -21,10 +21,17 @@ class SiteController extends Controller
 {
     public function index(): Response
     {
+        $user = Auth::user();
 
-        $sites = Site::with('type')->get();
+        if ($user->hasRole('Admin')) {
+            $sites = Site::with(['users', 'type'])->get();
+        } else {
+            $sites = $user->sites()->with(['type'])->get();
+        }
 
-        return Inertia::render('Site/Index', compact('sites'));
+        return Inertia::render('Site/Index', [
+            'sites' => $sites,
+        ]);
     }
 
     public function create(): Response
@@ -64,7 +71,7 @@ class SiteController extends Controller
 
     public function show(Site $site): Response
     {
-
+        $site->load('users');
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
 
@@ -75,14 +82,13 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Site $site): Response
     {
         if(!Auth::user()->can(PermissionSlug::SITES_UPDATE)){
             abort(403);
         }
+        $site->load('users');
+
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
 
@@ -93,9 +99,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRequest $request, Site $site): RedirectResponse
     {
         if(!Auth::user()->can(PermissionSlug::SITES_UPDATE)){
@@ -119,9 +122,6 @@ class SiteController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Site $site): RedirectResponse
     {
         if(!Auth::user()->can(PermissionSlug::SITES_DELETE)){

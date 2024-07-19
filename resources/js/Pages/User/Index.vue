@@ -77,6 +77,14 @@ const onDeleteSuccess = (e) => {
                             <th scope="col" class="px-6 py-3 text-start">
                                 <div class="flex items-center gap-x-2">
                                       <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        {{ $t('Site') }}
+                                      </span>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                                         {{ $t('Email') }}
                                       </span>
                                 </div>
@@ -113,6 +121,11 @@ const onDeleteSuccess = (e) => {
                                             <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200"> {{user.name}}</span>
                                         </div>
                                     </div>
+                                </div>
+                            </td>
+                            <td class="size-px whitespace-nowrap">
+                                <div class="px-6 py-3">
+                                    <span class="block text-sm text-gray-500 dark:text-neutral-500"> {{ user.sites.length > 0 ? user.sites[0].name : '-' }}</span>
                                 </div>
                             </td>
                             <td class="size-px whitespace-nowrap">

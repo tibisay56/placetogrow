@@ -21,8 +21,6 @@ class SiteFactory extends Factory
             'currency' => $this->faker->randomElement(CurrencyType::toArray()),
             'payment_expiration_time' => $this->faker->numberBetween(1, 1440),
             'type_id' => Type::all()->random()->id,
-            'user_id' => User::all()->random()->id,
         ];
     }
-
 }
