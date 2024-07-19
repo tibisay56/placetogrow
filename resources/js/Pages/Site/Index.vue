@@ -213,5 +213,8 @@ const onDeleteSuccess = (e) => {
 
             </div>
         </div>
+
+
     </AuthenticatedLayout>
 </template>
+

@@ -17,8 +17,12 @@ class RoleSeeder extends Seeder
             'Guests'
         ];
         foreach ($roles as $role) {
-            Role::query()->create([
-                'name' => $role
+            Role::updateOrCreate([
+                'name' => $role,
+                'guard_name' => 'web',
+            ], [
+                'name' => $role,
+                'guard_name' => 'web',
             ]);
         }
     }

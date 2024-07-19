@@ -55,7 +55,7 @@ const filteredPermissions = (category) => {
                                             {{ $t('Show Roles') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add roles, show and more.') }}
+                                            {{ $t('Add roles, edit and more.') }}
                                         </p>
                                     </div>
                                     <div>
@@ -84,43 +84,78 @@ const filteredPermissions = (category) => {
                                             {{ $t('Role') }}: {{ $t(role.name) }}
                                         </p>
 
-                                        <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                            <div class="grid sm:grid-cols-3 gap-2 gap-x-10">
-
-                                                <!-- Columna 1: Users -->
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('User Management') }}</p>
-                                                    <div v-for="permission in filteredPermissions('users')" :key="permission.id">
-                                                        <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
-                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-in-form"/>
-                                                            <span class="ml-2 text-sm text-gray-500 ms-3 dark:text-neutral-400">{{ $t(permission.name) }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Columna 2: Sites -->
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Sites Management') }}</p>
-                                                    <div v-for="permission in filteredPermissions('sites')" :key="permission.id">
-                                                        <label for="hs-checkbox-group-1" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
-                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-group-1" />
-                                                            <span class="ml-2">{{ $t(permission.name) }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Columna 3: Roles -->
-                                                <div>
-                                                    <p class="text-sm text-gray-600 dark:text-neutral-400">{{ $t('Roles Management') }}</p>
-                                                    <div v-for="permission in filteredPermissions('roles')" :key="permission.id">
-                                                        <label class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
-                                                            <input type="checkbox" :value="permission.id" :checked="selectedPermissions.includes(permission.id)" @change="togglePermission(permission.id)" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-checkbox-group-1" />
-                                                            <span class="ml-2">{{ $t(permission.name) }}</span>
-                                                        </label>
+                                        <div class="flex flex-col">
+                                            <div class="-m-1.5 overflow-x-auto">
+                                                <div class="p-1.5 min-w-full inline-block align-middle">
+                                                    <div class="border rounded-lg divide-y divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+                                                        <div class="overflow-hidden">
+                                                            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                                                                <thead class="bg-gray-50 dark:bg-neutral-700">
+                                                                <tr>
+                                                                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">{{ $t('Management') }} </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{{ $t('User') }}</td>
+                                                                    <td class="py-3 ps-4">
+                                                                        <div class="flex space-x-20 ml-6">
+                                                                            <div v-for="permission in filteredPermissions('users')" :key="permission.id" class="flex items-center h-5">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
+                                                                                    {{ $t (permission.name) }}
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{{ $t('Sites') }}</td>
+                                                                    <td class="py-3 ps-4">
+                                                                        <div class="flex space-x-20 ml-6">
+                                                                            <div v-for="permission in filteredPermissions('sites')" :key="permission.id" class="flex items-center h-5">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
+                                                                                    {{ $t (permission.name) }}
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{{ $t('Roles') }}</td>
+                                                                    <td class="py-3 ps-4">
+                                                                        <div class="flex space-x-20 ml-6">
+                                                                            <div v-for="permission in filteredPermissions('roles')" :key="permission.id" class="flex items-center h-5">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
+                                                                                    {{ $t (permission.name) }}
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{{ $t('Payments') }}</td>
+                                                                    <td class="py-3 ps-4">
+                                                                        <div class="flex space-x-20 ml-6">
+                                                                            <div v-for="permission in filteredPermissions('payments')" :key="permission.id" class="flex items-center h-5">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
+                                                                                    {{ $t (permission.name) }}
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

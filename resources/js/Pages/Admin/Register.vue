@@ -1,5 +1,6 @@
 <template>
     <form @submit.prevent="submitForm">
+
         <input type="email" v-model="form.email" placeholder="Email" required>
         <input type="password" v-model="form.password" placeholder="Password" required>
         <button type="submit">Register Admin</button>

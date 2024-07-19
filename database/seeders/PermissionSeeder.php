@@ -12,9 +12,19 @@ class PermissionSeeder extends Seeder
 
     public function run(): void
     {
-        foreach (PermissionSlug::toArray() as $permission) {
-            Permission::query()->create([
-                'name' => $permission]);
+        $permissions = array_merge(PermissionSlug::toArray(), [
+            'manage payments',
+            'view transactions'
+        ]);
+
+        foreach ($permissions as $permission) {
+            Permission::query()->updateOrcreate([
+                'name' => $permission,
+                'guard_name' => 'web',
+                ],[
+                    'name' => $permission,
+                    'guard_name' => 'web',
+                ]);
         }
     }
 }

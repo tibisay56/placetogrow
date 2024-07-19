@@ -16,35 +16,41 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         $baseRolesPermission = [
             [
                 'name' => 'Admin',
-                'permissions' => [
+                'permissions' => array_merge([
                     PermissionSlug::USERS_VIEW_ANY,
                     PermissionSlug::USERS_VIEW,
-                    PermissionSlug::USERS_SHOW,
                     PermissionSlug::USERS_CREATE,
                     PermissionSlug::USERS_UPDATE,
                     PermissionSlug::USERS_DELETE,
 
                     PermissionSlug::SITES_VIEW_ANY,
                     PermissionSlug::SITES_VIEW,
-                    PermissionSlug::SITES_SHOW,
                     PermissionSlug::SITES_CREATE,
                     PermissionSlug::SITES_UPDATE,
                     PermissionSlug::SITES_DELETE,
 
                     PermissionSlug::ROLES_VIEW_ANY,
                     PermissionSlug::ROLES_VIEW,
-                    PermissionSlug::ROLES_SHOW,
                     PermissionSlug::ROLES_CREATE,
                     PermissionSlug::ROLES_UPDATE,
                     PermissionSlug::ROLES_DELETE,
-                ],
+
+                    PermissionSlug::PAYMENTS_VIEW_ANY,
+                    PermissionSlug::PAYMENTS_VIEW,
+                    PermissionSlug::PAYMENTS_CREATE,
+                    PermissionSlug::PAYMENTS_UPDATE,
+                    PermissionSlug::PAYMENTS_DELETE,
+
+                    PermissionSlug::VIEW_TRANSACTIONS,
+                ]),
             ],
             [
                 'name' => 'Customer',
                 'permissions' => [
                     PermissionSlug::SITES_VIEW_ANY,
                     PermissionSlug::SITES_VIEW,
-                    PermissionSlug::SITES_SHOW,
+
+                    PermissionSlug::VIEW_TRANSACTIONS,
                 ],
             ],
             [
@@ -57,15 +63,20 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
         foreach ($baseRolesPermission as $role){
             $rol = Role::query()->updateOrcreate([
                 'name' => $role['name'],
+                'guard_name' => 'web',
             ]);
 
             $rol->syncPermissions($role['permissions']);
         }
 
-        User::query()->find( id: 1 )
-            ->assignRole('Admin');
+        $adminUser = User::where('email', 'admin@admin.com')->first();
+        if ($adminUser) {
+            $adminUser->syncRoles('Admin');
+        }
 
-        User::query()->find( id: 2 )
-            ->assignRole('Customer');
+        $customerUser = User::where('email', 'customer@example.com')->first();
+        if ($customerUser) {
+            $customerUser->syncRoles('Customer');
+        }
     }
 }

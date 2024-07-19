@@ -6,6 +6,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import { ref } from 'vue';
 import Layout from "@/Components/Layout.vue";
+import TablePayment from "@/Components/TablePayment.vue";
 
 const page = usePage()
 const site = ref(page.props.site);
@@ -117,7 +118,7 @@ const props = defineProps({
                                                 </div>
                                                 </div>
                                                 <div>
-                                                    <img class="h-16" :src="`/storage/${site.avatar}`" />
+                                                    <img class="h-16" :src="`/storage/${site.avatar}`" alt="avatar"/>
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="avatar" value="Logo" />
@@ -125,6 +126,9 @@ const props = defineProps({
                                             </form>
                                         </div>
                                     </div>
+                                    <TablePayment>
+
+                                    </TablePayment>
                                 </div>
                             </div>
                         </div>
@@ -132,6 +136,7 @@ const props = defineProps({
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>
 
