@@ -1,3 +1,31 @@
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import TextInput from "@/Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Layout from "@/Components/Layout.vue";
+import {ref} from "vue";
+
+const { props } = usePage();
+const roles = ref(props.roles || []);
+const sites = ref(props.sites || []);
+
+console.log(props.roles);
+const form = useForm({
+    name: '',
+    email: '',
+    roles: [],
+    site_id: null,
+});
+
+
+const submit = () => {
+    form.post(route('user.store'));
+};
+</script>
+
 <template>
     <Head title="Create Users" />
     <AuthenticatedLayout>
@@ -53,30 +81,23 @@
                                             </div>
                                             </div>
                                             <div>
-                                                <InputLabel for="site" :value="$t('Site')" />
-                                                <select v-model="form.site_id" id="site"
+                                                <InputLabel for="site_id" :value="$t('Site')" />
+                                                <select v-model="form.site_id" id="site_id"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option :value="null"/>
-                                                    <option v-for="site in props.sites" :key="site.id" :value="site.id">{{ site.name }}</option>
+                                                    <option :value="null">{{ $t('Select a site') }}</option>
+                                                    <option v-for="site in sites" :key="site.id" :value="site.id">{{ site.name }}</option>
                                                 </select>
-                                                <InputError :message="form.errors.status" class="mt-2" />
-                                            </div>
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                            <div>
-                                                <InputLabel for="role" :value="$t('Role')" />
-                                                <TextInput v-model="form.role" id="role" type="text" class="mt-1 block w-full" autocomplete="role" :placeholder="$t('Role')" />
-                                                <InputError :message="form.errors.role" class="mt-2" />
+                                                <InputError :message="form.errors.site_id" class="mt-2" />
                                             </div>
                                             <div>
-                                                <InputLabel for="status" :value="$t('Status')" />
-                                                <select v-model="form.status" id="status"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option value="active">{{ $t('Active') }}</option>
-                                                    <option value="inactive">{{ $t('Inactive') }}</option>
-                                                    <option value="pending">{{ $t('Pending') }}</option>
-                                                </select>
-                                                <InputError :message="form.errors.status" class="mt-2" />
-                                            </div>
+                                                <div>
+                                                    <InputLabel for="role" :value="$t('Role')" />
+                                                    <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">
+                                                        <input type="checkbox" :value="role.id" v-model="form.roles" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"/>
+                                                        <span>{{ role.name }}</span>
+                                                    </div>
+                                                    <InputError :message="form.errors.roles" class="mt-2" />
+                                                </div>
                                             </div>
                                             <div class="flex justify-center">
                                                 <PrimaryButton>
@@ -96,27 +117,6 @@
     </AuthenticatedLayout>
 </template>
 
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Layout from "@/Components/Layout.vue";
 
-const { props } = usePage();
-
-const form = useForm({
-    name: '',
-    email: '',
-    role: '',
-    status: '',
-});
-
-const submit = () => {
-    form.post(route('user.store'));
-};
-</script>
 
 

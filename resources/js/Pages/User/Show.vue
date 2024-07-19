@@ -11,23 +11,23 @@ import Layout from "@/Components/Layout.vue";
 const page = usePage();
 const user = ref(page.props.user);
 const roles = ref(page.props.roles);
-const site = ref(page.props.site);
+const sites = ref(page.props.sites);
 
 const form = useForm({
     name: user.value.name,
     email: user.value.email,
     roles_id: user.value.roles.map(role => role.id),
-    site_id: site.value ? site.value.id : null,
+    site_id: user.value.sites.length ? user.value.sites[0].id : null,
 });
 
 watchEffect(() => {
     if (page.props.user) {
         user.value = page.props.user;
         roles.value = page.props.roles;
-        site.value = page.props.site;
+        sites.value = page.props.sites;
         form.name = user.value.name;
         form.roles_id = user.value.roles.map(role => role.id);
-        form.site_id = site.value ? site.value.id : null;
+        form.site_id = user.value.sites.length ? user.value.sites[0].id : null;
     }
 });
 
@@ -97,25 +97,15 @@ watchEffect(() => {
                                                     <InputError :message="form.errors.email" class="mt-2" />
                                                 </div>
                                                 </div>
-                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                                 <div>
                                                     <InputLabel for="site_id" :value="$t('Site')" />
                                                     <select v-model="form.site_id" name="site_id" id="site_id"
                                                             class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option :value="site?.id">{{ site?.name }}</option>
+                                                        <option v-for="site in sites" :key="site.id" :value="site.id" >
+                                                        {{ site.name }}
+                                                        </option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.site_id" />
-                                                </div>
-                                                    <div>
-                                                        <InputLabel for="status" :value="$t('Status')" />
-                                                        <select v-model="form.status" id="status"
-                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                            <option value="active">{{ $t('Active') }}</option>
-                                                            <option value="inactive">{{ $t('Inactive') }}</option>
-                                                            <option value="pending">{{ $t('Pending') }}</option>
-                                                        </select>
-                                                        <InputError :message="form.errors.status" class="mt-2" />
-                                                    </div>
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="roles_id" :value="$t('Roles')" />

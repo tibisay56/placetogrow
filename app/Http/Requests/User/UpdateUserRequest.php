@@ -15,7 +15,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
+            'site_id' => 'required|exists:sites,id',
             'roles_id' => 'required|array',
+            'roles.*' => 'exists:roles,id',
         ];
     }
 }

@@ -12,8 +12,6 @@ const site = ref(page.props.site);
 const types = ref(page.props.types);
 const currencies = ref(page.props.currencies);
 
-console.log('types:', types.value);
-
 const initialValues = {
     name: site.value.name,
     avatar:null,

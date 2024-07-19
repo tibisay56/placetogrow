@@ -6,13 +6,18 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { ref } from 'vue';
+import {ref, watch} from 'vue';
 import Layout from "@/Components/Layout.vue";
 
 const page = usePage();
 const site = ref(page.props.site);
 const types = ref(page.props.types);
 const currencies = ref(page.props.currencies);
+
+console.log('Site:', JSON.stringify(site.value, null, 2));
+console.log('Types:', JSON.stringify(types.value, null, 2));
+console.log('Currencies:', JSON.stringify(currencies.value, null, 2));
+console.log('Users:', site.value.users);
 
 const form = useForm({
     name: site.value.name,
@@ -38,6 +43,11 @@ const submit = () => {
         }
     })
 }
+
+watch(site, (newValue) => {
+    console.log('Updated Site:', newValue);
+});
+
 const props = defineProps({
     types: Array,
     currencies: Array,
@@ -157,22 +167,28 @@ const props = defineProps({
                                                             <tr>
                                                                 <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Name</th>
                                                                 <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Email</th>
-                                                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Rol</th>
                                                                 <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Action</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                                            <tr v-for="(user) in site.users" :key="user.id">
+                                                            <template v-if="site.users.length > 0">
+                                                            <tr v-for="user in site.users" :key="user.id">
                                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
                                                                     {{ user.name }}</td>
                                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
                                                                     {{ user.email }}</td>
-                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                                                    {{ user.roles[0].name }}</td>
                                                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                                                     <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">Delete</button>
                                                                 </td>
                                                             </tr>
+                                                            </template>
+                                                            <template v-else>
+                                                                <tr>
+                                                                    <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-neutral-400">
+                                                                        No users assigned
+                                                                    </td>
+                                                                </tr>
+                                                            </template>
                                                             </tbody>
                                                         </table>
                                                     </div>

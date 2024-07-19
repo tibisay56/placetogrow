@@ -125,7 +125,7 @@ const onDeleteSuccess = (e) => {
                             </td>
                             <td class="size-px whitespace-nowrap">
                                 <div class="px-6 py-3">
-                                    <span class="block text-sm text-gray-500 dark:text-neutral-500"> {{user.email}}</span>
+                                    <span class="block text-sm text-gray-500 dark:text-neutral-500"> {{ user.sites.length > 0 ? user.sites[0].name : '-' }}</span>
                                 </div>
                             </td>
                             <td class="size-px whitespace-nowrap">
