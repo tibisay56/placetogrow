@@ -14,6 +14,10 @@ class SitesSeeder extends Seeder
     {
         $sites = Site::factory()->count(10)->create();
 
+        Site::factory()->create([
+            'name' => 'Test Site',
+        ]);
+
         foreach ($sites as $site) {
             $users = User::inRandomOrder()->limit(3)->get();
 

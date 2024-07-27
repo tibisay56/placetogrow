@@ -20,8 +20,17 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.6.0",
+        "@fortawesome/free-regular-svg-icons": "^6.6.0",
+        "@fortawesome/free-solid-svg-icons": "^6.6.0",
+        "@fortawesome/vue-fontawesome": "^3.0.8",
+        "@preline/copy-markup": "^2.4.1",
+        "@preline/datatable": "^2.4.1",
         "@preline/dropdown": "^2.3.0",
+        "@preline/stepper": "^2.4.0",
         "apexcharts": "^3.49.2",
-        "laravel-vue-i18n": "^2.7.7"
+        "datatables.net-dt": "^2.1.2",
+        "laravel-vue-i18n": "^2.7.7",
+        "uuid": "^10.0.0"
     }
 }

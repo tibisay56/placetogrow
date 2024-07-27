@@ -12,11 +12,4 @@ enum CurrencyType: string
         return array_column(self::cases(), 'value');
     }
 
-    public function text(): string
-    {
-        return match ($this) {
-            self::USD => trans('currencies.usd'),
-            self::COP => trans('currencies.cop'),
-        };
-    }
 }

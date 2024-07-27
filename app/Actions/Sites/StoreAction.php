@@ -1,12 +1,12 @@
 <?php
 
-
 namespace App\Actions\Sites;
 
+use App\Actions\Action;
 use App\Models\Site;
 use Illuminate\Support\Facades\Auth;
 
-class StoreAction
+class StoreAction extends Action
 {
     public function execute(array $data): Site
     {
@@ -19,5 +19,4 @@ class StoreAction
         $data['user_id'] = Auth::id();
         return Site::create($data);
     }
-
 }

@@ -1,3 +1,41 @@
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import TextInput from "@/Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import FileInput from "@/Components/FileInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Layout from "@/Components/Layout.vue";
+
+const form = useForm({
+    name: "",
+    avatar: null,
+    type_id: "",
+    category: "",
+    currency: "",
+    payment_expiration_time: 30,
+});
+
+const onSelectAvatar = (e) => {
+    const files = e.target.files;
+    if (files.length) {
+        form.avatar = files[0];
+    }
+    console.log(form.avatar);
+};
+
+const submit = () => {
+    form.post(route('site.store'));
+};
+
+const props = defineProps({
+    types: Array,
+    currencies: Array,
+});
+
+</script>
+
 <template>
     <Head title="Create Sites" />
     <AuthenticatedLayout>
@@ -104,42 +142,6 @@
     </AuthenticatedLayout>
 </template>
 
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import FileInput from "@/Components/FileInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Layout from "@/Components/Layout.vue";
 
-const form = useForm({
-    name: "",
-    avatar: null,
-    type_id: "",
-    category: "",
-    currency: "",
-    payment_expiration_time: 30,
-});
-
-const onSelectAvatar = (e) => {
-    const files = e.target.files;
-    if (files.length) {
-        form.avatar = files[0];
-    }
-    console.log(form.avatar);
-};
-
-const submit = () => {
-    form.post(route('site.store'));
-};
-
-const props = defineProps({
-    types: Array,
-    currencies: Array,
-});
-
-</script>
 
 

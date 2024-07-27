@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Sites\DeleteAction;
+use App\Actions\Sites\StoreAction;
+use App\Actions\Sites\UpdateAction;
 use App\Constants\CurrencyType;
 use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
@@ -36,6 +39,9 @@ class SiteController extends Controller
 
     public function create(): Response
     {
+        if(!Auth::user()->can(PermissionSlug::SITES_CREATE)){
+            abort(403);
+        }
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
@@ -47,24 +53,15 @@ class SiteController extends Controller
 
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(StoreRequest $request, StoreAction $storeAction): RedirectResponse
     {
 
-        if (! Auth::check()) {
-
+        if (!Auth::check()) {
             return redirect()->route('avatar');
         }
 
-        $data = $request->except('avatar');
-
-        if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $path = $file->store('avatars', ['disk' => 'public']);
-            $data['avatar'] = $path;
-        }
-        $data['user_id'] = Auth::user()->id;
-
-        Site::create($data);
+        $data = $request->all();
+        $storeAction->execute($data);
 
         return to_route('site.index');
     }
@@ -72,8 +69,8 @@ class SiteController extends Controller
     public function show(Site $site): Response
     {
         $site->load('users');
-        $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
+        $types = Type::all(['id', 'name']);
 
         return Inertia::render('Site/Show', [
             'site' => $site,
@@ -99,38 +96,25 @@ class SiteController extends Controller
         ]);
     }
 
-    public function update(UpdateRequest $request, Site $site): RedirectResponse
+    public function update(UpdateRequest $request, Site $site, UpdateAction $updateAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::SITES_UPDATE)){
+        if (!Auth::user()->can(PermissionSlug::SITES_UPDATE)) {
             abort(403);
         }
-        $data = $request->except('avatar');
 
-        if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $path = $file->store('avatars', ['disk' => 'public']);
-            $data['avatar'] = $path;
-
-            if ($site->avatar) {
-                Storage::disk('public')->delete($site->avatar);
-            }
-        }
-
-        $site->update($data);
+        $data = $request->all();
+        $updateAction->execute($site, $data);
 
         return to_route('site.index');
-
     }
 
-    public function destroy(Site $site): RedirectResponse
+    public function destroy(Site $site, DeleteAction $deleteAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::SITES_DELETE)){
+        if (!Auth::user()->can(PermissionSlug::SITES_DELETE)) {
             abort(403);
         }
-        if ($site->avatar) {
-            Storage::disk('public')->delete($site->avatar);
-        }
-        $site->delete();
+
+        $deleteAction->execute($site);
 
         return to_route('site.index');
     }

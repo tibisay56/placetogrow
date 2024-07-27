@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
 
-class CreateSiteTest extends TestCase
+class SiteTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -60,6 +60,23 @@ class CreateSiteTest extends TestCase
 
         $response->assertRedirect(route('site.index'));
         $this->assertDatabaseHas('sites', ['name' => 'New Site']);
+    }
+
+    /** @test */
+    public function an_admin_can_view_the_edit_form_for_a_site()
+    {
+        $user = User::factory()->create();
+        $user->assignRole('Admin');
+
+        $site = Site::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('site.edit', $site->slug));
+
+        $response->assertStatus(200)
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Site/Edit')
+                ->where('site.name', $site->name)
+            );
     }
 
     /** @test */
