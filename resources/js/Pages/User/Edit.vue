@@ -121,7 +121,7 @@ const submit = () => {
                                                                 :value="role.id"
                                                                 v-model="form.roles_id"
                                                             />
-                                                            <label :for="'role_' + role.id">{{ role.name }}</label>
+                                                            <label :for="'role_' + role.id">{{ $t(`${role.name}`) }}</label>
                                                         </div>
                                                     </div>
                                                     <div class="flex justify-center">

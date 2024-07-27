@@ -20,7 +20,7 @@ class SiteFactory extends Factory
             'category' => fake()->company(),
             'currency' => $this->faker->randomElement(CurrencyType::toArray()),
             'payment_expiration_time' => $this->faker->numberBetween(1, 1440),
-            'type_id' => Type::all()->random()->id,
+            'type_id' => Type::factory(),
         ];
     }
 }

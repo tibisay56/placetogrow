@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Roles\DeleteRoleAction;
+use App\Actions\Roles\StoreRoleAction;
+use App\Actions\Roles\UpdateRoleAction;
 use App\Constants\PermissionSlug;
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
@@ -38,17 +41,13 @@ class RoleController extends Controller
         ]);
     }
 
-    public function store(StoreRoleRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(StoreRoleRequest $request, StoreRoleAction $storeRoleAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_CREATE)){
+        if (!Auth::user()->can(PermissionSlug::ROLES_CREATE)) {
             abort(403);
         }
 
-        $role = Role::create(['name' => $request->name]);
-        $permissions = Permission::whereIn('id', $request->permissions)->get(['name'])->toArray();
-
-
-        $role->syncPermissions($permissions);
+        $role = $storeRoleAction->execute($request->all());
 
         return redirect()->route('role.index', $role)->with('success', 'Role created successfully.');
     }
@@ -77,28 +76,24 @@ class RoleController extends Controller
             'permissions' => $permissions,]);
     }
 
-    public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
+    public function update(UpdateRoleRequest $request, Role $role, UpdateRoleAction $updateRoleAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_UPDATE)){
+        if (!Auth::user()->can(PermissionSlug::ROLES_UPDATE)) {
             abort(403);
         }
 
-        $role->update(['name' => $request->name]);
-
-        $permissions = Permission::whereIn('id', $request->permissions)->get(['name'])->toArray();
-
-        $role->syncPermissions($permissions);
+        $updateRoleAction->execute($role, $request->all());
 
         return redirect()->route('role.index')->with('success', 'Role updated successfully.');
     }
 
-    public function destroy(Role $role): RedirectResponse
+    public function destroy(Role $role, DeleteRoleAction $deleteRoleAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_DELETE)){
+        if (!Auth::user()->can(PermissionSlug::ROLES_DELETE)) {
             abort(403);
         }
 
-        $role->delete();
+        $deleteRoleAction->execute($role);
 
         return to_route('role.index');
     }

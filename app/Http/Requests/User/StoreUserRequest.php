@@ -19,9 +19,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
-            'site_id' => 'required|exists:sites,id',
-            'roles' => 'required|array',
-            'roles.*' => 'exists:roles,id',
+            'password' => 'required|string|min:8|confirmed',
         ];
     }
 }

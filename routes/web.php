@@ -2,25 +2,18 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\LangController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', WelcomeController::class)->name('welcome');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -47,7 +40,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('sites', [SiteController::class, 'index'])->name('site.index');
     Route::get('sites/create', [SiteController::class, 'create'])->name('site.create');
-    Route::post('sites/create', [SiteController::class, 'store'])->name('site.store');
+    Route::post('sites', [SiteController::class, 'store'])->name('site.store');
     Route::get('sites/{site}', [SiteController::class, 'show'])->name('site.show');
     Route::get('sites/{site}/edit', [SiteController::class, 'edit'])->name('site.edit');
     Route::post('sites/{site}', [SiteController::class, 'update'])->name('site.update');
@@ -65,6 +58,27 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('role.destroy');
 });
 
+//Form
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('forms', [FormController::class, 'index'])->name('form.index');
+    Route::get('forms/create', [FormController::class, 'create'])->name('form.create');
+    Route::post('forms', [FormController::class, 'store'])->name('form.store');
+    Route::get('forms/{form}', [FormController::class, 'show'])->name('form.show');
+    Route::get('forms/{form}/edit', [FormController::class, 'edit'])->name('form.edit');
+    Route::post('forms/{form}', [FormController::class, 'update'])->name('form.update');
+    Route::delete('forms/{form}', [FormController::class, 'destroy'])->name('form.destroy');
+});
+
+//Payment
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::resource('settings', SettingsController::class);
+});
+
+Route::prefix('dashboard')->group(function () {
+    Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
+    Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
+});
 //Admin
 Route::get('/admin/register', [AdminController::class, 'create'])->name('admin.register');
 Route::post('/admin/register', [AdminController::class, 'store']);

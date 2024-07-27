@@ -4,30 +4,30 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { ref } from 'vue';
+import {ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
-import TablePayment from "@/Components/TablePayment.vue";
 
-const page = usePage()
-const site = ref(page.props.site);
-const types = ref(page.props.types);
-const currencies = ref(page.props.currencies);
+
+const page = usePage();
+const site = ref(page.props.site || {});
+const currencies = ref(page.props.currencies || []);
+const types = ref(page.props.types || []);
+
 
 const initialValues = {
     name: site.value.name,
-    avatar:null,
+    avatar: null,
     type_id: site.value.type_id,
     category: site.value.category,
     currency: site.value.currency,
     payment_expiration_time: 30,
-}
+};
 const form = useForm(initialValues);
 
 const props = defineProps({
     types: Array,
     currencies: Array,
 });
-
 </script>
 
 <template>
@@ -46,12 +46,8 @@ const props = defineProps({
                                 <!-- Header -->
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
-                                        <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            {{ $t('Show Sites') }}
-                                        </h2>
-                                        <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add sites, edit and more.') }}
-                                        </p>
+                                        <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200"> {{ $t('Show Sites') }} </h2>
+                                        <p class="text-sm text-gray-600 dark:text-neutral-400"> {{ $t('Add sites, edit and more.') }}</p>
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
@@ -73,29 +69,26 @@ const props = defineProps({
                                 <div class="py-12">
                                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                                         <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                            <form class="w-1/2 py-5 space-y-3">
-                                                <Transition
-                                                    enter-active-class="transition ease-in-out"
-                                                    enter-from-class="opacity-0"
-                                                    leave-active-class="transition ease-in-out"
-                                                    leave-to-class="opacity-0"
-                                                >
-                                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 text-center" >{{ $t('Site updated') }} </p>
-                                                </Transition>
+                                            <form class="w-1/2 py-5 space-y-3 ">
+                                                <div class="flex justify-center items-center h-20">
+                                                    <img class="h-16 flex flex-col items-center" :src="`/storage/${site.avatar}`" alt="avatar"/>
+                                                </div>
                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                                <div>
+                                                    <div>
                                                     <InputLabel for="name" :value="$t('Name')" />
                                                     <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />
                                                     <InputError class="mt-2" :message="form.errors.name" />
                                                 </div>
-                                                <div>
-                                                    <InputLabel for="type_id" :value="$t('Type')" />
-                                                    <select v-model="form.type_id" name="type_id" id="type_id"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
-                                                    </select>
-                                                    <InputError class="mt-2" :message="form.errors.type_id" />
-                                                </div>
+                                                    <div>
+                                                        <InputLabel for="type_id" :value="$t('Type')" />
+                                                        <select v-model="form.type_id" name="type_id" id="type_id"
+                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                            <option v-for="type in types" :key="type.id" :value="type.id">
+                                                                {{ type.name }}
+                                                            </option>
+                                                        </select>
+                                                        <InputError class="mt-2" :message="form.errors.type_id" />
+                                                    </div>
                                                 </div>
                                                 <div>
                                                     <InputLabel for="category" :value="$t('Category')" />
@@ -117,18 +110,9 @@ const props = defineProps({
                                                     <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                                 </div>
                                                 </div>
-                                                <div>
-                                                    <img class="h-16" :src="`/storage/${site.avatar}`" alt="avatar"/>
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="avatar" value="Logo" />
-                                                </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <TablePayment>
-
-                                    </TablePayment>
                                 </div>
                             </div>
                         </div>

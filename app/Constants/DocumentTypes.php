@@ -8,4 +8,9 @@ enum DocumentTypes
     case NIT;
     case CE;
     case PPT;
+
+    public static function toArray(): array
+    {
+        return array_map(fn($case) => $case->name, self::cases());
+    }
 }

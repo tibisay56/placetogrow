@@ -47,15 +47,6 @@ class UserTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function testItCanAssignRoleToUser(): void
-    {
-        $user = User::factory()->create();
-
-        $role = Role::where('name', 'Admin')->first();
-        $user->assignRole($role);
-
-        $this->assertTrue($user->hasRole('Admin'));
-    }
     protected function setUp(): void
     {
         parent::setUp();

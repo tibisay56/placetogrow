@@ -10,14 +10,14 @@ import {ref} from "vue";
 
 const { props } = usePage();
 const roles = ref(props.roles || []);
-const sites = ref(props.sites || []);
 
 console.log(props.roles);
 const form = useForm({
     name: '',
     email: '',
+    password: '',
+    password_confirmation: '',
     roles: [],
-    site_id: null,
 });
 
 
@@ -67,8 +67,8 @@ const submit = () => {
                                 <!-- End Header -->
                                 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                        <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                        <form class="w-1/3 py-5 space-y-3" @submit.prevent="submit">
+                                            <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 lg:gap-6">
                                             <div>
                                                 <InputLabel for="first_name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
@@ -79,24 +79,15 @@ const submit = () => {
                                                 <TextInput v-model="form.email" id="email" type="email" class="mt-1 block w-full" autocomplete="email" :placeholder="$t('Email')"/>
                                                 <InputError :message="form.errors.email" class="mt-2" />
                                             </div>
-                                            </div>
-                                            <div>
-                                                <InputLabel for="site_id" :value="$t('Site')" />
-                                                <select v-model="form.site_id" id="site_id"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option :value="null">{{ $t('Select a site') }}</option>
-                                                    <option v-for="site in sites" :key="site.id" :value="site.id">{{ site.name }}</option>
-                                                </select>
-                                                <InputError :message="form.errors.site_id" class="mt-2" />
-                                            </div>
-                                            <div>
                                                 <div>
-                                                    <InputLabel for="role" :value="$t('Role')" />
-                                                    <div v-for="role in roles" :key="role.id" class="flex items-center space-x-2">
-                                                        <input type="checkbox" :value="role.id" v-model="form.roles" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"/>
-                                                        <span>{{ role.name }}</span>
-                                                    </div>
-                                                    <InputError :message="form.errors.roles" class="mt-2" />
+                                                    <InputLabel for="password" :value="$t('Password')" />
+                                                    <TextInput v-model="form.password" id="password" type="password" class="mt-1 block w-full" autocomplete="new-password" :placeholder="$t('Password')"/>
+                                                    <InputError :message="form.errors.password" class="mt-2" />
+                                                </div>
+                                                <div>
+                                                    <InputLabel for="password_confirmation" :value="$t('Confirm Password')" />
+                                                    <TextInput v-model="form.password_confirmation" id="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" :placeholder="$t('Confirm Password')"/>
+                                                    <InputError :message="form.errors.password_confirmation" class="mt-2" />
                                                 </div>
                                             </div>
                                             <div class="flex justify-center">

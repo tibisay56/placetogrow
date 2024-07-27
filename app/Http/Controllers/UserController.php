@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Users\DeleteUserAction;
+use App\Actions\Users\StoreUserAction;
+use App\Actions\Users\UpdateUserAction;
 use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
 use App\Http\Requests\User\StoreUserRequest;
@@ -44,21 +47,15 @@ class UserController extends Controller
     ]);
     }
 
-    public function store(StoreUserRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(StoreUserRequest $request, StoreUserAction $storeUserAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_CREATE)){
+        if (!Auth::user()->can(PermissionSlug::USERS_CREATE)) {
             abort(403);
         }
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make('password');
-        $user->save();
 
-        $user->roles()->sync($request->roles);
-        if ($request->site_id) {
-            $user->sites()->sync([$request->site_id]);
-        }
+        $data = $request->only(['name', 'email', 'password']);
+        $data['password'] = bcrypt($data['password']);
+        $storeUserAction->execute($data);
 
         return to_route('user.index');
     }
@@ -92,28 +89,25 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UpdateUserRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function update(UpdateUserRequest $request, User $user, UpdateUserAction $updateUserAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_UPDATE)){
+        if (!Auth::user()->can(PermissionSlug::USERS_UPDATE)) {
             abort(403);
         }
-        $user->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-        ]);
 
-        $user->syncRoles($request->input('roles_id'));
-        $user->sites()->sync($request->input('site_id'));
+        $data = $request->only(['name', 'email', 'roles_id', 'site_id']);
+        $updateUserAction->execute($user, $data);
 
         return to_route('user.index');
     }
 
-    public function destroy(User $user): RedirectResponse
+    public function destroy(User $user, DeleteUserAction $deleteUserAction): RedirectResponse
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_DELETE)){
+        if (!Auth::user()->can(PermissionSlug::USERS_DELETE)) {
             abort(403);
         }
-        $user->delete();
+
+        $deleteUserAction->execute($user);
 
         return to_route('user.index');
     }

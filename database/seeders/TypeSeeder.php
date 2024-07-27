@@ -16,7 +16,7 @@ class TypeSeeder extends Seeder
     {
         $types = array_map(function (string $name) {
 
-            return ['name' => $name, 'created_at' => now()];
+            return ['name' => $name, 'created_at' => now(), 'updated_at' => now(),];
         }, TypeName::toArray());
 
         Type::insert($types);

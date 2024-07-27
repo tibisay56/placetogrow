@@ -137,7 +137,7 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-3">
                                     <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
                                         <template v-for="role in user.roles" :key="role.id">
-                                            {{ role.name }}<span v-if="index !== user.roles.length - 1"> </span>
+                                            {{ $t(`${role.name}`) }}<span v-if="index !== user.roles.length - 1"> </span>
                                         </template>
                                     </span>
                                 </div>

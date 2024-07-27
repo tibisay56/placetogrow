@@ -14,11 +14,6 @@ const site = ref(page.props.site);
 const types = ref(page.props.types);
 const currencies = ref(page.props.currencies);
 
-console.log('Site:', JSON.stringify(site.value, null, 2));
-console.log('Types:', JSON.stringify(types.value, null, 2));
-console.log('Currencies:', JSON.stringify(currencies.value, null, 2));
-console.log('Users:', site.value.users);
-
 const form = useForm({
     name: site.value.name,
     avatar: null,
