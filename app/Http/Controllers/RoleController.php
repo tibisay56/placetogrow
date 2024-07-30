@@ -49,7 +49,7 @@ class RoleController extends Controller
 
         $role = $storeRoleAction->execute($request->all());
 
-        return redirect()->route('role.index', $role)->with('success', 'Role created successfully.');
+        return redirect()->route('role.index', $role)->with('message', 'Role created successfully.');
     }
 
     public function show(Role $role): Response
@@ -84,7 +84,7 @@ class RoleController extends Controller
 
         $updateRoleAction->execute($role, $request->all());
 
-        return redirect()->route('role.index')->with('success', 'Role updated successfully.');
+        return redirect()->route('role.index')->with('message', 'Role updated successfully.');
     }
 
     public function destroy(Role $role, DeleteRoleAction $deleteRoleAction): RedirectResponse
@@ -95,7 +95,7 @@ class RoleController extends Controller
 
         $deleteRoleAction->execute($role);
 
-        return to_route('role.index');
+        return to_route('role.index')->with('message', 'Role deleted successfully.');
     }
 }
 

@@ -39,7 +39,6 @@ class PaymentController extends Controller
             $payment -> gateway = $request -> gateway;
             $payment -> status = PaymentStatus::PENDING;
             $payment -> user()->associate(User::first());
-            $payment -> site()->associate($request->site_id);
             $payment -> save();
 
             /** @var PaymentService $paymentService */

@@ -9,6 +9,16 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 const page = usePage()
 const sites = ref(page.props.sites);
 
+const colorByType = {
+    subscriptions: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    donations: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
+    invoicing: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+};
+
+const getBadgeClasses = (type) => {
+    return colorByType[type] || 'bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-500';
+};
+
 const onDeleteSuccess = (e) => {
     console.log(e)
     sites.value = e.props.sites;
@@ -18,10 +28,9 @@ const onDeleteSuccess = (e) => {
 </script>
 
 <template>
-    <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
-        <div class="w-full lg:ps-64">
+        <div class="w-full lg:ps-64 -mt-8">
             <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 <!-- Card -->
                 <div class="flex flex-col">
@@ -130,7 +139,7 @@ const onDeleteSuccess = (e) => {
                                         </td>
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
-                                                <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                <span :class="` capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(site.type.name)}`">
                                                 <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                                 </svg>
@@ -155,24 +164,15 @@ const onDeleteSuccess = (e) => {
                                             >
                                                 {{ $t('Actions') }}
 
-                                                <svg
-                                                    class="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
+                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                                 </svg>
                                             </button>
                                         </span>
                                                 </template>
 
                                                 <template #content>
-                                                    <DropdownLink  :href="route('site.show', site)"> {{ $t('Show') }} </DropdownLink>
+                                                    <DropdownLink  :href="route('site.show.slug', site)"> {{ $t('Show') }} </DropdownLink>
                                                     <DropdownLink  :href="route('site.edit', site)"> {{ $t('Edit') }} </DropdownLink>
                                                     <DropdownLink  @success="onDeleteSuccess" :href="route('site.destroy', site)" method="delete" as="button">
                                                         {{ $t('Delete') }}
@@ -215,8 +215,5 @@ const onDeleteSuccess = (e) => {
 
             </div>
         </div>
-
-
-    </AuthenticatedLayout>
 </template>
 

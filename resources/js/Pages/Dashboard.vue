@@ -5,10 +5,9 @@ import Layout from "@/Components/Layout.vue";
 </script>
 
 <template>
-    <AuthenticatedLayout>
         <Layout></Layout>
                         <!-- Content -->
-            <div class="w-full lg:ps-64">
+            <div class="w-full lg:ps-64 -mt-12">
                 <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                         <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ $t('Dashboard') }}</h2>
                     <div class="py-12">
@@ -20,5 +19,4 @@ import Layout from "@/Components/Layout.vue";
                     </div>
                 </div>
             </div>
-    </AuthenticatedLayout>
 </template>

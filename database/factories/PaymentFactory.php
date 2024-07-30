@@ -26,7 +26,6 @@ class PaymentFactory extends Factory
             'description' => fake()->sentence(),
             'reference' => Str::random(),
             'amount' => 10000,
-            'site_id' => Site::factory(),
             'currency' => CurrencyType::USD->name,
             'gateway' => PaymentGateway::PLACETOPAY->value,
             'status' => PaymentStatus::PENDING->value,

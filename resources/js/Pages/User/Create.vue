@@ -28,10 +28,9 @@ const submit = () => {
 
 <template>
     <Head title="Create Users" />
-    <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
-        <div class="w-full lg:ps-64">
+        <div class="w-full lg:ps-64 -mt-10">
             <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 <!-- Card -->
                 <div class="flex flex-col">
@@ -105,7 +104,6 @@ const submit = () => {
                 <!-- End Card -->
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
 
 

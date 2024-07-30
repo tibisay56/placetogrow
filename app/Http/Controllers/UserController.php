@@ -57,7 +57,7 @@ class UserController extends Controller
         $data['password'] = bcrypt($data['password']);
         $storeUserAction->execute($data);
 
-        return to_route('user.index');
+        return to_route('user.index')->with('message', 'User was created successfully!');
     }
     public function show(User $user): Response
     {
@@ -98,7 +98,7 @@ class UserController extends Controller
         $data = $request->only(['name', 'email', 'roles_id', 'site_id']);
         $updateUserAction->execute($user, $data);
 
-        return to_route('user.index');
+        return to_route('user.index')->with('message', 'User updated successfully!');
     }
 
     public function destroy(User $user, DeleteUserAction $deleteUserAction): RedirectResponse
@@ -109,7 +109,7 @@ class UserController extends Controller
 
         $deleteUserAction->execute($user);
 
-        return to_route('user.index');
+        return to_route('user.index')->with('message', 'User deleted successfully!');
     }
 }
 

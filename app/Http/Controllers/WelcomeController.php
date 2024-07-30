@@ -29,6 +29,11 @@ class WelcomeController extends Controller
     public function welcome(): \Inertia\Response
     {
         $sites = Site::all();
-        return Inertia::render('Welcome', ['sites' => $sites]);
+        return Inertia::render('Welcome', [
+            'sites' => $sites,
+            'currencies' => CurrencyType::toArray(),
+            'documentTypes' => DocumentTypes::toArray(),
+            'gateways' => PaymentGateway::toOptions(),
+        ]);
     }
 }

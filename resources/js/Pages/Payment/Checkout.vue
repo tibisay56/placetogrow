@@ -53,10 +53,10 @@ const submit = () => {
             <div class="flex w-full space-x-4">
                 <div class="flex-1 bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
                     <h2 class="text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-8">
-                        Personal Information
+                        Billing Information
                     </h2>
                     <form @submit.prevent="submit">
-                        <div class="space-y-2">
+                        <div class="space-y-4">
                             <div class="flex gap-4">
                                 <div class="w-1/2">
                                     <label for="name" class="block mb-2 text-sm text-gray-700 font-medium dark:text-white">Name</label>
@@ -88,19 +88,19 @@ const submit = () => {
                                     <InputError :message="form.errors.document_number" class="mt-2" />
                                 </div>
                             </div>
+                            <div>
+                                <label for="description" class="block mb-2 text-sm text-gray-700 font-medium dark:text-white">Description</label>
+                                <textarea v-model="form.description" id="description" rows="4" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"></textarea>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="flex-1 bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
                     <h2 class="text-sm font-semibold text-gray-800 dark:text-neutral-200 mb-8">
-                        Payment Details
+                        Payment Information
                     </h2>
                     <form @submit.prevent="submit">
-                        <div class="space-y-2">
-                            <div>
-                                <label for="description" class="block mb-2 text-sm text-gray-700 font-medium dark:text-white">Description</label>
-                                <textarea v-model="form.description" id="hs-default-height-with-autoheight-script" class="max-h-36 py-3 ps-4 pe-20 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 resize-none overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500" placeholder="Message..." rows="1" data-hs-default-height="48"></textarea>
-                            </div>
+                        <div class="space-y-4">
                             <div class="flex gap-4">
                                 <div class="w-1/2">
                                     <InputLabel for="currency" :value="$t('Currency')" class="mb-2"/>
@@ -131,12 +131,12 @@ const submit = () => {
                                     <InputError :message="form.errors.gateway" class="mt-2" />
                                 </div>
                             </div>
+                            <div class="mt-6 grid">
+                                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                    Submit Payment
+                                </PrimaryButton>
+                            </div>
                         </div>
-                        <div class="mt-6 grid">
-                        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="flex justify-center items-center text-center">
-                            Submit Payment
-                        </PrimaryButton>
-                    </div>
                     </form>
                 </div>
             </div>

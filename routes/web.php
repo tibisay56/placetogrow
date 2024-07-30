@@ -41,12 +41,13 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('sites', [SiteController::class, 'index'])->name('site.index');
     Route::get('sites/create', [SiteController::class, 'create'])->name('site.create');
     Route::post('sites', [SiteController::class, 'store'])->name('site.store');
-    Route::get('sites/{site}', [SiteController::class, 'show'])->name('site.show');
     Route::get('sites/{site}/edit', [SiteController::class, 'edit'])->name('site.edit');
     Route::post('sites/{site}', [SiteController::class, 'update'])->name('site.update');
     Route::delete('sites/{site}', [SiteController::class, 'destroy'])->name('site.destroy');
 });
-
+Route::prefix('dashboard')->group(function () {
+Route::get('sites/{slug}', [SiteController::class, 'showBySlug'])->name('site.show.slug');
+});
 //Role
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('roles', [RoleController::class, 'index'])->name('role.index');
@@ -79,9 +80,6 @@ Route::prefix('dashboard')->group(function () {
     Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
 });
-//Admin
-Route::get('/admin/register', [AdminController::class, 'create'])->name('admin.register');
-Route::post('/admin/register', [AdminController::class, 'store']);
 
 //Lang
 Route::get('/language/{language}', function ($language) {

@@ -6,6 +6,8 @@ use App\Actions\Sites\DeleteAction;
 use App\Actions\Sites\StoreAction;
 use App\Actions\Sites\UpdateAction;
 use App\Constants\CurrencyType;
+use App\Constants\DocumentTypes;
+use App\Constants\PaymentGateway;
 use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
 use App\Constants\TypeName;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
+use App\Models\Payment;
 
 class SiteController extends Controller
 {
@@ -63,19 +66,21 @@ class SiteController extends Controller
         $data = $request->all();
         $storeAction->execute($data);
 
-        return to_route('site.index');
+        return to_route('site.index')->with('message', 'Site created successfully.');
     }
 
-    public function show(Site $site): Response
+
+    public function showBySlug($slug): Response
     {
-        $site->load('users');
-        $currencies = CurrencyType::toArray();
-        $types = Type::all(['id', 'name']);
+        $site = Site::where('slug', $slug)->with('type')->firstOrFail();
 
         return Inertia::render('Site/Show', [
             'site' => $site,
-            'types' => $types,
-            'currencies' => $currencies,
+            'types' => Type::all(['id', 'name']),
+            'currencies' => CurrencyType::toArray(),
+            'documentTypes' => DocumentTypes::toArray(),
+            'payments' => Payment::all(),
+            'gateways' => PaymentGateway::toOptions(),
         ]);
     }
 
@@ -105,7 +110,7 @@ class SiteController extends Controller
         $data = $request->all();
         $updateAction->execute($site, $data);
 
-        return to_route('site.index');
+        return to_route('site.index')->with('message', 'Site updated successfully.');
     }
 
     public function destroy(Site $site, DeleteAction $deleteAction): RedirectResponse
@@ -116,6 +121,6 @@ class SiteController extends Controller
 
         $deleteAction->execute($site);
 
-        return to_route('site.index');
+        return to_route('site.index')->with('message', 'Site deleted successfully.');
     }
 }

@@ -21,7 +21,6 @@ class StorePaymentRequest extends FormRequest
         return [
             'description' => ['required', 'string', 'min:3', 'max:100'],
             'amount' => ['required', 'numeric', 'min:1', 'max:999999999999'],
-            'site_id' => ['required', 'numeric', 'exists:sites,id'],
             'currency' => ['required', Rule::in(CurrencyType::toArray())],
             'name' => ['required','string','min:3','max:20'],
             'lastname' => ['required','string','min:3','max:20'],
