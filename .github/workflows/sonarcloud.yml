@@ -24,7 +24,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=TibisayBarroso
-            -Dsonar.projectKey=SonarCloudCodeAnalyisis
+            -Dsonar.projectKey=tibisay56
 
           
       - name: Run SonarCloud analysis
