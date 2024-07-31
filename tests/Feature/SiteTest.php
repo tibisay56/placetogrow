@@ -21,7 +21,6 @@ class SiteTest extends TestCase
         Artisan::call('db:seed');
     }
 
-    /** @test */
     public function an_admin_can_view_sites()
     {
 
@@ -41,7 +40,6 @@ class SiteTest extends TestCase
             );
     }
 
-    /** @test */
     public function a_user_can_create_a_site()
     {
         $user = User::factory()->create();
@@ -62,7 +60,6 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'New Site']);
     }
 
-    /** @test */
     public function an_admin_can_view_the_edit_form_for_a_site()
     {
         $user = User::factory()->create();
@@ -79,7 +76,7 @@ class SiteTest extends TestCase
             );
     }
 
-    /** @test */
+
     public function an_admin_can_update_a_site()
     {
         $user = User::factory()->create();
@@ -99,7 +96,6 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'Updated Site Name']);
     }
 
-    /** @test */
     public function an_admin_can_delete_a_site()
     {
         $user = User::factory()->create();
