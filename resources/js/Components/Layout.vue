@@ -1,6 +1,5 @@
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue';
-import { HSDropdown } from 'preline';
+import {computed, reactive, ref} from 'vue';
 import {Link, router, usePage} from '@inertiajs/vue3';
 import {loadLanguageAsync} from "laravel-vue-i18n";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -59,27 +58,6 @@ const toggleDropdown = () => {
             <div class="w-full flex items-center justify-end ms-auto md:justify-between gap-x-1 md:gap-x-3">
 
                 <div class="hidden md:block">
-                    <!-- Search Input -->
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-                            <svg class="shrink-0 size-4 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        </div>
-                        <input type="text" class="py-2 ps-10 pe-16 block w-full bg-white border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder:text-neutral-400 dark:focus:ring-neutral-600" placeholder="Search">
-                        <div class="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
-                            <button type="button" class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500" aria-label="Close">
-                                <span class="sr-only">Close</span>
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-                            </button>
-                        </div>
-                        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
-                            <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
-                            <span class="mx-1">
-                                  <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                </span>
-                            <span class="text-xs">/</span>
-                        </div>
-                    </div>
-                    <!-- End Search Input -->
                 </div>
 
                 <div class="hidden md:block">
@@ -137,7 +115,7 @@ const toggleDropdown = () => {
                                 <div v-show="isDropdownOpen">
                                     <div class="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                                         <p class="text-sm text-gray-500 dark:text-neutral-500">Signed in as</p>
-                                        <div class="ms-2">{{ user.value?.name }}</div>
+                                        <div class="ms-2">{{ user.name }}</div>
                                     </div>
                                     <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                     <DropdownLink :href="route('logout')" method="post" as="button">
@@ -208,6 +186,15 @@ const toggleDropdown = () => {
                         </li>
 
                         <li>
+                            <Link :href="route('payment.index')">
+                                <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="users-accordion-child">
+                                    <font-awesome-icon icon="fa-regular fa-file-lines" />
+                                    {{ $t('Transactions') }}
+                                </button>
+                            </Link>
+                        </li>
+
+                        <li>
                             <Link :href="route('user.index')">
                             <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="users-accordion-child">
                                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -234,10 +221,10 @@ const toggleDropdown = () => {
                             </Link>
                         </li>
                         <li class="hs-accordion" id="projects-accordion">
-                        <Link :href="route('form.index')">
+                        <Link :href="route('setting.index')">
                             <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="projects-accordion-child">
-                                <font-awesome-icon icon="fa-regular fa-file-lines" />
-                                {{ $t('Forms') }}
+                                <font-awesome-icon :icon="['fas', 'gear']" />
+                                {{ $t('Settings') }}
                             </button>
                         </Link>
                         </li>

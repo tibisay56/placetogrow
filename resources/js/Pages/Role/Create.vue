@@ -1,6 +1,5 @@
 <template>
     <Head title="Create Roles" />
-    <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
         <div class="w-full lg:ps-64 -mt-12">
@@ -25,12 +24,6 @@
                                             <Link :href="route('role.index')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                     {{ $t('View all') }}
-                                                </a>
-                                            </Link>
-                                            <Link :href="route('role.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                    {{ $t('Add role') }}
                                                 </a>
                                             </Link>
                                         </div>
@@ -136,11 +129,9 @@
                 <!-- End Card -->
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";

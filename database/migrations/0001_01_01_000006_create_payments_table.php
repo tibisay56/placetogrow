@@ -21,8 +21,15 @@ return new class extends Migration
             $table->enum('gateway', PaymentGateway::toArray());
             $table->unsignedInteger('process_Identifier')->nullable();
 
-            $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('payer_name')->nullable();
+            $table->string('payer_lastname')->nullable();
+            $table->string('payer_document_type')->nullable();
+            $table->string('payer_document_number')->nullable();
+            $table->string('payer_email')->nullable();
+
+            $table->foreignId('site_id');
+            $table->foreign('site_id')->references('id')->on('sites');
+
             $table->timestamps();
         });
     }
