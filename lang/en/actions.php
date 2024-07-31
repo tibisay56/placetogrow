@@ -7,7 +7,7 @@ return [
     'action'          => 'Action',
     'actions'         => 'Actions',
     'add'             => 'Add',
-    'admin'           => 'Transaction',
+    'admin'           => 'Admin',
     'agree'           => 'Agree',
     'archive'         => 'Archive',
     'assign'          => 'Assign',
