@@ -26,7 +26,7 @@ class SiteTest extends TestCase
     {
 
         $user = User::factory()->create();
-        $user->assignRole('Admin');
+        $user->assignRole('Transaction');
 
         $site = Site::factory()->create([
             'name' => 'Test Site',
@@ -45,7 +45,7 @@ class SiteTest extends TestCase
     public function a_user_can_create_a_site()
     {
         $user = User::factory()->create();
-        $user->assignRole('Admin');
+        $user->assignRole('Transaction');
 
         $type = Type::factory()->create();
 
@@ -66,7 +66,7 @@ class SiteTest extends TestCase
     public function an_admin_can_view_the_edit_form_for_a_site()
     {
         $user = User::factory()->create();
-        $user->assignRole('Admin');
+        $user->assignRole('Transaction');
 
         $site = Site::factory()->create();
 
@@ -83,7 +83,7 @@ class SiteTest extends TestCase
     public function an_admin_can_update_a_site()
     {
         $user = User::factory()->create();
-        $user->assignRole('Admin');
+        $user->assignRole('Transaction');
 
         $site = Site::factory()->create();
 
@@ -103,7 +103,7 @@ class SiteTest extends TestCase
     public function an_admin_can_delete_a_site()
     {
         $user = User::factory()->create();
-        $user->assignRole('Admin');
+        $user->assignRole('Transaction');
 
         $site = Site::factory()->create();
 

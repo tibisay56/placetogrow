@@ -8,6 +8,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -59,26 +60,23 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('role.destroy');
 });
 
-//Form
-Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('forms', [FormController::class, 'index'])->name('form.index');
-    Route::get('forms/create', [FormController::class, 'create'])->name('form.create');
-    Route::post('forms', [FormController::class, 'store'])->name('form.store');
-    Route::get('forms/{form}', [FormController::class, 'show'])->name('form.show');
-    Route::get('forms/{form}/edit', [FormController::class, 'edit'])->name('form.edit');
-    Route::post('forms/{form}', [FormController::class, 'update'])->name('form.update');
-    Route::delete('forms/{form}', [FormController::class, 'destroy'])->name('form.destroy');
-});
-
 //Payment
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::resource('settings', SettingsController::class);
-});
-
 Route::prefix('dashboard')->group(function () {
     Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payment.show');
     Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
+});
+
+
+//Setting
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('settings', [SettingsController::class, 'index'])->name('setting.index');
+    Route::get('settings/create', [SettingsController::class, 'create'])->name('setting.create');
+    Route::post('settings', [SettingsController::class, 'store'])->name('setting.store');
+    Route::get('settings/{setting}', [SettingsController::class, 'show'])->name('setting.show');
+    Route::get('settings/{setting}/edit', [SettingsController::class, 'edit'])->name('setting.edit');
+    Route::post('settings/{setting}', [SettingsController::class, 'update'])->name('setting.update');
+    Route::delete('settings/{setting}', [SettingsController::class, 'destroy'])->name('setting.destroy');
 });
 
 //Lang

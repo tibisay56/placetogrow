@@ -63,7 +63,6 @@ class StorePaymentTest extends TestCase
                 ->assertRedirect($responseData['processUrl']);
 
         $this->assertDatabaseHas('payments', [
-            'user_id' => $user->id,
             'site_id' => $site->id,
             'description' => $data['description'],
             'amount' => 10000,

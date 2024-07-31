@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
@@ -38,7 +37,6 @@ const props = defineProps({
 
 <template>
     <Head title="Create Sites" />
-    <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
         <div class="w-full lg:ps-64 -mt-12">
@@ -139,7 +137,6 @@ const props = defineProps({
                 <!-- End Card -->
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
 
 

@@ -27,13 +27,10 @@ class SiteController extends Controller
 {
     public function index(): Response
     {
-        $user = Auth::user();
-
-        if ($user->hasRole('Admin')) {
-            $sites = Site::with(['users', 'type'])->get();
-        } else {
-            $sites = $user->sites()->with(['type'])->get();
+        if(!Auth::user()->can(PermissionSlug::SITES_VIEW)){
+            abort(403);
         }
+        $sites = Site::with('type')->get();
 
         return Inertia::render('Site/Index', [
             'sites' => $sites,

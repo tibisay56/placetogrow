@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import Layout from "@/Components/Layout.vue";
@@ -37,8 +36,6 @@ const filteredPermissions = (category) => {
 
 <template>
     <Head title="Show Roles" />
-
-    <AuthenticatedLayout>
         <Layout></Layout>
         <!-- Content -->
         <div class="w-full lg:ps-64 -mt-12">
@@ -164,6 +161,5 @@ const filteredPermissions = (category) => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
 

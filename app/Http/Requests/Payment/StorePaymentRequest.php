@@ -28,6 +28,7 @@ class StorePaymentRequest extends FormRequest
             'document_number' => ['required', 'numeric', 'digits_between:6,20'],
             'document_type' => ['required', Rule::in(DocumentTypes::toArray())],
             'gateway' => ['required', Rule::in(PaymentGateway::toArray())],
+            'site_id' => ['required', 'exists:sites,id'],
         ];
     }
 }

@@ -1,5 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Inertia from "lodash";
 
 const { props } = usePage();
 const payment = props.payment;
@@ -7,111 +9,114 @@ const payment = props.payment;
 
 <template>
 
-    <!-- Card Section -->
+
     <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-        <form>
-            <!-- Card -->
-            <div class="bg-white rounded-xl shadow dark:bg-neutral-900">
-                <div class="relative h-40 rounded-t-xl bg-[url('https://www.evertecinc.com/wp-content/uploads/2022/04/Evertec-lanza-nueva-plataforma-de-pagos-en-linea.jpg')] bg-no-repeat bg-cover bg-center">
+            <div class="relative flex flex-col bg-white shadow-lg rounded-xl pointer-events-auto dark:bg-neutral-800">
+                <div class="relative overflow-hidden min-h-32 bg-orange-500 text-center rounded-t-xl">
+
+                    <!-- SVG Background Element -->
+                    <figure class="absolute inset-x-0 bottom-0">
+                        <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 100.1">
+                            <path fill="currentColor" class="fill-white dark:fill-neutral-800" d="M0,0c0,0,934.4,93.4,1920,0v100.1H0L0,0z"></path>
+                        </svg>
+                    </figure>
+                    <!-- End SVG Background Element -->
                 </div>
 
-                <div class="pt-0 p-4 sm:pt-0 sm:p-7">
+                <div class="relative z-10 -mt-12">
+                    <!-- Icon -->
+                    <span class="mx-auto flex justify-center items-center size-[62px] rounded-full border border-gray-200 bg-white text-gray-700 shadow-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400">
+                          <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
+                            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+                          </svg>
+                        </span>
+                    <!-- End Icon -->
+                </div>
+
+                <!-- Body -->
+                <div class="p-4 sm:p-7 overflow-y-auto">
+                    <div class="text-center">
+                        <h3 id="hs-ai-invoice-modal-label" class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
+                            Invoice
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-neutral-500">
+                            Invoice #3682303
+                        </p>
+                    </div>
+
                     <!-- Grid -->
-                    <div class="space-y-4 sm:space-y-6">
+                    <div class="mt-5 sm:mt-10 grid grid-cols-2 sm:grid-cols-3 gap-5">
                         <div>
-                            <label class="sr-only">
-                                Product photo
-                            </label>
+                            <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">Payment status:</span>
+                            <span class="capitalize block text-sm font-medium text-gray-800 dark:text-neutral-200">{{ payment.status }}</span>
+                        </div>
+                        <!-- End Col -->
 
-                            <div class="flex flex-col items-center  sm:flex-row sm:items-center sm:gap-x-5">
-                                <img class="-mt-8 relative z-10 size-24 rounded-full ring-4 ring-white dark:ring-neutral-900 mx-auto"
-                                     src="/Documents/check.jpg" alt="Avatar">
-                            </div>
-                            <div class="bg-white items-center border-b  sm:items-center rounded-t-xl py-2 px-3 dark:bg-neutral-900 dark:border-neutral-700">
-                                <h3 class="text-lg font-bold text-orange-500 dark:text-white">
-                                    Payment Completed Succesfully!!
-                                </h3>
-                                <p class="mt-2 text-gray-500 dark:text-neutral-400">Thank you for your payment. We will be in contact shortly </p>
+                        <div>
+                            <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">Date paid:</span>
+                            <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200">{{ payment.created_at }}</span>
+                        </div>
+                        <!-- End Col -->
+
+                        <div>
+                            <span class="block text-xs uppercase text-gray-500 dark:text-neutral-500">Payment description:</span>
+                            <div class="flex items-center gap-x-2">
+                                <span class="capitalize block text-sm font-medium text-gray-800 dark:text-neutral-200">{{ payment.description }}</span>
                             </div>
                         </div>
+                        <!-- End Col -->
+                    </div>
+                    <!-- End Grid -->
 
-                        <div class="flex flex-col items-center space-y-4">
-                            <div class="w-full max-w-sm">
-                                <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 mx-auto">
-                                    <div class="bg-white border-b rounded-t-xl py-2 px-3 dark:bg-neutral-900 dark:border-neutral-700">
-                                        <h3 class="text-lg font-bold text-orange-500 dark:text-white">
-                                            Payment Description
-                                        </h3>
-                                    </div>
-                                    <div class="p-3 dark:bg-neutral-900">
-                                        <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                            {{ payment.description }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="mt-5 sm:mt-10">
+                        <h4 class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Summary</h4>
 
-                            <div class="w-full max-w-sm">
-                                <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 mx-auto">
-                                    <div class="bg-white border-b rounded-t-xl py-2 px-3 dark:bg-neutral-900 dark:border-neutral-700">
-                                        <h3 class="text-lg font-bold text-orange-500 dark:text-white">
-                                            Amount
-                                        </h3>
-                                    </div>
-                                    <div class="p-3 dark:bg-neutral-900">
-                                        <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                            {{ payment.amount }} {{ payment.currency }}
-                                        </p>
-                                    </div>
+                        <ul class="mt-3 flex flex-col">
+                            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                                <div class="flex items-center justify-between w-full">
+                                    <span>Payment to Front</span>
+                                    <span>$264.00</span>
                                 </div>
-                            </div>
-
-                            <div class="w-full max-w-sm">
-                                <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 mx-auto">
-                                    <div class="bg-white border-b rounded-t-xl py-2 px-3 dark:bg-neutral-900 dark:border-neutral-700">
-                                        <h3 class="text-lg font-bold text-orange-500 dark:text-white">
-                                            Status
-                                        </h3>
-                                    </div>
-                                    <div class="p-3 dark:bg-neutral-900">
-                                        <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                            {{ payment.status }}
-                                        </p>
-                                    </div>
+                            </li>
+                            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
+                                <div class="flex items-center justify-between w-full">
+                                    <span>Tax fee</span>
+                                    <span>$52.8</span>
                                 </div>
-                            </div>
-
-                            <div class="w-full max-w-sm">
-                                <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 mx-auto">
-                                    <div class="bg-white border-b rounded-t-xl py-2 px-3 dark:bg-neutral-900 dark:border-neutral-700">
-                                        <h3 class="text-lg font-bold text-orange-500 dark:text-white">
-                                            Date
-                                        </h3>
-                                    </div>
-                                    <div class="p-3 dark:bg-neutral-900">
-                                        <p class="mt-2 text-gray-500 dark:text-neutral-400">
-                                            {{ payment.created_at }}
-                                        </p>
-                                    </div>
+                            </li>
+                            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
+                                <div class="flex items-center justify-between w-full">
+                                    <span>Amount paid</span>
+                                    <span>{{ payment.currency }} ${{ payment.amount }}</span>
                                 </div>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
 
+                    <!-- Button -->
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            Invoice PDF
+                        </a>
+                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                            Print
+                        </a>
+                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" href="/">
+                            Go to Home
+                        </a>
+                    </div>
+                    <!-- End Buttons -->
 
-                        <!-- End Grid -->
-
-                    <div class="mt-5 flex justify-center gap-x-2">
-                        <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-400 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-400 disabled:opacity-50 disabled:pointer-events-none">
-                            Done
-                        </button>
+                    <div class="mt-5 sm:mt-10">
+                        <p class="text-sm text-gray-500 dark:text-neutral-500">If you have any questions, please contact us at <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="#">example@site.com</a> or call at <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="tel:+1898345492">+1 898-34-5492</a></p>
                     </div>
                 </div>
+                <!-- End Body -->
             </div>
-            <!-- End Card -->
-        </form>
     </div>
-    <!-- End Card Section -->
 
 </template>
 
