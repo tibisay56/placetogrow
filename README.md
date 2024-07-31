@@ -14,32 +14,34 @@ A web platform for managing microsites, enabling administrators to register user
 
 ## Installation
 
-    1. Clone this repository to your local machine:
+1. Clone this repository to your local machine:
 
-       ```bash
-       git clone https://github.com/your-username/your-repository.git
+```
+       git clone https://github.com/tibisay56/placetogrow.git
+```
+2. Install project dependencies using Composer and NPM:
 
-    2. Install project dependencies using Composer and NPM:
-
+```
         composer install
         npm install
+```
+3. Copy the .env.example configuration file and create a new one named .env. Then, update the environment variables according to your configuration:
 
-    3. Copy the .env.example configuration file and create a new one named .env. Then, update the environment variables according to your configuration:
-        
+```
         cp .env.example .env
         php artisan key:generate
-        
-    4. Run migrations to create the database tables:
-        
-        php artisan migrate
-        
-    5. Start the development server:
-        
-        php artisan serve
-        
-### Usage
+```
+4. Run migrations to create the database tables:
 
-Once the server is up and running, you can access the application from your browser by visiting http://localhost:8000.
+```
+        php artisan migrate
+```
+5. Start the development server:
+
+```
+        php artisan serve
+```
+
 
 ## Contributing
 
@@ -49,4 +51,6 @@ Contributions are welcome. If you find any issues or have a suggestion, please o
 ## License
 
 Microsites is licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+=======
 
