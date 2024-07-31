@@ -38,4 +38,5 @@ jobs:
             -Dsonar.organization=tibisay56 \
             -Dsonar.projectKey=tibisay56_placetogrow \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -X
