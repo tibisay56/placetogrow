@@ -23,7 +23,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=TibisayBarroso
+            -Dsonar.organization=tibisay56
             -Dsonar.projectKey=tibisay56_placetogrow
           
       - name: Run SonarCloud analysis
