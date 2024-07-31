@@ -25,11 +25,12 @@ class PaymentFactory extends Factory
         return [
             'description' => fake()->sentence(),
             'reference' => Str::random(),
-            'amount' => 10000,
+            'amount' => $this->faker->numberBetween(1000, 10000),
             'currency' => CurrencyType::USD->name,
             'gateway' => PaymentGateway::PLACETOPAY->value,
-            'status' => PaymentStatus::PENDING->value,
-            'user_id' => User::factory(),
+            'status' => $this->faker->randomElement(PaymentStatus::toArray()),
+            'site_id' => Site::inRandomOrder()->first()->id,
+            'payer_name' => $this->faker->name(),
         ];
     }
 }

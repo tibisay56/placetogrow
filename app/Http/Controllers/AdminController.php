@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function create()
     {
-        return inertia('Admin/Register');
+        return inertia('Transaction/Register');
     }
 
     public function store(Request $request)
@@ -30,6 +30,6 @@ class AdminController extends Controller
 
         $user->assignRole($role);
 
-        return redirect()->route('admin.register')->with('success', 'Admin registered successfully.');
+        return redirect()->route('admin.register')->with('success', 'Transaction registered successfully.');
     }
 }
