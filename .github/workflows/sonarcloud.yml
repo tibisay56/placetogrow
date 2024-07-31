@@ -24,11 +24,12 @@ jobs:
     steps:
       - name: Check whether SONAR_TOKEN is set
         id: checksecret_job
-        run: echo "is_SONAR_TOKEN_set=${{ env.SONAR_TOKEN != '' }}" >> $GITHUB_ENV
+        run: |
+          echo "is_SONAR_TOKEN_set=${{ secrets.SONAR_TOKEN != '' }}" >> $GITHUB_ENV
 
   build:
     needs: [checksecret]
-    if: needs.checksecret.outputs.is_SONAR_TOKEN_set == 'true'
+    if: ${{ needs.checksecret.outputs.is_SONAR_TOKEN_set == 'true' }}
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
