@@ -7,19 +7,26 @@ on:
   pull_request:
     branches:
       - feature/cicd
+
 jobs:
   build-and-analyze:
-    runs-on: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
+
     steps:
       - name: Check out Source
         uses: actions/checkout@v4
-      - name: Setup Java
-        uses: actions/setup-java@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Build Project
-        run: mvn clean install -DskipTests
+          php-version: '8.1'
+
+      - name: Install Dependencies
+        run: composer install
+
+      - name: Run Tests
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
