@@ -3,7 +3,10 @@ name: Sonar Scan
 on:
   push:
     branches:
-      - feature/ci/cd
+      - feature/cicd
+  pull_request:
+    branches:
+      - feature/cicd
 jobs:
   build-and-analyze:
     runs-on: [ ubuntu-latest ]
