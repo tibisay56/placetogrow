@@ -16,8 +16,8 @@ jobs:
 
     steps:
       - name: Setup PHP
-      - uses: shivammathur/setup-php@v2
-      - with:
+        uses: shivammathur/setup-php@v2
+        with:
           php-version: 8.3
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
@@ -33,7 +33,7 @@ jobs:
 
       - name: Run test
         run: php artisan test
-        
+
 
       - name: Check out Source
         uses: actions/checkout@v4
