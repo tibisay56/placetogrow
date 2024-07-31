@@ -35,15 +35,16 @@ jobs:
         run: |
           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
           unzip sonar-scanner.zip
-          export PATH=$PATH:`pwd`/sonar-scanner-4.6.2.2472-linux/bin
+          echo "$(pwd)/sonar-scanner-4.6.2.2472-linux/bin" >> $GITHUB_ENV
 
-      - name: Print SonarCloud Token (For Debugging)
-        run: echo "SONAR_TOKEN is set to '${{ secrets.SONAR_TOKEN }}'"
+      - name: Verify SonarCloud scanner installation
+        run: which sonar-scanner || echo "sonar-scanner not found"
 
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          PATH: ${{ env.PATH }}
         run: |
           sonar-scanner \
             -Dsonar.projectKey=tibisay56_placetogrow \
