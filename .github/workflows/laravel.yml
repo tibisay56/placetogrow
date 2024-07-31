@@ -22,6 +22,11 @@ jobs:
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
 
+      - name: Check PHP
+        run: php -v
+
+      - uses: actions/checkout@v2
+
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -33,11 +38,6 @@ jobs:
 
       - name: Run test
         run: php artisan test
-
-
-      - name: Check out Source
-        uses: actions/checkout@v4
-
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
