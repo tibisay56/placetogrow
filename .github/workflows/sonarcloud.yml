@@ -1,4 +1,3 @@
-
 name: SonarCloud analysis
 
 on:
@@ -9,25 +8,28 @@ on:
   workflow_dispatch:
 
 permissions:
-  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
+  pull-requests: write  # Allows SonarCloud to decorate PRs with analysis results
 
 jobs:
   Analysis:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Analyze with SonarCloud
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        # You can pin the exact commit or the version.
-        # uses: SonarSource/sonarcloud-github-action@v2.2.0
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+      - name: Set up SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v2.2.0
         with:
-        
-          args:
-          
+          args: |
             -Dsonar.projectKey=tibisay56_placetogrow
             -Dsonar.organization=TibisayBarroso
-         
-          projectBaseDir: .
+            -Dsonar.host.url=https://sonarcloud.io
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+      - name: Run SonarCloud analysis
+        run: sonar-scanner
+          
+      
