@@ -1,5 +1,11 @@
+includes:
+  - ./vendor/nunomaduro/larastan/extension.neon
+
 parameters:
-    level: max
-    paths:
-      - app
-      - tests
+  level: 4
+  paths:
+    - app
+    - tests
+
+  excludePaths:
+    - vendor
