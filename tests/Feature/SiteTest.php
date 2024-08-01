@@ -21,9 +21,8 @@ class SiteTest extends TestCase
         Artisan::call('db:seed');
     }
 
-    public function an_admin_can_view_sites()
+    public function test_admin_can_view_sites()
     {
-
         $user = User::factory()->create();
         $user->assignRole('Admin');
 
@@ -40,7 +39,7 @@ class SiteTest extends TestCase
             );
     }
 
-    public function a_user_can_create_a_site()
+    public function test_user_can_create_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -60,7 +59,7 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'New Site']);
     }
 
-    public function an_admin_can_view_the_edit_form_for_a_site()
+    public function test_admin_can_view_the_edit_form_for_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -76,8 +75,7 @@ class SiteTest extends TestCase
             );
     }
 
-
-    public function an_admin_can_update_a_site()
+    public function test_admin_can_update_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -96,7 +94,7 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'Updated Site Name']);
     }
 
-    public function an_admin_can_delete_a_site()
+    public function test_admin_can_delete_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
