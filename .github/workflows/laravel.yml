@@ -1,0 +1,60 @@
+name: Sonar Scan
+
+on:
+  push:
+    branches: [ feature/cicd ]
+  pull_request:
+    branches: [ feature/cicd ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php version: ['8.3']
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: json, dom, curl, libxml, mbstring
+          coverage: none
+
+      - name: Start mysql service
+        run: sudo /etc/init.d/mysql start
+
+      - name: Check PHP
+        run: php -v
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: run composer install
+        run: composer install -n --prefer-dist
+
+      - name: run npm install
+        run: npm install
+
+      - name: Run Laravel pint
+        run: ./vendor/bin/pint
+
+      - name: Run Migrations
+        run: php artisan migrate --force
+
+      - name: Seed Database
+        run: php artisan db:seed --force
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          args: |
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            SONAR_HOST_URL: 'https://sonarcloud.io'
+

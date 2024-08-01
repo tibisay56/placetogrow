@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -44,7 +44,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::delete('sites/{site}', [SiteController::class, 'destroy'])->name('site.destroy');
 });
 Route::prefix('dashboard')->group(function () {
-Route::get('sites/{slug}', [SiteController::class, 'showBySlug'])->name('site.show.slug');
+    Route::get('sites/{slug}', [SiteController::class, 'showBySlug'])->name('site.show.slug');
 });
 //Role
 Route::prefix('dashboard')->middleware('auth')->group(function () {
@@ -64,7 +64,6 @@ Route::prefix('dashboard')->group(function () {
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
 });
 
-
 //Setting
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('settings', [SettingsController::class, 'index'])->name('setting.index');
@@ -79,6 +78,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 //Lang
 Route::get('/language/{language}', function ($language) {
     Session::put('locale', $language);
+
     return redirect()->back();
 })->name('language');
 

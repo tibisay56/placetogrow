@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Cviebrock\EloquentSluggable\Sluggable;
 
 class Site extends Model
 {
@@ -27,9 +27,10 @@ class Site extends Model
     {
         return $this->belongsTo(Type::class);
     }
+
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'site_user', 'user_id', 'site_id'   );
+        return $this->belongsToMany(User::class, 'site_user', 'user_id', 'site_id');
     }
 
     public function getRouteKeyName(): string
@@ -37,11 +38,12 @@ class Site extends Model
         return 'slug';
     }
 
-    public function sluggable(): array {
+    public function sluggable(): array
+    {
         return [
             'slug' => [
-                'source' => 'name'
-            ]
+                'source' => 'name',
+            ],
         ];
     }
 }

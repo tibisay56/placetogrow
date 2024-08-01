@@ -11,15 +11,15 @@ use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
-use Illuminate\Http\Client\Request;
-
 
 class StorePaymentTest extends TestCase
 {
-    use WithFaker;
     use RefreshDatabase;
+    use WithFaker;
+
     /**
      * A basic feature test example.
      */
@@ -31,10 +31,10 @@ class StorePaymentTest extends TestCase
             'status' => [
                 'status' => 'OK',
                 'reason' => 'PC',
-                'message'=> 'Respuesta falsa',
-                'date' => '2021-11-30T15:08:27-05:00'
+                'message' => 'Respuesta falsa',
+                'date' => '2021-11-30T15:08:27-05:00',
             ],
-            'requestId'=> 1,
+            'requestId' => 1,
             'processUrl' => 'https://checkout-co.placetopay.com/session/1/cc9b8690b1f7228c78b759ce27d7e80a',
         ];
 
@@ -60,7 +60,7 @@ class StorePaymentTest extends TestCase
         $response = $this->actingAs($user)->post(route('payment.store'), $data);
 
         $response->assertSessionHasNoErrors()
-                ->assertRedirect($responseData['processUrl']);
+            ->assertRedirect($responseData['processUrl']);
 
         $this->assertDatabaseHas('payments', [
             'site_id' => $site->id,

@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     protected $fillable = [
         'name',
@@ -34,6 +34,6 @@ class User extends Authenticatable
 
     public function sites(): BelongsToMany
     {
-        return $this->belongsToMany(Site::class, 'site_user','user_id', 'site_id');
+        return $this->belongsToMany(Site::class, 'site_user', 'user_id', 'site_id');
     }
 }

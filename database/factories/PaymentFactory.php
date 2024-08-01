@@ -6,7 +6,6 @@ use App\Constants\CurrencyType;
 use App\Constants\PaymentGateway;
 use App\Constants\PaymentStatus;
 use App\Models\Site;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

@@ -2,14 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
@@ -22,7 +18,7 @@ class UserTest extends TestCase
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
             'password' => 'password',
-            'password_confirmation' => 'password'
+            'password_confirmation' => 'password',
         ];
 
         $response = $this->post('/register', $userData);
@@ -31,6 +27,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('users', ['email' => 'john.doe@example.com']);
     }
+
     public function testItCanAuthenticateUser(): void
     {
         $user = User::factory()->create([

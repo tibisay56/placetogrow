@@ -4,13 +4,11 @@ namespace Database\Seeders;
 
 use App\Constants\PermissionSlug;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
 class DefaultRolesAndPermissionsSeeder extends Seeder
 {
-
     public function run(): void
     {
         $baseRolesPermission = [
@@ -60,7 +58,7 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
             ],
         ];
 
-        foreach ($baseRolesPermission as $role){
+        foreach ($baseRolesPermission as $role) {
             $rol = Role::query()->updateOrcreate([
                 'name' => $role['name'],
                 'guard_name' => 'web',

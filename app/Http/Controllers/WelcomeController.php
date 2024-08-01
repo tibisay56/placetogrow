@@ -5,13 +5,10 @@ namespace App\Http\Controllers;
 use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
 use App\Constants\PaymentGateway;
-use App\Models\Payment;
 use App\Models\Site;
-use Inertia\Inertia;
-use Illuminate\Http\Response;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 class WelcomeController extends Controller
 {
@@ -29,6 +26,7 @@ class WelcomeController extends Controller
     public function welcome(): \Inertia\Response
     {
         $sites = Site::all();
+
         return Inertia::render('Welcome', [
             'sites' => $sites,
             'currencies' => CurrencyType::toArray(),

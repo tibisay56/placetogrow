@@ -11,5 +11,4 @@ enum CurrencyType: string
     {
         return array_column(self::cases(), 'value');
     }
-
 }
