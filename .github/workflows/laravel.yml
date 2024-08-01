@@ -9,12 +9,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: microsites
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     strategy:
       matrix:
         php version: ['8.3']
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -25,8 +41,6 @@ jobs:
       - name: Check PHP
         run: php -v
 
-      - uses: actions/checkout@v2
-
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -36,8 +50,15 @@ jobs:
       - name: run npm install
         run: npm install
 
+      - name: Create DB
+        run: |
+          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE microsites;"
+
       - name: Run test
         run: php artisan test
+
+      - name: Run Migrations
+        run: php artisan migrate --force
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
