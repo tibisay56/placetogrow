@@ -23,6 +23,7 @@ class Site extends Model
         'type_id',
     ];
 
+
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
@@ -46,4 +47,5 @@ class Site extends Model
             ],
         ];
     }
+
 }

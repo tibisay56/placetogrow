@@ -22,15 +22,6 @@ const submit = () => {
     });
 };
 
-const togglePermission = (permissionId) => {
-    const index = selectedPermissions.value.indexOf(permissionId);
-    if (index !== -1) {
-        selectedPermissions.value.splice(index, 1);
-    } else {
-        selectedPermissions.value.push(permissionId);
-    }
-    form.permissions = selectedPermissions.value;
-};
 
 watch(selectedPermissions, (newPermissions) => {
     form.permissions = newPermissions;

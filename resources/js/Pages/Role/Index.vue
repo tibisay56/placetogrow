@@ -10,7 +10,6 @@ const page = usePage()
 const roles = ref(page.props.roles);
 
 const onDeleteSuccess = (e) => {
-    console.log(e)
     roles.value = e.props.roles;
 }
 
