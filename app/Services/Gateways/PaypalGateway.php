@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Http;
 class PaypalGateway implements PaymentGateway
 {
     private array $data;
+
     private array $config;
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->data = [
             'expiration' => now()->addHour()->format('c'),
             'ipAddress' => request()->ip(),
@@ -32,7 +35,7 @@ class PaypalGateway implements PaymentGateway
         $tranKey = base64_encode(hash_hmac('sha256', $nonce.$seed, $secretKey, true));
         $nonce = base64_encode($nonce);
 
-        $this -> data['auth'] = [
+        $this->data['auth'] = [
             'login' => $login,
             'tranKey' => $tranKey,
             'nonce' => $nonce,
@@ -66,7 +69,7 @@ class PaypalGateway implements PaymentGateway
             ],
         ];
 
-        $this->data ['returnUrl'] = route ('payment.Show', $payment);
+        $this->data['returnUrl'] = route('payment.Show', $payment);
 
         return $this;
     }
@@ -81,15 +84,14 @@ class PaypalGateway implements PaymentGateway
 
     public function get(Payment $payment): QueryPaymentResponse
     {
-        $url = $this->config['url'] . '/' . $payment-> process_identifier;
+        $url = $this->config['url'].'/'.$payment->process_identifier;
 
         $response = Http::get($url);
         $response = $response->json();
 
         $status = $response['status'];
 
-        return new QueryPaymentResponse($status['reason'], $status ['status']);
+        return new QueryPaymentResponse($status['reason'], $status['status']);
 
     }
-
 }

@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Http;
 class PlacetoPayGateway implements PaymentGateway
 {
     private array $data;
+
     private array $config;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->data = [
             'expiration' => now()->addHour()->format('c'),
             'ipAddress' => request()->ip(),
@@ -67,7 +69,7 @@ class PlacetoPayGateway implements PaymentGateway
             ],
         ];
 
-        $this->data ['returnUrl'] = route ('payment.show', $payment);
+        $this->data['returnUrl'] = route('payment.show', $payment);
 
         return $this;
     }
@@ -84,14 +86,13 @@ class PlacetoPayGateway implements PaymentGateway
 
     public function get(Payment $payment): QueryPaymentResponse
     {
-        $url = $this->config['url'].'/'.$payment-> process_identifier;
+        $url = $this->config['url'].'/'.$payment->process_identifier;
 
         $response = Http::post($url, $this->data);
         $response = $response->json();
 
         $status = $response['status'];
 
-        return new QueryPaymentResponse($status['reason'], $status ['status']);
+        return new QueryPaymentResponse($status['reason'], $status['status']);
     }
-
 }

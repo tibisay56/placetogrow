@@ -12,15 +12,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
     public function index(): Response
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_VIEW_ANY)){
+        if (! Auth::user()->can(PermissionSlug::ROLES_VIEW_ANY)) {
             abort(403);
         }
         $roles = Role::with('permissions')->get();
@@ -32,18 +31,18 @@ class RoleController extends Controller
 
     public function create(): Response
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_CREATE)){
+        if (! Auth::user()->can(PermissionSlug::ROLES_CREATE)) {
             abort(403);
         }
 
         return Inertia::render('Role/Create', [
-            'permissions' => Permission::get()
+            'permissions' => Permission::get(),
         ]);
     }
 
     public function store(StoreRoleRequest $request, StoreRoleAction $storeRoleAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::ROLES_CREATE)) {
+        if (! Auth::user()->can(PermissionSlug::ROLES_CREATE)) {
             abort(403);
         }
 
@@ -54,31 +53,31 @@ class RoleController extends Controller
 
     public function show(Role $role): Response
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_CREATE)){
+        if (! Auth::user()->can(PermissionSlug::ROLES_CREATE)) {
             abort(403);
         }
 
         $permissions = Permission::all();
 
         return Inertia::render('Role/Show', ['role' => $role->load('permissions'),
-            'permissions' => $permissions,]);
+            'permissions' => $permissions, ]);
     }
 
     public function edit(Role $role): Response
     {
-        if(!Auth::user()->can(PermissionSlug::ROLES_UPDATE)){
+        if (! Auth::user()->can(PermissionSlug::ROLES_UPDATE)) {
             abort(403);
         }
 
         $permissions = Permission::all();
 
         return Inertia::render('Role/Edit', ['role' => $role->load('permissions'),
-            'permissions' => $permissions,]);
+            'permissions' => $permissions, ]);
     }
 
     public function update(UpdateRoleRequest $request, Role $role, UpdateRoleAction $updateRoleAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::ROLES_UPDATE)) {
+        if (! Auth::user()->can(PermissionSlug::ROLES_UPDATE)) {
             abort(403);
         }
 
@@ -89,7 +88,7 @@ class RoleController extends Controller
 
     public function destroy(Role $role, DeleteRoleAction $deleteRoleAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::ROLES_DELETE)) {
+        if (! Auth::user()->can(PermissionSlug::ROLES_DELETE)) {
             abort(403);
         }
 
@@ -98,4 +97,3 @@ class RoleController extends Controller
         return to_route('role.index')->with('message', 'Role deleted successfully.');
     }
 }
-

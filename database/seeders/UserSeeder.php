@@ -3,18 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-
     public function run(): void
     {
         $adminEmail = 'admin@admin.com';
         $customerEmail = 'customer@example.com';
 
-        if (!User::where('email', $adminEmail)->exists()) {
+        if (! User::where('email', $adminEmail)->exists()) {
             User::create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
@@ -22,7 +20,7 @@ class UserSeeder extends Seeder
             ])->assignRole('Admin');
         }
 
-        if (!User::where('email', $customerEmail)->exists()) {
+        if (! User::where('email', $customerEmail)->exists()) {
             User::create([
                 'name' => 'Customer',
                 'email' => 'customer@example.com',

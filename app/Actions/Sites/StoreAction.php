@@ -17,6 +17,7 @@ class StoreAction extends Action
         }
 
         $data['user_id'] = Auth::id();
+
         return Site::create($data);
     }
 }

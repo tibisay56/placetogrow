@@ -7,9 +7,8 @@ use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
 class SiteTest extends TestCase
 {
@@ -21,10 +20,8 @@ class SiteTest extends TestCase
         Artisan::call('db:seed');
     }
 
-    /** @test */
-    public function an_admin_can_view_sites()
+    public function test_admin_can_view_sites()
     {
-
         $user = User::factory()->create();
         $user->assignRole('Admin');
 
@@ -41,8 +38,7 @@ class SiteTest extends TestCase
             );
     }
 
-    /** @test */
-    public function a_user_can_create_a_site()
+    public function test_user_can_create_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -62,8 +58,7 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'New Site']);
     }
 
-    /** @test */
-    public function an_admin_can_view_the_edit_form_for_a_site()
+    public function test_admin_can_view_the_edit_form_for_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -79,8 +74,7 @@ class SiteTest extends TestCase
             );
     }
 
-    /** @test */
-    public function an_admin_can_update_a_site()
+    public function test_admin_can_update_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -99,8 +93,7 @@ class SiteTest extends TestCase
         $this->assertDatabaseHas('sites', ['name' => 'Updated Site Name']);
     }
 
-    /** @test */
-    public function an_admin_can_delete_a_site()
+    public function test_admin_can_delete_a_site()
     {
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -113,4 +106,3 @@ class SiteTest extends TestCase
         $this->assertDatabaseMissing('sites', ['id' => $site->id]);
     }
 }
-

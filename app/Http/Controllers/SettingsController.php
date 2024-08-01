@@ -14,6 +14,7 @@ class SettingsController extends Controller
     public function index(): Response
     {
         $settings = PaymentSetting::with('site')->get();
+
         return Inertia::render('Setting/Index', [
             'settings' => $settings,
         ]);
@@ -22,6 +23,7 @@ class SettingsController extends Controller
     public function create(): Response
     {
         $sites = Site::all();
+
         return Inertia::render('PaymentSettings/Create', [
             'sites' => $sites,
         ]);
@@ -44,6 +46,7 @@ class SettingsController extends Controller
     public function edit(PaymentSetting $paymentSetting): Response
     {
         $sites = Site::all();
+
         return Inertia::render('Transaction/PaymentSettings/Edit', [
             'paymentSetting' => $paymentSetting,
             'sites' => $sites,
@@ -67,6 +70,7 @@ class SettingsController extends Controller
     public function destroy(PaymentSetting $paymentSetting): RedirectResponse
     {
         $paymentSetting->delete();
+
         return redirect()->route('admin.payment-settings.index')->with('success', 'Payment settings deleted successfully.');
     }
 }

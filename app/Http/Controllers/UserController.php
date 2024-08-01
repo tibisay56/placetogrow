@@ -6,14 +6,12 @@ use App\Actions\Users\DeleteUserAction;
 use App\Actions\Users\StoreUserAction;
 use App\Actions\Users\UpdateUserAction;
 use App\Constants\PermissionSlug;
-use App\Constants\PolicyName;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
 
@@ -21,7 +19,7 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_VIEW_ANY)){
+        if (! Auth::user()->can(PermissionSlug::USERS_VIEW_ANY)) {
             ABORT(403);
         }
 
@@ -34,7 +32,7 @@ class UserController extends Controller
 
     public function create(): Response
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_CREATE)){
+        if (! Auth::user()->can(PermissionSlug::USERS_CREATE)) {
             abort(403);
         }
 
@@ -44,12 +42,12 @@ class UserController extends Controller
         return inertia('User/Create', [
             'sites' => $sites,
             'roles' => $roles,
-    ]);
+        ]);
     }
 
     public function store(StoreUserRequest $request, StoreUserAction $storeUserAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::USERS_CREATE)) {
+        if (! Auth::user()->can(PermissionSlug::USERS_CREATE)) {
             abort(403);
         }
 
@@ -59,9 +57,10 @@ class UserController extends Controller
 
         return to_route('user.index')->with('message', 'User was created successfully!');
     }
+
     public function show(User $user): Response
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_VIEW)){
+        if (! Auth::user()->can(PermissionSlug::USERS_VIEW)) {
             abort(403);
         }
         $user->load(['roles', 'sites']);
@@ -75,7 +74,7 @@ class UserController extends Controller
 
     public function edit(User $user): Response
     {
-        if(!Auth::user()->can(PermissionSlug::USERS_UPDATE)){
+        if (! Auth::user()->can(PermissionSlug::USERS_UPDATE)) {
             abort(403);
         }
         $user->load(['roles', 'sites']);
@@ -91,7 +90,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user, UpdateUserAction $updateUserAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::USERS_UPDATE)) {
+        if (! Auth::user()->can(PermissionSlug::USERS_UPDATE)) {
             abort(403);
         }
 
@@ -103,7 +102,7 @@ class UserController extends Controller
 
     public function destroy(User $user, DeleteUserAction $deleteUserAction): RedirectResponse
     {
-        if (!Auth::user()->can(PermissionSlug::USERS_DELETE)) {
+        if (! Auth::user()->can(PermissionSlug::USERS_DELETE)) {
             abort(403);
         }
 
@@ -112,4 +111,3 @@ class UserController extends Controller
         return to_route('user.index')->with('message', 'User deleted successfully!');
     }
 }
-
