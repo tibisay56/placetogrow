@@ -44,6 +44,8 @@ jobs:
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
 
+      - name: Start mysql service
+        run: sudo /etc/init.d/mysql start
 
       - name: Check PHP
         run: php -v
@@ -59,13 +61,6 @@ jobs:
 
       - name: Run Laravel pint
         run: ./vendor/bin/pint
-
-      - name: Wait for MySQL to be ready
-        run: |
-          until mysqladmin ping -h 127.0.0.1 -u root -p${{ secrets.DB_PASSWORD }} --silent; do
-            echo 'waiting for mysql to be connectable...'
-            sleep 1
-          done
 
       - name: Run test
         run: php artisan test
@@ -83,9 +78,12 @@ jobs:
       - name: Seed Database
         run: php artisan db:seed --force
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          args: |
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: 'https://sonarcloud.io'
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            SONAR_HOST_URL: 'https://sonarcloud.io'
 
