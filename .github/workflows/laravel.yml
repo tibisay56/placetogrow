@@ -50,9 +50,12 @@ jobs:
       - name: run npm install
         run: npm install
 
-      - name: Create DB
+      - name: Wait for MySQL to be ready
         run: |
-          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE microsites;"
+          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+            echo 'waiting for mysql to be connectable...'
+            sleep 1
+          done
 
       - name: Run test
         run: php artisan test
