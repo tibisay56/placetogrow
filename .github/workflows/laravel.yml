@@ -9,10 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      BROADCAST_DRIVER: log
     services:
       mysql:
         image: mysql:8.0
         env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
           MYSQL_DATABASE: microsites
         ports:
@@ -37,6 +43,7 @@ jobs:
           php-version: 8.3
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
+
 
       - name: Check PHP
         run: php -v
