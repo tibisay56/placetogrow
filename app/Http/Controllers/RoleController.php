@@ -77,6 +77,7 @@ class RoleController extends Controller
 
     public function update(UpdateRoleRequest $request, Role $role, UpdateRoleAction $updateRoleAction): RedirectResponse
     {
+       
         if (! Auth::user()->can(PermissionSlug::ROLES_UPDATE)) {
             abort(403);
         }
