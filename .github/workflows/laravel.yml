@@ -55,7 +55,7 @@ jobs:
 
       - name: Wait for MySQL to be ready
         run: |
-          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+          until mysqladmin ping -h 127.0.0.1 -u root -p${{ secrets.DB_PASSWORD }} --silent; do
             echo 'waiting for mysql to be connectable...'
             sleep 1
           done

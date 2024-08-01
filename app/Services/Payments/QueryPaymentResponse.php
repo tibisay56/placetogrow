@@ -23,5 +23,4 @@ class QueryPaymentResponse implements Arrayable
             'status' => $this->status->value,
         ];
     }
-
 }

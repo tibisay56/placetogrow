@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Constants\CurrencyType;
 use App\Models\Site;
 use App\Models\Type;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SiteFactory extends Factory
@@ -26,8 +25,8 @@ class SiteFactory extends Factory
             'storage/avatars/google.png',
         ];
 
-
         $randomAvatar = $this->faker->randomElement($avatars);
+
         return [
             'name' => fake()->company(),
             'avatar' => $randomAvatar,

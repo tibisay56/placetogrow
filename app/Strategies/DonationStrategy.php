@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Strategies;
+
 class DonationStrategy implements SettingsStrategy
 {
     public function getFields(): array

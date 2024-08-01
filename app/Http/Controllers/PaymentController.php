@@ -10,7 +10,6 @@ use App\Contracts\PaymentService;
 use App\Http\Requests\Payment\StorePaymentRequest;
 use App\Models\Payment;
 use App\Models\Site;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -27,43 +26,43 @@ class PaymentController extends Controller
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
         ]);
-        }
+    }
 
     public function store(StorePaymentRequest $request): RedirectResponse
     {
-            $payment = new Payment();
-            $payment -> reference = date('ymdHis') . '-' . strtoupper(Str::random(4));
-            $payment -> description = $request->description;
-            $payment -> amount = $request -> amount;
-            $payment -> currency = $request -> currency;
-            $payment -> gateway = $request -> gateway;
-            $payment -> status = PaymentStatus::PENDING;
+        $payment = new Payment();
+        $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
+        $payment->description = $request->description;
+        $payment->amount = $request->amount;
+        $payment->currency = $request->currency;
+        $payment->gateway = $request->gateway;
+        $payment->status = PaymentStatus::PENDING;
 
-            $payment->payer_name = $request->name;
-            $payment->payer_lastname = $request->last_name;
-            $payment->payer_document_type = $request->document_type;
-            $payment->payer_document_number = $request->document_number;
-            $payment->payer_email = $request->email;
+        $payment->payer_name = $request->name;
+        $payment->payer_lastname = $request->last_name;
+        $payment->payer_document_type = $request->document_type;
+        $payment->payer_document_number = $request->document_number;
+        $payment->payer_email = $request->email;
 
-            $payment->site_id = $request->site_id;
+        $payment->site_id = $request->site_id;
 
-            $payment -> save();
+        $payment->save();
 
-            /** @var PaymentService $paymentService */
-            $paymentService = app(PaymentService::class, [
-                'payment' => $payment,
-                'gateway' => $request -> gateway,
-            ]);
+        /** @var PaymentService $paymentService */
+        $paymentService = app(PaymentService::class, [
+            'payment' => $payment,
+            'gateway' => $request->gateway,
+        ]);
 
-            $response = $paymentService->create([
-               'name' => $request ->name,
-               'last_name' => $request ->last_name,
-                'email' => $request ->email,
-                'document_number' => $request ->document_number,
-                'document_type' => $request ->document_type,
-            ]);
+        $response = $paymentService->create([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'document_number' => $request->document_number,
+            'document_type' => $request->document_type,
+        ]);
 
-            return redirect() -> away($response->url);
+        return redirect()->away($response->url);
     }
 
     public function show(Payment $payment): Response

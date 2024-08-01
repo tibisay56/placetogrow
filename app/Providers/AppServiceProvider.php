@@ -11,7 +11,6 @@ use App\Services\Payments\PaymentService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(PaymentServiceContract::class, function (Application $app, array $data){
+        $this->app->bind(PaymentServiceContract::class, function (Application $app, array $data) {
             ['payment' => $payment, 'gateway' => $gateway] = $data;
 
             $gateway = $app->make(PaymentGatewayContract::class, ['gateway' => $gateway]);
@@ -27,8 +26,8 @@ class AppServiceProvider extends ServiceProvider
             return new PaymentService($payment, $gateway);
         });
 
-        $this->app->bind(PaymentGatewayContract::class, function (Application $app, array $data){
-            return match(PaymentGateway::from($data['gateway'])) {
+        $this->app->bind(PaymentGatewayContract::class, function (Application $app, array $data) {
+            return match (PaymentGateway::from($data['gateway'])) {
                 PaymentGateway::PLACETOPAY => new PlacetoPayGateway(),
                 PaymentGateway::PAYPAL => new PaypalGateway(),
             };

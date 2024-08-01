@@ -7,9 +7,8 @@ use App\Models\Type;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
 class SiteTest extends TestCase
 {
@@ -107,4 +106,3 @@ class SiteTest extends TestCase
         $this->assertDatabaseMissing('sites', ['id' => $site->id]);
     }
 }
-

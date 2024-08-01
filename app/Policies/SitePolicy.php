@@ -6,11 +6,9 @@ use App\Constants\PermissionSlug;
 use App\Constants\PolicyName;
 use App\Models\Site;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class SitePolicy
 {
-
     public function viewAny(User $user): bool
     {
         return $user->hasPermissionTo(PolicyName::VIEW_ANY);

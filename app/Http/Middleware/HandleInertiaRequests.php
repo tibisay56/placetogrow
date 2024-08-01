@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
 
             ],
-            'locale' => function () use ($request) {
+            'locale' => function () {
                 return session('locale', config('app.locale'));
             },
         ];

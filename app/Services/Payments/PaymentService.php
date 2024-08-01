@@ -2,9 +2,9 @@
 
 namespace App\Services\Payments;
 
-use App\Models\Payment;
 use App\Contracts\PaymentGateway;
 use App\Contracts\PaymentService as PaymentServiceContract;
+use App\Models\Payment;
 
 class PaymentService implements PaymentServiceContract
 {
@@ -13,6 +13,7 @@ class PaymentService implements PaymentServiceContract
         protected PaymentGateway $gateway,
     ) {
     }
+
     public function create(array $buyer): PaymentResponse
     {
         $response = $this->gateway->prepare()
@@ -26,6 +27,7 @@ class PaymentService implements PaymentServiceContract
 
         return $response;
     }
+
     public function query(): Payment
     {
         $response = $this->gateway->prepare()
