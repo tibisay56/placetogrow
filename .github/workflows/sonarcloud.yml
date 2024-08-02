@@ -9,6 +9,21 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+     env:
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: silver182
+      BROADCAST_DRIVER: log
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,6 +35,9 @@ jobs:
           php-version: '8.3'
           coverage: xdebug
 
+      - name: Start mysql service
+        run: sudo /etc/init.d/mysql start
+        
       - name: Install dependencies with composer
         run: composer update --no-ansi --no-interaction --no-progress
 
