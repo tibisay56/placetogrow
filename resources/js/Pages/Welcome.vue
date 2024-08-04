@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, useForm, router, usePage} from '@inertiajs/vue3';
-import { ref, reactive } from "vue";
+import {ref, reactive, computed} from "vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import {loadLanguageAsync} from "laravel-vue-i18n";
@@ -30,6 +30,7 @@ function handleImageError() {
 }
 const page = usePage()
 const sites = ref(page.props.sites || []);
+console.log(sites.value);
 
 //Language
 
@@ -107,83 +108,21 @@ const changeLocale = async (item) => {
                     <div>
                         <!-- Title -->
                         <div class="sm:w-1/2 xl:w-1/2 mx-auto text-center mb-6">
-                            <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200">{{ $t('Trusted by Open Source, enterprise, and more than 99.000 of you') }}</h2>
+                            <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200">{{ $t('Microsites') }}</h2>
                         </div>
                         <!-- End Title -->
 
                         <!-- Grid -->
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 lg:gap-6">
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-
-                                <a v-for="site in sites.slice(0, 1)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
+                            <div v-for="site in sites" :key="site.id" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
+                                <a :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
+                                    <img class="inline-block size-[38px]" :src="`/storage/avatars/${site.avatar}`" :alt="site.name"/>
                                     <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
                                 </a>
                             </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(1, 2)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block  mx-auto size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(2, 3)" :key="site.id"  :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(3, 4)" :key="site.id"  :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(4, 5)" :key="site.id"  :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(5, 6)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(6, 7)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(7, 8)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(8, 9)" :key="site.id"  :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(9, 10)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-                            <div class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
-                                <a v-for="site in sites.slice(10, 11)" :key="site.id" :href="`/dashboard/sites/${encodeURIComponent(site.slug)}`" class="flex flex-col items-center">
-                                    <img class="inline-block size-[38px]" :src="`/storage/${site.avatar}`" :alt="site.name"/>
-                                    <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ site.name }}</p>
-                                </a>
-                            </div>
-
+                        </div>
                     </div>
-                    </div>
-                        <!-- End Grid -->
+                    <!-- End Grid -->
                     <!-- End Clients -->
                 </main>
             </div>

@@ -33,5 +33,4 @@ class SitePolicy
     {
         return $user->hasPermissionTo(PermissionSlug::SITES_DELETE);
     }
-
 }
