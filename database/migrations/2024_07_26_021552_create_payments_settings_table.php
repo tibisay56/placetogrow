@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained()->onDelete('cascade');
             $table->json('required_fields')->nullable();
-            $table->string('currency');
-            $table->integer('payment_expiration_time')->default(1440);
             $table->timestamps();
         });
     }

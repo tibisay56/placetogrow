@@ -28,7 +28,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function store(StorePaymentRequest $request): RedirectResponse
+    public function store(StorePaymentRequest $request): \Symfony\Component\HttpFoundation\Response
     {
         $payment = new Payment();
         $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
@@ -62,7 +62,7 @@ class PaymentController extends Controller
             'document_type' => $request->document_type,
         ]);
 
-        return redirect()->away($response->url);
+        return Inertia::location($response->url);
     }
 
     public function show(Payment $payment): Response
