@@ -48,6 +48,7 @@ final class PermissionSlug
 
     public const VIEW_TRANSACTIONS = 'view_transactions';
 
+
     public static function toArray(): array
     {
         return (new \ReflectionClass(self::class))->getConstants();

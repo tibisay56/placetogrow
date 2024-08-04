@@ -24,7 +24,7 @@ class SettingsController extends Controller
     {
         $sites = Site::all();
 
-        return Inertia::render('PaymentSettings/Create', [
+        return Inertia::render('Setting/Create', [
             'sites' => $sites,
         ]);
     }
@@ -40,7 +40,7 @@ class SettingsController extends Controller
 
         PaymentSetting::create($validated);
 
-        return redirect()->route('admin.payment-settings.index')->with('success', 'Payment settings created successfully.');
+        return redirect()->route('settings.index')->with('success', 'Payment settings created successfully.');
     }
 
     public function edit(PaymentSetting $paymentSetting): Response
@@ -58,19 +58,18 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'site_id' => 'required|exists:sites,id',
             'required_fields' => 'nullable|array',
-            'currency' => 'required|string',
-            'payment_expiration_time' => 'required|integer|min:1',
         ]);
 
-        $paymentSetting->update($validated);
+        $setting = PaymentSetting::findOrFail($id);
+        $setting->update($validated);;
 
-        return redirect()->route('admin.payment-settings.index')->with('success', 'Payment settings updated successfully.');
+        return redirect()->route('settings.index')->with('success', 'Payment settings updated successfully.');
     }
 
     public function destroy(PaymentSetting $paymentSetting): RedirectResponse
     {
         $paymentSetting->delete();
 
-        return redirect()->route('admin.payment-settings.index')->with('success', 'Payment settings deleted successfully.');
+        return redirect()->route('setting.index')->with('success', 'Payment settings deleted successfully.');
     }
 }

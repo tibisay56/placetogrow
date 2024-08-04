@@ -46,7 +46,7 @@ const submit = () => {
     <div class="max-w-[85rem] px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mx-auto">
         <div class="p-4 bg-white rounded-lg shadow-md dark:bg-neutral-800 mx-12 lg:mx-64">
             <div v-if="site.avatar" class="flex justify-center items-center h-20">
-                <img class="mx-auto flex flex-col items-center rounded-lg border border-gray-300 shadow mb-10" width="100" height="100" :src="`/storage/${site.avatar}`" alt="avatar"/>
+                <img class="mx-auto flex flex-col items-center rounded-lg border border-gray-300 shadow mb-10" width="100" height="100" :src="`/storage/avatars/${site.avatar}`" alt="avatar"/>
             </div>
             <div>
                 <h1 v-if="site.name" class="text-xl font-semibold text-gray-800 dark:text-neutral-200"> {{ site.name }}</h1>
@@ -67,11 +67,11 @@ const submit = () => {
                                     <input v-model="form.email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Email"><InputError :message="form.errors.email" class="mt-2" />
                                 </div>
                                 <div class="mt-2 space-y-3 sm:w-1/2">
-                                <select v-model="form.document_type" id="document_type" name="document_type" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                    <option :value="null">Select option...</option>
-                                    <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
-                                </select><InputError :message="form.errors.documentType" class="mt-2"/>
-                                <input v-model="form.document_number" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
+                                    <select v-model="form.document_type" id="document_type" name="document_type" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                        <option :value="null">Select option...</option>
+                                        <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
+                                    </select><InputError :message="form.errors.documentType" class="mt-2"/>
+                                    <input v-model="form.document_number" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
                                 </div>
                             </div>
                         </div>
@@ -110,4 +110,3 @@ const submit = () => {
         </div>
     </div>
 </template>
-
