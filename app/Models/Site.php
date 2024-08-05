@@ -21,7 +21,7 @@ class Site extends Model
         'currency',
         'payment_expiration_time',
         'type_id',
-        'required_fields'
+        'required_fields',
     ];
 
     protected $casts = [
