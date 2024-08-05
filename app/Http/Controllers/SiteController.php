@@ -7,6 +7,7 @@ use App\Actions\Sites\StoreAction;
 use App\Actions\Sites\UpdateAction;
 use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
+use App\Constants\FieldType;
 use App\Constants\PaymentGateway;
 use App\Constants\PermissionSlug;
 use App\Constants\TypeName;
@@ -74,6 +75,7 @@ class SiteController extends Controller
             'documentTypes' => DocumentTypes::toArray(),
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
+            'required_fields' => $site->required_fields,
         ]);
     }
 
@@ -86,11 +88,13 @@ class SiteController extends Controller
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
+        $field_types = FieldType::toArray();
 
         return Inertia::render('Site/Edit', [
             'site' => $site,
             'types' => $types,
             'currencies' => $currencies,
+            'field_types' => $field_types,
         ]);
     }
 

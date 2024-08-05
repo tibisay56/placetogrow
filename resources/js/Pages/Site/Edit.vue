@@ -5,13 +5,15 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import Layout from "@/Components/Layout.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const page = usePage();
 const site = ref(page.props.site);
 const types = ref(page.props.types);
 const currencies = ref(page.props.currencies);
+const field_types = ref(page.props.field_types);
 
 const form = useForm({
     name: site.value.name,
@@ -21,8 +23,9 @@ const form = useForm({
     category: site.value.category,
     currency: site.value.currency,
     payment_expiration_time: 30,
+    required_fields: site.value.required_fields,
+    field_type: site.value.field_type,
 });
-
 const onSelectAvatar = (e) => {
     const files = e.target.files;
     if (files.length) {
@@ -31,22 +34,62 @@ const onSelectAvatar = (e) => {
 };
 
 const submit = () => {
+    if(dynamicFields.value[dynamicFields.value.length - 1].name=="" && dynamicFields.value[dynamicFields.value.length - 1].field_type=="" ){
+        dynamicFields.value.pop();
+    }
+
+    dynamicFields.value.forEach(item => {
+        item.required = true;
+        item.value = "";
+    });
+    form.required_fields = [...form.required_fields, ...dynamicFields.value];
+
     form.post(route('site.update', site.value),{
         onSuccess: (e) => {
             site.value = e.props.contact;
         }
     })
+
 }
 
-watch(site, (newValue) => {
-    console.log('Updated Site:', newValue);
-});
-
 const props = defineProps({
-    types: Array,
-    currencies: Array,
+types: Array,
+currencies: Array,
+field_types: Array,
 });
 
+const dynamicFields = ref([
+{ name: '', field_type: '' }
+]);
+
+const addField = () => {
+const allFieldsValid = dynamicFields.value.every(field => field.name.trim() !== '' && field.field_type.trim() !== '');
+
+if (allFieldsValid) {
+    dynamicFields.value.push({
+        name: '',
+        field_type: ''
+    });
+} else {
+    alert('Please fill out all fields before adding a new row.');
+}
+};
+const removeField = (index) => {
+if (dynamicFields.value.length > 1) {
+    dynamicFields.value.splice(index, 1);
+}
+};
+
+const removeFieldRequire = (index) => {
+    if (form.required_fields.length > 1) {
+        form.required_fields.splice(index, 1);
+        console.log(form.required_fields);
+    }
+};
+
+const canAddField = computed(() => {
+return dynamicFields.value.every(field => field.name.trim() !== '' && field.field_type.trim() !== '');
+});
 
 </script>
 
@@ -138,6 +181,91 @@ const props = defineProps({
                                                         <InputError class="mt-2" :message="form.errors.avatar" />
                                                     </form>
                                                 </div>
+                                                <!--FIELD-->
+                                                <div class="space-y-4">
+                                                    <div v-for="(field, index) in form.required_fields" :key="index" class="flex items-center gap-2 ml-1.3">
+                                                    <input v-model="form[field.name]" :id="field.name" :type="field.field_type" :placeholder="field.name.charAt(0).toUpperCase() + field.name.slice(1)" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"><InputError :message="form.errors[field.name]" class="mt-2" />
+                                                        <button
+                                                            type="button"
+                                                            class="inline-flex items-center justify-center gap-x-2 p-2 text-sm font-medium bg-transparent text-red-500 focus:outline-none focus:ring-0 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-700 dark:focus:bg-red-700"
+                                                            @click="removeFieldRequire(index)"
+                                                            aria-label="Remove Field"
+                                                        >
+                                                            <font-awesome-icon :icon="['fas', 'trash']" class="text-lg"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Campos dinámicos -->
+                                                <div>
+                                                    <div v-for="(field, index) in dynamicFields" :key="index" class="flex items-center gap-4 mb-4">
+                                                        <div class="flex-1">
+                                                            <!-- Nombre del campo -->
+                                                            <InputLabel :for="'name_' + index" :value="$t('Name')" />
+                                                            <TextInput
+                                                                :id="'name_' + index"
+                                                                type="text"
+                                                                class="mt-1 block w-full"
+                                                                autocomplete="name"
+                                                                placeholder="Name"
+                                                                v-model="field.name"
+                                                            />
+                                                            <InputError class="mt-2" :message="form.errors.name" />
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <!-- Tipo de campo -->
+                                                            <InputLabel :for="'field_type_' + index" :value="$t('Field Type')" />
+                                                            <select
+                                                                v-model="field.field_type"
+                                                                :name="'field_type_' + index"
+                                                                :id="'field_type_' + index"
+                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                                            >
+                                                                <option v-for="fieldType in field_types" :key="fieldType" :value="fieldType">
+                                                                    {{ fieldType }}
+                                                                </option>
+                                                            </select>
+                                                            <InputError class="mt-2" :message="form.errors.field_type" />
+                                                        </div>
+
+                                                        <div class="flex items-center gap-2 ml-4">
+                                                            <button
+                                                                type="button"
+                                                                class="mt-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                                                                @click="addField"
+                                                                :disabled="!canAddField"
+                                                                aria-label="Add Field"
+                                                            >
+                                                                <svg
+                                                                    class="shrink-0 size-6"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="32"
+                                                                    height="32"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="2"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                >
+                                                                    <path d="M5 12h14"></path>
+                                                                    <path d="M12 5v14"></path>
+                                                                </svg>
+                                                            </button>
+
+                                                            <!-- Botón de eliminar -->
+                                                            <button
+                                                                type="button"
+                                                                class="mt-6 inline-flex items-center justify-center gap-x-2 p-2 text-sm font-medium bg-transparent text-red-500 focus:outline-none focus:ring-0 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-700 dark:focus:bg-red-700"
+                                                                @click="removeField(index)"
+                                                                aria-label="Remove Field"
+                                                            >
+                                                                <font-awesome-icon :icon="['fas', 'trash']" class="text-lg"/>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="flex justify-center">
                                                     <PrimaryButton>
                                                         {{ $t('Update Site') }}

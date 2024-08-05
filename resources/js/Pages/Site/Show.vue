@@ -10,6 +10,7 @@ const documentTypes = ref(props.documentTypes || []);
 const currencies = ref(props.currencies || []);
 const gateways = ref(props.gateways || []);
 const site = ref(props.site || []);
+const requiredFields = ref(props.required_fields || []);
 
 const form = useForm({
     name: '',
@@ -56,6 +57,14 @@ const submit = () => {
             <div class="space-y-8">
                 <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
                     <form @submit.prevent="submit">
+
+                        <div v-if="requiredFields.length" class="py-6">
+                            <label class="inline-block text-sm font-medium dark:text-white">Required Fields:</label>
+                            <div v-for="(field, index) in requiredFields" :key="index" class="mb-2">
+                                <input v-model="form[field.name]" :type="field.field_type" :placeholder="field.name" class="border rounded px-2 py-1 w-full"/>
+                            </div>
+                        </div>
+
                         <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
                             <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
                                 Billing contact
