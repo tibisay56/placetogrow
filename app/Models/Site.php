@@ -21,8 +21,12 @@ class Site extends Model
         'currency',
         'payment_expiration_time',
         'type_id',
+        'required_fields',
     ];
 
+    protected $casts = [
+        'required_fields' => 'array',
+    ];
 
     public function type(): BelongsTo
     {
@@ -47,5 +51,4 @@ class Site extends Model
             ],
         ];
     }
-
 }
