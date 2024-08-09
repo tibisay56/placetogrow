@@ -61,7 +61,7 @@ class SettingsController extends Controller
         ]);
 
         $setting = PaymentSetting::findOrFail($id);
-        $setting->update($validated);;
+        $setting->update($validated);
 
         return redirect()->route('settings.index')->with('success', 'Payment settings updated successfully.');
     }

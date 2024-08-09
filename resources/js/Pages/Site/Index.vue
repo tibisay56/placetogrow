@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, Link, usePage} from '@inertiajs/vue3';
 import {computed, ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
@@ -85,7 +84,7 @@ const onDeleteSuccess = (e) => {
                                         </div>
                                     </th>
 
-                                    <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                    <th scope="col" class="px-6 py-3 text-start">
                                         <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                                                 {{ $t('Name') }}
@@ -100,7 +99,6 @@ const onDeleteSuccess = (e) => {
                                               </span>
                                         </div>
                                     </th>
-
                                     <th scope="col" class="px-6 py-3 text-start">
                                         <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -108,8 +106,20 @@ const onDeleteSuccess = (e) => {
                                               </span>
                                         </div>
                                     </th>
-
-                                    <th scope="col" class="px-6 py-3 text-end"></th>
+                                    <th scope="col" class="px-6 py-3 text-start">
+                                        <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Slug') }}
+                                              </span>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-end">
+                                        <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Actions') }}
+                                              </span>
+                                        </div>
+                                    </th>
                                 </tr>
                                 </thead>
 
@@ -125,7 +135,7 @@ const onDeleteSuccess = (e) => {
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <img class="inline-block size-[38px] rounded-full" :src="`/storage/avatars/${site.avatar}`"/>
+                                            <img class="inline-block size-[38px] rounded-full" :src="`/storage/${site.avatar}`"/>
                                         </div>
                                     </td>
                                     <td   class="size-px whitespace-nowrap">
@@ -155,6 +165,13 @@ const onDeleteSuccess = (e) => {
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                              <a :href="route('site.show.slug', site)" class="text-sm text-blue-600 decoration-2 hover:underline dark:text-blue-500 ms-4">
+                                                {{ $t( site.slug ) }}
+                                              </a>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap">
                                         <Dropdown align="right" width="48">
                                             <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -172,7 +189,7 @@ const onDeleteSuccess = (e) => {
                                             </template>
 
                                             <template #content>
-                                                <DropdownLink  :href="route('site.show.slug', site)"> {{ $t('Show') }} </DropdownLink>
+                                                <DropdownLink :href="route('site.transactions.show', site)">{{ $t('Show') }}</DropdownLink>
                                                 <DropdownLink  :href="route('site.edit', site)"> {{ $t('Edit') }} </DropdownLink>
                                                 <DropdownLink  @success="onDeleteSuccess" :href="route('site.destroy', site)" method="delete" as="button">
                                                     {{ $t('Delete') }}

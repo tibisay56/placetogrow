@@ -65,7 +65,13 @@ const formatDate = (dateString) => {
                                         <span class="sr-only">Checkbox</span>
                                     </label>
                                 </th>
-
+                                <th scope="col" class="pe-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200 ms-4">
+                                          Site
+                                        </span>
+                                    </div>
+                                </th>
                                 <th scope="col" class="pe-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200 ms-4">
@@ -81,7 +87,6 @@ const formatDate = (dateString) => {
                                         </span>
                                     </div>
                                 </th>
-
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -114,6 +119,14 @@ const formatDate = (dateString) => {
                                     </div>
                                 </th>
 
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                          Required Field
+                                        </span>
+                                    </div>
+                                </th>
+
                                 <th scope="col" class="px-6 py-3 text-end"></th>
                             </tr>
                             </thead>
@@ -127,6 +140,11 @@ const formatDate = (dateString) => {
                                             <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-2">
                                             <span class="sr-only">Checkbox</span>
                                         </label>
+                                    </div>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="text-sm text-gray-600 dark:text-neutral-400" href="#">{{ payment.site.name }}</span>
                                     </div>
                                 </td>
                                 <td class="size-px whitespace-nowrap">
@@ -176,6 +194,16 @@ const formatDate = (dateString) => {
                                             </svg>
                                             <span class="text-sm text-gray-600 dark:text-neutral-400">•••• 2390</span>
                                         </div>
+                                    </div>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="pe-6 py-2">
+                                        <span
+                                            v-for="(field, index) in payment.required_fields"
+                                            :key="index"
+                                            class="text-sm text-gray-600 dark:text-neutral-400">
+                                            {{ field.name }}: {{ field.value }}
+                                        </span>
                                     </div>
                                 </td>
                             </tr>

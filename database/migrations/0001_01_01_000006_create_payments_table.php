@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('payer_document_type')->nullable();
             $table->string('payer_document_number')->nullable();
             $table->string('payer_email')->nullable();
+            $table->json('required_fields')->nullable();
 
             $table->foreignId('site_id');
             $table->foreign('site_id')->references('id')->on('sites');

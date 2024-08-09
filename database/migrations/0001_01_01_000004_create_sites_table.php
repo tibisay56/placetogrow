@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('currency', CurrencyType::toArray());
             $table->integer('payment_expiration_time')->default(1440);
             $table->foreignId('type_id')->constrained();
+            $table->json('required_fields')->nullable();
             $table->timestamps();
         });
     }

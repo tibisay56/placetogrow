@@ -39,6 +39,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('sites', [SiteController::class, 'index'])->name('site.index');
     Route::get('sites/create', [SiteController::class, 'create'])->name('site.create');
     Route::post('sites', [SiteController::class, 'store'])->name('site.store');
+    Route::get('sites/{slug}/transactions', [SiteController::class, 'showTransactions'])->name('site.transactions.show');
     Route::get('sites/{site}/edit', [SiteController::class, 'edit'])->name('site.edit');
     Route::post('sites/{site}', [SiteController::class, 'update'])->name('site.update');
     Route::delete('sites/{site}', [SiteController::class, 'destroy'])->name('site.destroy');

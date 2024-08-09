@@ -31,5 +31,4 @@ class UserPolicy
     {
         return $user->hasPermissionTo(PermissionSlug::USERS_DELETE);
     }
-
 }

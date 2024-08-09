@@ -28,8 +28,9 @@ class PaymentFactory extends Factory
             'currency' => CurrencyType::USD->name,
             'gateway' => PaymentGateway::PLACETOPAY->value,
             'status' => $this->faker->randomElement(PaymentStatus::toArray()),
-            'site_id' => Site::inRandomOrder()->first()->id,
+            'site_id' => Site::factory(),
             'payer_name' => $this->faker->name(),
+            'required_fields' => [],
         ];
     }
 }

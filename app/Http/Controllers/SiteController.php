@@ -7,6 +7,7 @@ use App\Actions\Sites\StoreAction;
 use App\Actions\Sites\UpdateAction;
 use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
+use App\Constants\FieldType;
 use App\Constants\PaymentGateway;
 use App\Constants\PermissionSlug;
 use App\Constants\TypeName;
@@ -27,7 +28,13 @@ class SiteController extends Controller
         if (! Auth::user()->can(PermissionSlug::SITES_VIEW)) {
             abort(403);
         }
-        $sites = Site::with('type')->get();
+        $user = Auth::user();
+
+        if ($user->hasRole('Admin')) {
+            $sites = Site::with('type')->get();
+        } else {
+            $sites = $user->sites()->with('type')->get();
+        }
 
         return Inertia::render('Site/Index', [
             'sites' => $sites,
@@ -67,13 +74,32 @@ class SiteController extends Controller
     {
         $site = Site::where('slug', $slug)->with('type')->firstOrFail();
 
-        return Inertia::render('Site/Show', [
+        return Inertia::render('Site/Slug', [
             'site' => $site,
             'types' => Type::all(['id', 'name']),
             'currencies' => CurrencyType::toArray(),
             'documentTypes' => DocumentTypes::toArray(),
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
+            'required_fields' => $site->required_fields,
+        ]);
+    }
+
+    public function showTransactions($slug): Response
+    {
+
+        $site = Site::where('slug', $slug)->firstOrFail();
+        $site->load('users');
+        $site->load('payments');
+        $transactions = $site->payments()->paginate(10);
+        $currencies = CurrencyType::toArray();
+        $types = TypeName::toArray();
+
+        return Inertia::render('Site/Show', [
+            'site' => $site,
+            'currencies' => $currencies,
+            'transactions' => $transactions,
+            'types' => $types,
         ]);
     }
 
@@ -86,11 +112,13 @@ class SiteController extends Controller
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
+        $field_types = FieldType::toArray();
 
         return Inertia::render('Site/Edit', [
             'site' => $site,
             'types' => $types,
             'currencies' => $currencies,
+            'field_types' => $field_types,
         ]);
     }
 

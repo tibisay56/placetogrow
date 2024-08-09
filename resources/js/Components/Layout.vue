@@ -44,25 +44,16 @@ const toggleDropdown = () => {
 </script>
 
 <template>
-    <!-- ========== HEADER ========== -->
     <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-white border-b text-sm py-0.8 lg:ps-[260px] dark:bg-neutral-800 dark:border-neutral-700">
         <nav class="px-4 sm:px-6 flex basis-full items-center w-full mx-auto">
             <div class="me-5 lg:me-0 lg:hidden">
-                <!-- Logo -->
                 <a class="flex justify-center items-center rounded-xl text-xl font-semibold focus:outline-none focus:opacity-80" href="/dashboard" aria-label="Preline">
                     <img src="/Documents/logo.png" alt="Logo" class="h-10 w-auto">
                 </a>
-                <!-- End Logo -->
             </div>
-
             <div class="w-full flex items-center justify-end ms-auto md:justify-between gap-x-1 md:gap-x-3">
-
-                <div class="hidden md:block">
-                </div>
-
-                <div class="hidden md:block">
                     <!-- lang -->
-                    <div class="relative">
+                    <div class="relative ml-auto hidden md:block">
                         <Dropdown align="right" width="48">
                             <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -74,7 +65,6 @@ const toggleDropdown = () => {
                                             </button>
                                         </span>
                             </template>
-
                             <template #content>
                                 <div v-show="isDropdownOpen">
                                     <a v-for="(item, index) in items.item" :key="index" @click="changeLocale(item)" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-700">
@@ -84,18 +74,13 @@ const toggleDropdown = () => {
                             </template>
                         </Dropdown>
                     </div>
-                    <!-- End lang -->
                 </div>
-
                 <div class="flex flex-row items-center justify-end gap-1">
                     <button type="button" class="md:hidden size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                         <span class="sr-only">Search</span>
                     </button>
-
-                    <!-- Dropdown -->
                     <div class="flex flex-row items-center justify-end gap-2">
-                        <!-- Dropdown -->
                         <Dropdown align="right" width="48">
                             <template #trigger>
                             <span class="inline-flex rounded-md">
@@ -124,11 +109,8 @@ const toggleDropdown = () => {
                                 </div>
                             </template>
                         </Dropdown>
-                        <!-- End Dropdown -->
-                    <!-- End Dropdown -->
                     </div>
                 </div>
-            </div>
         </nav>
     </header>
     <!-- ========== END HEADER ========== -->
@@ -219,14 +201,6 @@ const toggleDropdown = () => {
                                 {{ $t('Sites') }}
                             </button>
                             </Link>
-                        </li>
-                        <li class="hs-accordion" id="projects-accordion">
-                        <Link :href="route('setting.index')">
-                            <button type="button" class="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200" aria-expanded="true" aria-controls="projects-accordion-child">
-                                <font-awesome-icon :icon="['fas', 'gear']" />
-                                {{ $t('Settings') }}
-                            </button>
-                        </Link>
                         </li>
                     </ul>
                 </nav>
