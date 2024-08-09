@@ -26,6 +26,7 @@ class Payment extends Model
         'site_id',
         'required_fields',
     ];
+
     protected $casts = [
         'required_fields' => 'array',
     ];

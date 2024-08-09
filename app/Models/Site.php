@@ -38,10 +38,12 @@ class Site extends Model
     {
         return $this->belongsToMany(User::class, 'site_user', 'user_id', 'site_id');
     }
+
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

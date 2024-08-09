@@ -12,17 +12,18 @@ class WelcomeService
     public function getTypes(): Collection
     {
         return Type::query()
-            -> select('id', 'name')
-            -> with ('media')
-            -> get()
-            -> map(function ($type){
-                return[
+            ->select('id', 'name')
+            ->with('media')
+            ->get()
+            ->map(function ($type) {
+                return [
                     'id' => $type->id,
                     'name' => $type->name,
-                    'logo' => asset('images/types/type_'. random_int(1, 5).'svg'),
+                    'logo' => asset('images/types/type_'.random_int(1, 5).'svg'),
                 ];
             });
     }
+
     public function filterSites(?string $typeFilter, ?string $searchFilter): LengthAwarePaginator
     {
         $sitesQuery = Site::query()
@@ -31,7 +32,7 @@ class WelcomeService
                 return $query->where('type_id', $typeFilter);
             })
             ->when($searchFilter, function ($query) use ($searchFilter) {
-                return $query->where('name', 'like', '%' . $searchFilter . '%');
+                return $query->where('name', 'like', '%'.$searchFilter.'%');
             });
 
         $sites = $sitesQuery->paginate(10)->withQueryString();
@@ -41,9 +42,10 @@ class WelcomeService
                 'id' => $site->id,
                 'name' => $site->name,
                 'slug' => $site->slug,
-                'logo' => asset('storage/' . $site->logo),
+                'logo' => asset('storage/'.$site->logo),
             ];
         });
+
         return $sites;
     }
 
@@ -56,7 +58,7 @@ class WelcomeService
                 return $query->where('sites.type_id', $typeFilter);
             })
             ->when($searchFilter, function ($query, $searchFilter) {
-                return $query->where('sites.name', 'like', '%' . $searchFilter . '%');
+                return $query->where('sites.name', 'like', '%'.$searchFilter.'%');
             });
 
         $sites = $sitesQuery->paginate(10)->withQueryString();
@@ -69,12 +71,12 @@ class WelcomeService
                 'type' => [
                     'id' => $site->type->id,
                     'name' => $site->type->name,
-                    'logo' => asset('storage/'. $site->logo),
+                    'logo' => asset('storage/'.$site->logo),
                 ],
-                'logo' => asset('storage/' . $site->logo),
+                'logo' => asset('storage/'.$site->logo),
             ];
         });
+
         return $sites;
     }
 }
-

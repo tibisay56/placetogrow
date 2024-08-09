@@ -21,5 +21,4 @@ class WelcomeController extends Controller
             'sites' => $sites,
         ]);
     }
-
 }

@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class SiteFactory extends Factory
 {
     protected $model = Site::class;
+
     private static $avatarIndex = 0;
+
     public function definition(): array
     {
-
 
         $avatars = [
             'logos/avatar1.png',
@@ -48,7 +49,6 @@ class SiteFactory extends Factory
         self::$avatarIndex++;
 
         $typeIds = Type::whereIn('name', TypeName::toArray())->pluck('id')->toArray();
-
 
         return [
             'name' => fake()->company(),

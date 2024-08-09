@@ -20,4 +20,3 @@ class FilterSitesRequest extends FormRequest
         ];
     }
 }
-

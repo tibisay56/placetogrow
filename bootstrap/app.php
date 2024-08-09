@@ -28,28 +28,29 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
 
-            $exceptions->respond(function (Response $response) {
-                if (shouldRenderCustomErrorPage() && in_array($response->getStatusCode(),[403, 404, 500])) {
-                    return Inertia::render('Error', [
-                       'status' => $response->getStatusCode(),
-                    ]);
-                }
+        $exceptions->respond(function (Response $response) {
+            if (shouldRenderCustomErrorPage() && in_array($response->getStatusCode(), [403, 404, 500])) {
+                return Inertia::render('Error', [
+                    'status' => $response->getStatusCode(),
+                ]);
+            }
 
-                return $response;
-            });
+            return $response;
+        });
 
     })->create();
 
-    function shouldRenderCustomErrorPage()
-    {
-        if(app() -> environment(['local', 'testing'])){
+function shouldRenderCustomErrorPage()
+{
+    if (app()->environment(['local', 'testing'])) {
 
-            return true;
-        }
-
-        if(config('app.custom_error_pages_enabled')){
-
-            return true;
-        }
-        return false;
+        return true;
     }
+
+    if (config('app.custom_error_pages_enabled')) {
+
+        return true;
+    }
+
+    return false;
+}
