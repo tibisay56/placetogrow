@@ -10,6 +10,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\Site;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
@@ -53,6 +54,7 @@ class UserController extends Controller
 
         $data = $request->only(['name', 'email', 'password']);
         $data['password'] = bcrypt($data['password']);
+
         $storeUserAction->execute($data);
 
         return to_route('user.index')->with('message', 'User was created successfully!');

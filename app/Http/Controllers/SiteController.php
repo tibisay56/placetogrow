@@ -28,7 +28,13 @@ class SiteController extends Controller
         if (! Auth::user()->can(PermissionSlug::SITES_VIEW)) {
             abort(403);
         }
-        $sites = Site::with('type')->get();
+        $user = Auth::user();
+
+        if ($user->hasRole('Admin')) {
+            $sites = Site::with('type')->get();
+        } else {
+            $sites = $user->sites()->with('type')->get();
+        }
 
         return Inertia::render('Site/Index', [
             'sites' => $sites,
@@ -68,7 +74,7 @@ class SiteController extends Controller
     {
         $site = Site::where('slug', $slug)->with('type')->firstOrFail();
 
-        return Inertia::render('Site/Show', [
+        return Inertia::render('Site/Slug', [
             'site' => $site,
             'types' => Type::all(['id', 'name']),
             'currencies' => CurrencyType::toArray(),
@@ -76,6 +82,24 @@ class SiteController extends Controller
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
             'required_fields' => $site->required_fields,
+        ]);
+    }
+
+    public function showTransactions($slug): Response
+    {
+
+        $site = Site::where('slug', $slug)->firstOrFail();
+        $site->load('users');
+        $site->load('payments');
+        $transactions = $site->payments()->paginate(10);
+        $currencies = CurrencyType::toArray();
+        $types = TypeName::toArray();
+
+        return Inertia::render('Site/Show', [
+            'site' => $site,
+            'currencies' => $currencies,
+            'transactions' => $transactions,
+            'types' => $types,
         ]);
     }
 

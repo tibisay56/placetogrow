@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
 {
@@ -37,7 +38,10 @@ class Site extends Model
     {
         return $this->belongsToMany(User::class, 'site_user', 'user_id', 'site_id');
     }
-
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
     public function getRouteKeyName(): string
     {
         return 'slug';

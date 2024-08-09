@@ -10,6 +10,7 @@ use App\Contracts\PaymentService;
 use App\Http\Requests\Payment\StorePaymentRequest;
 use App\Models\Payment;
 use App\Models\Site;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,11 +19,21 @@ class PaymentController extends Controller
 {
     public function index(): Response
     {
+
+        $user = Auth::user();
+
+        if ($user->hasRole('Admin')) {
+            $payments = Payment::with('site')->get();
+        } else {
+            $siteIds = $user->sites->pluck('id');
+            $payments = Payment::whereIn('site_id', $siteIds)->with('site')->get();
+        }
+
         return Inertia::render('Payment/Index', [
             'currencies' => CurrencyType::toArray(),
             'documentTypes' => DocumentTypes::toArray(),
             'sites' => Site::all(),
-            'payments' => Payment::all(),
+            'payments' => $payments,
             'gateways' => PaymentGateway::toOptions(),
         ]);
     }
@@ -43,6 +54,7 @@ class PaymentController extends Controller
         $payment->payer_document_number = $request->document_number;
         $payment->payer_email = $request->email;
 
+        $payment->required_fields = $request->required_Fields;
         $payment->site_id = $request->site_id;
 
         $payment->save();

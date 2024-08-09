@@ -15,9 +15,12 @@ class PaymentSeeder extends Seeder
      */
     public function run()
     {
-        $siteId = Site::first()->id;
-        Payment::factory()->count(10)->create([
-            'site_id' => $siteId,
-        ]);
+        $siteIds = Site::factory()->count(14)->create()->pluck('id');
+
+        foreach ($siteIds as $siteId) {
+            Payment::factory()->count(1)->create([
+                'site_id' => $siteId,
+            ]);
+        }
     }
 }

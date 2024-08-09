@@ -1,121 +1,215 @@
 <script setup>
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import {ref} from 'vue';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Layout from "@/Components/Layout.vue";
+import {ref} from "vue";
 
-const { props } = usePage();
-const documentTypes = ref(props.documentTypes || []);
-const currencies = ref(props.currencies || []);
-const gateways = ref(props.gateways || []);
-const site = ref(props.site || []);
-const requiredFields = ref(props.required_fields || []);
+const page = usePage();
+const site = ref(page.props.site);
+const types = ref(page.props.types);
+const currencies = ref(page.props.currencies);
 
 const form = useForm({
-    name: '',
-    lastname: '',
-    email: '',
-    document_number: '',
-    document_type: documentTypes.value[0] || null,
-    description: '',
-    amount: '',
-    currency: currencies.value[0] || null,
-    gateway: gateways.value[0] || null,
-    site_id: site.value.id || null,
+    name: site.value.name,
+    avatar: null,
+    type_id: site.value.type_id,
+    user_id: site.value.user_id,
+    category: site.value.category,
+    currency: site.value.currency,
+    payment_expiration_time: String(30),
 });
 
-const goBack = () => {
-    window.history.back();
-};
+console.log(page.props.types);
+console.log(site.value.type_id);
 
 const submit = () => {
-    form.post(route('payment.store'), {
-        onError: (errors) => {
-            console.log('Errores de validación:', errors);
-        },
-        onSuccess: () => {
-            console.log('Formulario enviado con éxito');
-        }
-    });
+    form.post(route('site.store'));
 };
+
+const props = defineProps({
+    types: Array,
+    currencies: Array,
+});
 
 </script>
 
 <template>
     <Head title="Show Sites" />
-    <div class="max-w-[85rem] px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mx-auto">
-        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-neutral-800 mx-12 lg:mx-64">
-            <div v-if="site.avatar" class="flex justify-center items-center h-20">
-                <img class="mx-auto flex flex-col items-center rounded-lg border border-gray-300 shadow mb-10" width="100" height="100" :src="`/storage/avatars/${site.avatar}`" alt="avatar"/>
-            </div>
-            <div>
-                <h1 v-if="site.name" class="text-xl font-semibold text-gray-800 dark:text-neutral-200"> {{ site.name }}</h1>
-                <p v-if="site.category" class="text-sm text-gray-600 dark:text-neutral-400 mb-4"> {{ site.category }}</p>
-                <p v-if="site.type" class="capitalize text-sm text-gray-600 dark:text-neutral-400 mb-4"> {{ site.type.name }}</p>
-            </div>
-            <div class="space-y-8">
-                <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
-                    <form @submit.prevent="submit">
-
-                        <div v-if="requiredFields.length" class="py-6">
-                            <label class="inline-block text-sm font-medium dark:text-white">Required Fields:</label>
-                            <div v-for="(field, index) in requiredFields" :key="index" class="mb-2">
-                                <input v-model="form[field.name]" :type="field.field_type" :placeholder="field.name" class="border rounded px-2 py-1 w-full"/>
-                            </div>
-                        </div>
-
-                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                            <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Billing contact
-                            </label>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <input v-model="form.name" id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><InputError :message="form.errors.name" class="mt-2" />
-                                    <input v-model="form.lastname" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Last Name"><InputError :message="form.errors.lastname" class="mt-2" />
-                                    <input v-model="form.email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Email"><InputError :message="form.errors.email" class="mt-2" />
+    <Layout></Layout>
+    <!-- Content -->
+    <div class="w-full lg:ps-64 -mt-12">
+        <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <!-- Card -->
+            <div class="flex flex-col">
+                <div class="-m-1.5 overflow-x-auto">
+                    <div class="p-1.5 min-w-full inline-block align-middle">
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
+                            <!-- Header -->
+                            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                                <div>
+                                    <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                                        {{ $t('Show Sites') }}
+                                    </h2>
+                                    <p class="text-sm text-gray-600 dark:text-neutral-400">
+                                        {{ $t('Add sites, edit and more.') }}
+                                    </p>
                                 </div>
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <select v-model="form.document_type" id="document_type" name="document_type" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option :value="null">Select option...</option>
-                                        <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
-                                    </select><InputError :message="form.errors.documentType" class="mt-2"/>
-                                    <input v-model="form.document_number" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
+                                <div>
+                                    <div class="inline-flex gap-x-2">
+                                        <Link :href="route('site.index')">
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
+                                                {{ $t('View all') }}
+                                            </a>
+                                        </Link>
+                                        <Link :href="route('site.create')">
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
+                                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                {{ $t('Add site') }}
+                                            </a>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- End Header -->
+                            <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
+                                <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                    <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                            <div class="mt-4">
+                                                <InputLabel for="name" :value="$t('Name')" />
+                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
+                                                <InputError class="mt-2" :message="form.errors.name" />
+                                            </div>
+                                            <div class="mt-4">
+                                                <InputLabel for="type_id" :value="$t('Type')" />
+                                                <select v-model="form.type_id" name="type_id" id="type_id"
+                                                        class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                    <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
+                                                </select>
+                                                <InputError class="mt-2" :message="form.errors.type_id" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <InputLabel for="category" :value="$t('Category')" />
+                                            <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  :placeholder="$t('Category')"/>
+                                            <InputError class="mt-2" :message="form.errors.category" />
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                            <div>
+                                                <InputLabel for="currency" :value="$t('Currency')" />
+                                                <select v-model="form.currency" name="currency" id="currency"
+                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                    <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
+                                                </select>
+                                                <InputError class="mt-2" :message="form.errors.currency" />
+                                            </div>
+                                            <div>
+                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
+                                                <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="flex flex-col">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200 mt-4 mb-4">
+                                            {{ $t('Users') }}
+                                        </h2>
+                                    </div>
+                                    <div class="-m-1.5 overflow-x-auto">
+                                        <div class="p-1.5 min-w-full inline-block align-middle">
+                                            <div class="border rounded-lg shadow overflow-hidden dark:border-neutral-700 dark:shadow-gray-900">
+                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                                                    <thead class="bg-gray-50 dark:bg-neutral-700">
+                                                    <tr>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Name</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Email</th>
+                                                        <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                                    <template v-if="site.users.length > 0">
+                                                        <tr v-for="user in site.users" :key="user.id">
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                                                {{ user.name }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                                                                {{ user.email }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                                                <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                    <template v-else>
+                                                        <tr>
+                                                            <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-neutral-400">
+                                                                No users assigned
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <div>
+                                        <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200 mt-4 mb-4">
+                                            {{ $t('Transactions') }}
+                                        </h2>
+                                    </div>
+                                    <div class="-m-1.5 overflow-x-auto">
+                                        <div class="p-1.5 min-w-full inline-block align-middle">
+                                            <div class="border rounded-lg shadow overflow-hidden dark:border-neutral-700 dark:shadow-gray-900">
+                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                                                    <thead class="bg-gray-50 dark:bg-neutral-700">
+                                                    <tr>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Order</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Amount</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Date</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Customer</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Payment Status</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                                    <template v-if="site.payments.length > 0">
+                                                        <tr v-for="payment in site.payments" :key="payment.id">
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                                                {{ payment.reference }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                                                                {{ payment.amount }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                                                                {{ payment.created_at }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                                                                {{ payment.payer_name }}</td>
+                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                                                                {{ payment.status }}</td>
+                                                        </tr>
+                                                    </template>
+                                                    <template v-else>
+                                                        <tr>
+                                                            <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-neutral-400">
+                                                                No payments assigned
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
-                    <form @submit.prevent="submit">
-                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                            <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Payment Method
-                            </label>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <textarea v-model="form.description" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 resize-none overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500" placeholder="Description" rows="1" data-hs-default-height="48"></textarea><InputError :message="form.errors.description"/>
-                                    <select v-model="form.currency" id="currency" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
-                                    </select><InputError :message="form.errors.currency" class="mt-2" />
-                                </div>
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <input v-model="form.amount" type="number" id="amount" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Amount"><InputError :message="form.errors.amount" class="mt-2"/>
-                                    <select v-model="form.gateway" id="gateway" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option v-for="gateway in gateways" :key="gateway.value" :value="gateway.value">{{ gateway.text }}</option>
-                                    </select><InputError :message="form.errors.gateway" class="mt-2" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-5 flex justify-end gap-x-2">
-                            <button @click="goBack" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                                {{ $t('Cancel') }}
-                            </button>
-                            <PrimaryButton class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none">{{ $t('Submit') }}</PrimaryButton>
-                        </div>
-                    </form>
-                </div>
             </div>
+            <!-- End Card -->
         </div>
     </div>
 </template>
+

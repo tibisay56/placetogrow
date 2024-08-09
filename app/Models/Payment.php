@@ -24,6 +24,10 @@ class Payment extends Model
         'payer_document_number',
         'payer_email',
         'site_id',
+        'required_fields',
+    ];
+    protected $casts = [
+        'required_fields' => 'array',
     ];
 
     public function site(): BelongsTo
