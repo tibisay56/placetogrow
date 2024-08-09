@@ -53,6 +53,7 @@ class UserController extends Controller
 
         $data = $request->only(['name', 'email', 'password']);
         $data['password'] = bcrypt($data['password']);
+
         $storeUserAction->execute($data);
 
         return to_route('user.index')->with('message', 'User was created successfully!');

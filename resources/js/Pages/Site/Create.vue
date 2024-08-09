@@ -21,7 +21,6 @@ const onSelectAvatar = (e) => {
     if (files.length) {
         form.avatar = files[0];
     }
-    console.log(form.avatar);
 };
 
 const submit = () => {
@@ -64,7 +63,7 @@ const props = defineProps({
                                                 </a>
                                             </Link>
                                             <Link :href="route('site.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                     {{ $t('Add site') }}
                                                 </a>

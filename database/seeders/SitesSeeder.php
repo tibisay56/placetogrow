@@ -11,6 +11,7 @@ class SitesSeeder extends Seeder
 {
     public function run(): void
     {
+
         $sites = Site::factory()->count(10)->create();
 
         Site::factory()->create([

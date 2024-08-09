@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Constants\CurrencyType;
+use App\Constants\TypeName;
 use App\Models\Site;
 use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -10,48 +11,53 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class SiteFactory extends Factory
 {
     protected $model = Site::class;
-    private $avatars = [
-        '8cwvsj4UhkntwRaL1pwCFiuazNJYefWRvcfl1k3f.png',
-        'oS5ImnUkh3y1LcPS70VXZ4Ss2JIndPqhAj4Ikp5P.png',
-        '6F7y30mRidurhaxTWh2ire4pmas5we1KHcdfBcbT.png',
-        'ABqTc3VPhJGXwJCuDsjaWiij6OLHmJ6BzJLbtAEJ.png',
-        'dkaxn49vmJXKETLcQe75Eh9moLrgb8LjhFdCwQcY.png',
-        'g3U79D2hDolpTN59bpAZ93bVeJrKlZnw5MPtxCyH.png',
-        'gTprNJGOptpTwPrTBDhEXBMokeCVUxO5QlmaTpM2.png',
-        'N1G5VX0T0edeoV5vSzK42QbsvsqLh1qdTRpUb55c.png',
-        'rQmObsfLuf20OF0kuBxBVUbESvB2MmkMtYq4W3k6.png',
-        'sBoru7enaggqixpzpTG2PL3hnQGY1e82EIEWsUK6.png',
-        'MmUuiFNFREDlVhLdWd9kXPmgWjWwqkC7XTEAsNUK.png',
-        'skVqdH0qTbapZ8jSc29hW1hfM81FLKiAFuSYP4N4.png'
-    ];
 
-    private $avatars = [
-        '8cwvsj4UhkntwRaL1pwCFiuazNJYefWRvcfl1k3f.png',
-        'oS5ImnUkh3y1LcPS70VXZ4Ss2JIndPqhAj4Ikp5P.png',
-        '6F7y30mRidurhaxTWh2ire4pmas5we1KHcdfBcbT.png',
-        'ABqTc3VPhJGXwJCuDsjaWiij6OLHmJ6BzJLbtAEJ.png',
-        'dkaxn49vmJXKETLcQe75Eh9moLrgb8LjhFdCwQcY.png',
-        'g3U79D2hDolpTN59bpAZ93bVeJrKlZnw5MPtxCyH.png',
-        'gTprNJGOptpTwPrTBDhEXBMokeCVUxO5QlmaTpM2.png',
-        'N1G5VX0T0edeoV5vSzK42QbsvsqLh1qdTRpUb55c.png',
-        'rQmObsfLuf20OF0kuBxBVUbESvB2MmkMtYq4W3k6.png',
-        'sBoru7enaggqixpzpTG2PL3hnQGY1e82EIEWsUK6.png',
-        'MmUuiFNFREDlVhLdWd9kXPmgWjWwqkC7XTEAsNUK.png',
-        'skVqdH0qTbapZ8jSc29hW1hfM81FLKiAFuSYP4N4.png',
-    ];
+    private static $avatarIndex = 0;
 
     public function definition(): array
     {
 
-        $randomAvatar = $this->faker->unique()->randomElement($this->avatars);
+        $avatars = [
+            'logos/avatar1.png',
+            'logos/avatar2.png',
+            'logos/avatar3.png',
+            'logos/avatar4.png',
+            'logos/avatar5.png',
+            'logos/avatar6.png',
+            'logos/avatar7.png',
+            'logos/avatar8.png',
+            'logos/avatar9.png',
+            'logos/avatar10.png',
+            'logos/avatar11.png',
+            'logos/avatar12.png',
+            'logos/avatar13.png',
+            'logos/avatar14.png',
+            'logos/avatar15.png',
+            'logos/avatar16.png',
+            'logos/avatar17.png',
+            'logos/avatar18.png',
+            'logos/avatar19.png',
+            'logos/avatar20.png',
+            'logos/avatar21.png',
+        ];
+
+        if (self::$avatarIndex >= count($avatars)) {
+            self::$avatarIndex = 0;
+        }
+
+        $avatar = $avatars[self::$avatarIndex];
+        self::$avatarIndex++;
+
+        $typeIds = Type::whereIn('name', TypeName::toArray())->pluck('id')->toArray();
 
         return [
             'name' => fake()->company(),
-            'avatar' => $randomAvatar,
+            'avatar' => $avatar,
             'category' => fake()->company(),
             'currency' => $this->faker->randomElement(CurrencyType::toArray()),
             'payment_expiration_time' => $this->faker->numberBetween(1, 1440),
-            'type_id' => Type::factory(),
+            'required_fields' => [],
+            'type_id' => $this->faker->randomElement($typeIds),
         ];
     }
 }

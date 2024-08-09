@@ -5,9 +5,9 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {computed, ref, watch} from 'vue';
+import { computed, ref } from 'vue';
 import Layout from "@/Components/Layout.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const page = usePage();
 const site = ref(page.props.site);
@@ -42,6 +42,7 @@ const submit = () => {
         item.required = true;
         item.value = "";
     });
+    console.log(form.required_fields);
     form.required_fields = [...form.required_fields, ...dynamicFields.value];
 
     form.post(route('site.update', site.value),{
@@ -144,7 +145,7 @@ return dynamicFields.value.every(field => field.name.trim() !== '' && field.fiel
                                                 <div>
                                                     <InputLabel for="type_id" :value="$t('Type')" />
                                                     <select v-model="form.type_id" name="type_id" id="type_id"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                         <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.type_id" />
