@@ -32,19 +32,21 @@ A web platform for managing microsites, enabling administrators to register user
         php artisan key:generate
 ```
 4. Edit the .env file to configure the database connection for MySQL.
-
+```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=microsites
 DB_USERNAME=root
 DB_PASSWORD=your_password
+```
 
 5. Add PlaceToPay credentials to the .env file.
-
+```
 PLACETOPAY_LOGIN=your_placetopay_login
 PLACETOPAY_SECRET_KEY=your_placetopay_secret_key
 PLACETOPAY_URL=your_placetopay_url
+```
 
 6. Run migrations to create the database tables:
 
