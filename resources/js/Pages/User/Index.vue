@@ -12,7 +12,7 @@ const users = ref(page.props.users);
 const onDeleteSuccess = (e) => {
     users.value = e.props.users;
 }
-console.log('Users:', users.value);
+
 </script>
 
 <template>
