@@ -65,11 +65,13 @@ class UserController extends Controller
             abort(403);
         }
         $user->load(['roles', 'site']);
+        $sites = Site::all();
 
         return inertia('User/Show', [
             'user' => $user,
             'roles' => $user->roles,
             'site' => $user->site,
+            'sites' => $sites,
         ]);
     }
 
@@ -79,8 +81,8 @@ class UserController extends Controller
             abort(403);
         }
         $user->load(['roles', 'site']);
-        $roles = Role::all();
         $sites = Site::all();
+        $roles = Role::all();
 
         return inertia('User/Edit', [
             'user' => $user,
