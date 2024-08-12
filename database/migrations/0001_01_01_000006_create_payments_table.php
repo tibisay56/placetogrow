@@ -31,6 +31,9 @@ return new class extends Migration
             $table->foreignId('site_id');
             $table->foreign('site_id')->references('id')->on('sites');
 
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }
