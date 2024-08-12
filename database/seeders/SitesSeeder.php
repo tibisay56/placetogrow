@@ -19,7 +19,7 @@ class SitesSeeder extends Seeder
         ]);
 
         foreach ($sites as $site) {
-            $users = User::inRandomOrder()->limit(3)->get();
+            $users = User::inRandomOrder()->limit(1)->get();
 
             foreach ($users as $user) {
                 SiteUser::create([
