@@ -6,7 +6,6 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
@@ -23,6 +22,7 @@ class Site extends Model
         'payment_expiration_time',
         'type_id',
         'required_fields',
+        'user_id',
     ];
 
     protected $casts = [
@@ -34,9 +34,9 @@ class Site extends Model
         return $this->belongsTo(Type::class);
     }
 
-    public function users(): BelongsToMany
+    public function user(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'site_user', 'user_id', 'site_id');
+        return $this->belongsTo(User::class);
     }
 
     public function payments(): HasMany
