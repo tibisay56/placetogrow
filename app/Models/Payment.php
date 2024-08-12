@@ -24,6 +24,7 @@ class Payment extends Model
         'payer_document_number',
         'payer_email',
         'site_id',
+        'user_id',
         'required_fields',
     ];
 
@@ -34,5 +35,10 @@ class Payment extends Model
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
