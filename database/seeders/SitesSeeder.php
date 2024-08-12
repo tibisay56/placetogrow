@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Site;
-use App\Models\SiteUser;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,14 +18,10 @@ class SitesSeeder extends Seeder
         ]);
 
         foreach ($sites as $site) {
-            $users = User::inRandomOrder()->limit(1)->get();
+            $user = User::inRandomOrder()->first();
 
-            foreach ($users as $user) {
-                SiteUser::create([
-                    'site_id' => $site->id,
-                    'user_id' => $user->id,
-                ]);
-            }
+            $site->user_id = $user->id;
+            $site->save();
         }
     }
 }
