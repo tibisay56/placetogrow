@@ -27,7 +27,7 @@ watchEffect(() => {
         roles.value = page.props.roles;
         form.name = user.value.name;
         form.email = user.value.email;
-        sites.value = page.props.sites;
+        sites.value = page.props.sites || [];
         form.roles_id = user.value.roles.map(role => role.id);
         form.site_id = user.value.site ? user.value.site.id : null;
     }
@@ -102,7 +102,7 @@ const submit = () => {
                                                     </div>
                                                         <div>
                                                             <InputLabel for="site_id" :value="$t('Site')" />
-                                                            <select v-model="form.site_id" name="sites_id" id="site_id" multiple
+                                                            <select v-model="form.site_id" name="sites_id" id="site_id"
                                                                     class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                                 <option v-for="site in sites" :key="site.id" :value="site.id" >
                                                                     {{ site.name }}
