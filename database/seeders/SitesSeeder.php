@@ -11,14 +11,16 @@ class SitesSeeder extends Seeder
     public function run(): void
     {
 
-        $sites = Site::factory()->count(10)->create();
+        $sites = Site::factory()->count(25)->create();
 
         Site::factory()->create([
             'name' => 'Test Site',
         ]);
 
+        $users = User::all();
+
         foreach ($sites as $site) {
-            $user = User::inRandomOrder()->first();
+            $user = $users->random();
 
             $site->user_id = $user->id;
             $site->save();
