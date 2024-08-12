@@ -13,13 +13,12 @@ const user = ref(page.props.user);
 const roles = ref(page.props.roles);
 const sites = ref(page.props.sites || []);
 
-console.log('Initial sites:', sites.value);
 
 const form = useForm({
     name: user.value.name,
     email: user.value.email,
     roles_id: user.value.roles.map(role => role.id),
-    site_id: user.value.sites.length ? user.value.sites[0].id : null,
+    site_id: user.value.site ? user.value.site.id : null,
 });
 
 watchEffect(() => {
@@ -30,7 +29,7 @@ watchEffect(() => {
         form.email = user.value.email;
         sites.value = page.props.sites;
         form.roles_id = user.value.roles.map(role => role.id);
-        form.site_id = user.value.sites.length ? user.value.sites[0].id : null;
+        form.site_id = user.value.site ? user.value.site.id : null;
     }
 });
 
