@@ -4,7 +4,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -63,17 +62,6 @@ Route::prefix('dashboard')->group(function () {
     Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payment.show');
     Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
-});
-
-//Setting
-Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('settings', [SettingsController::class, 'index'])->name('setting.index');
-    Route::get('settings/create', [SettingsController::class, 'create'])->name('setting.create');
-    Route::post('settings', [SettingsController::class, 'store'])->name('setting.store');
-    Route::get('settings/{setting}', [SettingsController::class, 'show'])->name('setting.show');
-    Route::get('settings/{setting}/edit', [SettingsController::class, 'edit'])->name('setting.edit');
-    Route::post('settings/{setting}', [SettingsController::class, 'update'])->name('setting.update');
-    Route::delete('settings/{setting}', [SettingsController::class, 'destroy'])->name('setting.destroy');
 });
 
 //Lang
