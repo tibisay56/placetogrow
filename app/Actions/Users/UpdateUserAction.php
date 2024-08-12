@@ -31,6 +31,7 @@ class UpdateUserAction
                 $site->save();
             }
         }
+
         return $user;
     }
 }
