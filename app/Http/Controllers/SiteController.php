@@ -91,14 +91,14 @@ class SiteController extends Controller
         $site = Site::where('slug', $slug)->firstOrFail();
         $site->load('user');
         $site->load('payments');
-        $transactions = $site->payments()->paginate(10);
+        $payments = $site->payments()->paginate(10);
         $currencies = CurrencyType::toArray();
         $types = TypeName::toArray();
 
         return Inertia::render('Site/Show', [
             'site' => $site,
             'currencies' => $currencies,
-            'transactions' => $transactions,
+            'payments' => $payments,
             'types' => $types,
         ]);
     }
