@@ -89,7 +89,7 @@ class SiteController extends Controller
     {
 
         $site = Site::where('slug', $slug)->firstOrFail();
-        $site->load('users');
+        $site->load('user');
         $site->load('payments');
         $transactions = $site->payments()->paginate(10);
         $currencies = CurrencyType::toArray();
@@ -108,7 +108,7 @@ class SiteController extends Controller
         if (! Auth::user()->can(PermissionSlug::SITES_UPDATE)) {
             abort(403);
         }
-        $site->load('users');
+        $site->load('user');
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
