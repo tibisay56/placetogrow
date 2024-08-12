@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Payment;
 use App\Models\Site;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
@@ -15,11 +16,15 @@ class PaymentSeeder extends Seeder
      */
     public function run()
     {
-        $siteIds = Site::factory()->count(14)->create()->pluck('id');
+        $sites = Site::factory()->count(10)->create();
+        $users = User::all();
 
-        foreach ($siteIds as $siteId) {
-            Payment::factory()->count(1)->create([
-                'site_id' => $siteId,
+        foreach ($sites as $site) {
+            $user = $users->random();
+
+            Payment::factory()->create([
+                'site_id' => $site->id,
+                'user_id' => $user->id,
             ]);
         }
     }
