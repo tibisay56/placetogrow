@@ -2,6 +2,7 @@
 
 namespace App\Actions\Users;
 
+use App\Models\Site;
 use App\Models\User;
 
 class UpdateUserAction
@@ -18,9 +19,18 @@ class UpdateUserAction
         }
 
         if (isset($data['site_id'])) {
-            $user->sites()->sync($data['site_id']);
-        }
+            $currentSite = $user->site;
+            if ($currentSite) {
+                $currentSite->user_id = null;
+                $currentSite->save();
+            }
 
+            $site = Site::find($data['site_id']);
+            if ($site) {
+                $site->user_id = $user->id;
+                $site->save();
+            }
+        }
         return $user;
     }
 }
