@@ -33,7 +33,7 @@ class SiteController extends Controller
         if ($user->hasRole('Admin')) {
             $sites = Site::with('type')->get();
         } else {
-            $sites = $user->sites()->with('type')->get();
+            $sites = $user->site()->with('type')->get();
         }
 
         return Inertia::render('Site/Index', [
