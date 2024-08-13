@@ -1,10 +1,46 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Inertia from "lodash";
+import {onMounted, ref} from "vue";
+import jsPDF from "jspdf";
 
 const { props } = usePage();
 const payment = props.payment;
+
+const paymentStatus = ref(payment.status);
+const datePaid = ref(payment.created_at);
+const description = ref(payment.description);
+const amountPaid = ref(payment.amount);
+const currency = ref(payment.currency);
+
+onMounted(() => {
+    const printButton = document.getElementById('printButton');
+    if (printButton) {
+        printButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.print();
+        });
+    }
+});
+
+const generatePDF = () => {
+    const doc = new jsPDF();
+
+    doc.text("Invoice", 10, 10);
+
+    const x = 10;
+    const y = 20;
+    const width = 180;
+    const height = 60;
+
+    doc.rect(x, y, width, height);
+    doc.text(`Payment Status: ${paymentStatus.value}`, x + 10, y + 10);
+    doc.text(`Date Paid: ${datePaid.value}`, x + 10, y + 20);
+    doc.text(`Description: ${description.value}`, x + 10, y + 30);
+    doc.text(`Amount Paid: ${currency.value} $${amountPaid.value}`, x + 10, y + 40);
+
+    doc.save('invoice.pdf');
+};
+
 </script>
 
 <template>
@@ -73,18 +109,6 @@ const payment = props.payment;
                         <h4 class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Summary</h4>
 
                         <ul class="mt-3 flex flex-col">
-                            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
-                                <div class="flex items-center justify-between w-full">
-                                    <span>Payment to Front</span>
-                                    <span>$264.00</span>
-                                </div>
-                            </li>
-                            <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
-                                <div class="flex items-center justify-between w-full">
-                                    <span>Tax fee</span>
-                                    <span>$52.8</span>
-                                </div>
-                            </li>
                             <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-semibold bg-gray-50 border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
                                 <div class="flex items-center justify-between w-full">
                                     <span>Amount paid</span>
@@ -96,11 +120,11 @@ const payment = props.payment;
 
                     <!-- Button -->
                     <div class="mt-5 flex justify-end gap-x-2">
-                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                        <button @click="generatePDF" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                             Invoice PDF
-                        </a>
-                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                        </button>
+                        <a id="printButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                             Print
                         </a>
