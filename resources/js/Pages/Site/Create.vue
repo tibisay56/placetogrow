@@ -7,13 +7,19 @@ import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
 
+const minExpirationTime = 1;
+const maxExpirationTime = 1440;
+
+const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationTime - minExpirationTime + 1)) + minExpirationTime;
+
+
 const form = useForm({
     name: "",
     avatar: null,
     type_id: "",
     category: "",
     currency: "",
-    payment_expiration_time: 30,
+    payment_expiration_time: getRandomExpirationTime(),
 });
 
 const onSelectAvatar = (e) => {
