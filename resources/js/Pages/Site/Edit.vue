@@ -22,7 +22,7 @@ const form = useForm({
     user_id: site.value.user_id,
     category: site.value.category,
     currency: site.value.currency,
-    payment_expiration_time: 30,
+    payment_expiration_time: String(30),
     required_fields: site.value.required_fields,
     field_type: site.value.field_type,
 });
@@ -166,7 +166,7 @@ return dynamicFields.value.every(field => field.name.trim() !== '' && field.fiel
                                                     <InputError class="mt-2" :message="form.errors.currency" />
                                                 </div>
                                                 <div>
-                                                    <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                    <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (minutes)')" />
                                                     <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
                                                     <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                                 </div>
