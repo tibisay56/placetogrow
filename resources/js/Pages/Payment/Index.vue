@@ -8,6 +8,8 @@ import {format} from "date-fns";
 const page = usePage()
 const payments = ref(page.props.payments || []);
 
+payments.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
 const colorByStatus = {
     approved: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     approved_partial: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
