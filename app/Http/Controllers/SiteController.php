@@ -33,7 +33,7 @@ class SiteController extends Controller
         if ($user->hasRole('Admin')) {
             $sites = Site::with('type')->get();
         } else {
-            $sites = $user->sites()->with('type')->get();
+            $sites = $user->site()->with('type')->get();
         }
 
         return Inertia::render('Site/Index', [
@@ -89,16 +89,16 @@ class SiteController extends Controller
     {
 
         $site = Site::where('slug', $slug)->firstOrFail();
-        $site->load('users');
+        $site->load('user');
         $site->load('payments');
-        $transactions = $site->payments()->paginate(10);
+        $payments = $site->payments()->paginate(10);
         $currencies = CurrencyType::toArray();
         $types = TypeName::toArray();
 
         return Inertia::render('Site/Show', [
             'site' => $site,
             'currencies' => $currencies,
-            'transactions' => $transactions,
+            'payments' => $payments,
             'types' => $types,
         ]);
     }
@@ -108,7 +108,7 @@ class SiteController extends Controller
         if (! Auth::user()->can(PermissionSlug::SITES_UPDATE)) {
             abort(403);
         }
-        $site->load('users');
+        $site->load('user');
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();

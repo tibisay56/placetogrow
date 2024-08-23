@@ -13,9 +13,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import {faGear, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
 
 
-library.add(faCreditCard, faFileLines, faGear, faTrash);
+library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

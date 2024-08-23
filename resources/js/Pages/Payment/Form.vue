@@ -1,14 +1,15 @@
 <script setup>
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+
 import InputError from "@/Components/InputError.vue";
-import {ref} from 'vue';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {useForm, usePage} from "@inertiajs/vue3";
+import {ref} from "vue";
 
 const { props } = usePage();
 const documentTypes = ref(props.documentTypes || []);
 const currencies = ref(props.currencies || []);
 const gateways = ref(props.gateways || []);
-const site = ref(props.site || []);
+const site = ref(props.site || {});
 const requiredFields = ref(props.required_fields || []);
 
 const form = useForm({
@@ -25,13 +26,16 @@ const form = useForm({
     required_Fields: requiredFields,
 });
 
+console.log(props.documentTypes, props.currencies, props.gateways);
+
+
 
 const goBack = () => {
     window.history.back();
 };
 
 const submit = () => {
-    form.post(route('payment.store'), {
+    form.post(route('payment.store', { siteId: site.value.id }), {
         onError: (errors) => {
             console.log('Errores de validación:', errors);
         },
@@ -40,21 +44,11 @@ const submit = () => {
         }
     });
 };
-
 </script>
 
 <template>
-    <Head title="Show Sites" />
     <div class="max-w-[85rem] px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mx-auto">
         <div class="p-4 bg-white rounded-lg shadow-md dark:bg-neutral-800 mx-12 lg:mx-64">
-            <div v-if="site.avatar" class="flex justify-center items-center h-20">
-                <img class="mx-auto flex flex-col items-center rounded-lg border border-gray-300 shadow mb-10" width="100" height="100" :src="`/storage/${site.avatar}`" alt="avatar"/>
-            </div>
-            <div>
-                <h1 v-if="site.name" class="text-xl font-semibold text-gray-800 dark:text-neutral-200"> {{ site.name }}</h1>
-                <p v-if="site.category" class="text-sm text-gray-600 dark:text-neutral-400 mb-4"> {{ site.category }}</p>
-                <p v-if="site.type" class="capitalize text-sm text-gray-600 dark:text-neutral-400 mb-4"> {{ site.type.name }}</p>
-            </div>
             <div class="space-y-8">
                 <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
                     <form @submit.prevent="submit">
@@ -80,7 +74,7 @@ const submit = () => {
                                     <select v-model="form.document_type" id="document_type" name="document_type" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
                                         <option :value="null">Select option...</option>
                                         <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
-                                    </select><InputError :message="form.errors.documentType" class="mt-2"/>
+                                    </select><InputError :message="form.errors.document_type" class="mt-2"/>
                                     <input v-model="form.document_number" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
                                 </div>
                             </div>
@@ -120,3 +114,7 @@ const submit = () => {
         </div>
     </div>
 </template>
+
+<style scoped>
+
+</style>

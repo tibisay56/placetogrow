@@ -17,7 +17,7 @@ const form = useForm({
     name: user.value.name,
     email: user.value.email,
     roles_id: user.value.roles.map(role => role.id),
-    site_id: user.value.sites.length ? user.value.sites[0].id : null,
+    site_id: user.value.site ? user.value.site.id : null,
 });
 
 watchEffect(() => {
@@ -27,7 +27,7 @@ watchEffect(() => {
         sites.value = page.props.sites;
         form.name = user.value.name;
         form.roles_id = user.value.roles.map(role => role.id);
-        form.site_id = user.value.sites.length ? user.value.sites[0].id : null;
+        form.site_id = user.value.site ? user.value.site.id : null;
     }
 });
 

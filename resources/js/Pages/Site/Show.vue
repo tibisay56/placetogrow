@@ -22,9 +22,6 @@ const form = useForm({
     payment_expiration_time: String(30),
 });
 
-console.log(page.props.types);
-console.log(site.value.type_id);
-
 const submit = () => {
     form.post(route('site.store'));
 };
@@ -107,7 +104,7 @@ const props = defineProps({
                                                 <InputError class="mt-2" :message="form.errors.currency" />
                                             </div>
                                             <div>
-                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (minutes)')" />
                                                 <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                             </div>
@@ -132,12 +129,12 @@ const props = defineProps({
                                                     </tr>
                                                     </thead>
                                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                                    <template v-if="site.users.length > 0">
-                                                        <tr v-for="user in site.users" :key="user.id">
+                                                    <template v-if="site.user">
+                                                        <tr>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                                                {{ user.name }}</td>
+                                                                {{ site.user.name }}</td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                                                {{ user.email }}</td>
+                                                                {{ site.user.email }}</td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                                                 <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">Delete</button>
                                                             </td>

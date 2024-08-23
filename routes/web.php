@@ -4,8 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -63,17 +63,18 @@ Route::prefix('dashboard')->group(function () {
     Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payment.show');
     Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
+    Route::get('payment/form/{siteId}', [PaymentController::class, 'form'])->name('payment.form');
 });
 
-//Setting
+//Subscription
 Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('settings', [SettingsController::class, 'index'])->name('setting.index');
-    Route::get('settings/create', [SettingsController::class, 'create'])->name('setting.create');
-    Route::post('settings', [SettingsController::class, 'store'])->name('setting.store');
-    Route::get('settings/{setting}', [SettingsController::class, 'show'])->name('setting.show');
-    Route::get('settings/{setting}/edit', [SettingsController::class, 'edit'])->name('setting.edit');
-    Route::post('settings/{setting}', [SettingsController::class, 'update'])->name('setting.update');
-    Route::delete('settings/{setting}', [SettingsController::class, 'destroy'])->name('setting.destroy');
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::get('subscriptions/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::get('subscriptions/{subscription}', [SubscriptionController::class, 'show'])->name('subscription.show');
+    Route::get('subscriptions/{subscription}/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+    Route::put('subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscription.update');
+    Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
 //Lang

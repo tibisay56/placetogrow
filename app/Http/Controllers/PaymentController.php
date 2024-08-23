@@ -19,14 +19,13 @@ class PaymentController extends Controller
 {
     public function index(): Response
     {
-
         $user = Auth::user();
 
         if ($user->hasRole('Admin')) {
             $payments = Payment::with('site')->get();
         } else {
-            $siteIds = $user->sites->pluck('id');
-            $payments = Payment::whereIn('site_id', $siteIds)->with('site')->get();
+            $site = $user->site;
+            $payments = $site ? Payment::where('site_id', $site->id)->with('site')->get() : collect();
         }
 
         return Inertia::render('Payment/Index', [
