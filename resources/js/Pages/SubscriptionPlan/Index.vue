@@ -7,12 +7,6 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
-const settings = ref(page.props.settings);
-
-const onDeleteSuccess = (e) => {
-    console.log(e)
-    settings.value = e.props.settings;
-}
 
 
 </script>
@@ -31,24 +25,24 @@ const onDeleteSuccess = (e) => {
                                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                     <div>
                                         <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                            {{ $t('Settings') }}
+                                            {{ $t('Plans') }}
                                         </h2>
                                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                            {{ $t('Add settings, edit and more.') }}
+                                            {{ $t('Add plans, edit and more.') }}
                                         </p>
                                     </div>
 
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('setting.index')">
+                                            <Link :href="route('form.index')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
                                                 {{ $t('View all') }}
                                             </a>
                                         </Link>
-                                            <Link :href="route('setting.create')">
+                                            <Link :href="route('form.create')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                {{ $t('Add setting') }}
+                                                {{ $t('Add plan') }}
                                             </a>
                                             </Link>
                                         </div>
@@ -88,7 +82,7 @@ const onDeleteSuccess = (e) => {
                                     </thead>
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                    <tr v-for="setting in settings">
+                                    <tr>
                                         <td class="size-px whitespace-nowrap">
                                             <div class="ps-6 py-3">
                                                 <label for="hs-at-with-checkboxes-1" class="flex">
@@ -101,7 +95,7 @@ const onDeleteSuccess = (e) => {
                                             <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                                 <div class="flex items-center gap-x-3">
                                                     <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $t(setting.name) }}</span>
+                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,7 +107,7 @@ const onDeleteSuccess = (e) => {
                                                 <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                                 </svg>
-                                                {{setting.status}}
+
                                               </span>
                                             </div>
                                         </td>
@@ -145,13 +139,7 @@ const onDeleteSuccess = (e) => {
                                         </span>
                                                 </template>
 
-                                                <template #content>
-                                                    <DropdownLink :href="route('setting.show', { setting: setting.id })"> {{ $t('Show') }} </DropdownLink>
-                                                    <DropdownLink :href="route('setting.edit', role)"> {{ $t('Edit') }} </DropdownLink>
-                                                    <DropdownLink @success="onDeleteSuccess" :href="route('setting.destroy', setting)" method="delete" as="button">
-                                                        {{ $t('Delete') }}
-                                                    </DropdownLink>
-                                                </template>
+
                                             </Dropdown>
                                         </td>
                                     </tr>

@@ -44,6 +44,11 @@ class Site extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function subscriptionPlans(): HasMany
+    {
+        return $this->hasMany(SubscriptionPlan::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
