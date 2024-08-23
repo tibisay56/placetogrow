@@ -5,6 +5,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,18 @@ Route::prefix('dashboard')->group(function () {
     Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payment.show');
     Route::get('payments', [PaymentController::class, 'index'])->name('payment.index');
     Route::post('payments/create', [PaymentController::class, 'store'])->name('payment.store');
+    Route::get('payment/form/{siteId}', [PaymentController::class, 'form'])->name('payment.form');
+});
+
+//Subscription
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::get('subscriptions/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::get('subscriptions/{subscription}', [SubscriptionController::class, 'show'])->name('subscription.show');
+    Route::get('subscriptions/{subscription}/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+    Route::put('subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscription.update');
+    Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
 //Lang
