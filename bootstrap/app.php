@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,17 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-        ]);
-
-        $middleware->web(append: [
-            HandleInertiaRequests::class,
-        ]);
-        $middleware->web(append: [
             App\Http\Middleware\TranslationsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-
         $exceptions->respond(function (Response $response) {
             if (shouldRenderCustomErrorPage() && in_array($response->getStatusCode(), [403, 404, 500])) {
                 return Inertia::render('Error', [
@@ -37,18 +29,21 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return $response;
         });
+    })
+    ->create();
 
-    })->create();
-
+/**
+ * Determine if a custom error page should be rendered.
+ *
+ * @return bool
+ */
 function shouldRenderCustomErrorPage()
 {
     if (app()->environment(['local', 'testing'])) {
-
         return true;
     }
 
     if (config('app.custom_error_pages_enabled')) {
-
         return true;
     }
 
