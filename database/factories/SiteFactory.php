@@ -26,4 +26,9 @@ class SiteFactory extends Factory
             'type_id' => $this->faker->randomElement($typeIds),
         ];
     }
+
+    public function subscriptionType(): self
+    {
+        return $this->state(fn () => ['type' => TypeName::SUBSCRIPTIONS->value]);
+    }
 }
