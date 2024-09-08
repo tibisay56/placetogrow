@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Subscription;
+namespace App\Http\Requests\Plan;
 
-use App\Constants\BillingFrecuency;
+use App\Constants\BillingFrequency;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
             'description' => 'nullable|string',
             'subscription_expiration' => 'required|integer|min:1|max:1440',
             'site_id' => 'required|exists:sites,id',
-            'billing_frequency' => 'required|in:'.implode(',', BillingFrecuency::toArray()),
+            'billing_frequency' => 'required|in:'.implode(',', BillingFrequency::toArray()),
         ];
     }
 }
