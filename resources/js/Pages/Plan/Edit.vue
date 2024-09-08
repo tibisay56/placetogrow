@@ -9,28 +9,28 @@ import Layout from "@/Components/Layout.vue";
 
 const page = usePage();
 const sites = ref(page.props.sites || []);
-const subscription = ref(page.props.subscription);
+const plan = ref(page.props.plan);
 const billingFrequencies = ref(page.props.billingFrequencies || []);
 const currencies = ref(page.props.currencies || []);
 const planTypes = ref(page.props.planTypes || []);
 
 const form = useForm({
-    plan_type_id: subscription.value.plan_type_id,
-    description: subscription.value.description,
-    currency: subscription.value.currency,
-    amount: subscription.value.amount,
-    billing_frequency: subscription.value.billing_frequency,
-    subscription_expiration: subscription.value.subscription_expiration,
-    site_id: subscription.value.site_id || null,
+    plan_type_id: plan.value.plan_type_id,
+    description: plan.value.description,
+    currency: plan.value.currency,
+    amount: plan.value.amount,
+    billing_frequency: plan.value.billing_frequency,
+    subscription_expiration: plan.value.subscription_expiration,
+    site_id: plan.value.site_id || null,
 });
 
 const submit = () => {
-    form.put(route('subscription.update', subscription.value), {
+    form.put(route('plan.update', plan.value), {
         onSuccess: (e) => {
-            subscription.value = e.props.contact;
+            plan.value = e.props.contact;
         },
         onError: (errors) => {
-            console.error('Error updating subscription:', errors);
+            console.error('Error updating plan:', errors);
         }
     });
 };
@@ -56,12 +56,12 @@ const submit = () => {
                                 </div>
                                 <div>
                                     <div class="inline-flex gap-x-2">
-                                        <Link :href="route('subscription.index')">
+                                        <Link :href="route('plan.index')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                 {{ $t('View all') }}
                                             </a>
                                         </Link>
-                                        <Link :href="route('subscription.create')">
+                                        <Link :href="route('plan.create')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none">
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                 {{ $t('Add plan') }}
