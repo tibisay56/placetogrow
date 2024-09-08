@@ -5,8 +5,6 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
-import {ref} from "vue";
-
 
 const minExpirationTime = 1;
 const maxExpirationTime = 1440;
@@ -15,26 +13,24 @@ const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationT
 
 
 const form = useForm({
-    name: "",
     description: "",
     currency: "",
     amount:"",
     billing_frequency: "",
     subscription_expiration: getRandomExpirationTime(),
     site_id: null,
+    plan_type_id:"",
 });
-
 const submit = () => {
     form.post(route('subscription.store'));
 };
-
 
 const props = defineProps({
     billingFrequencies: Array,
     currencies: Array,
     sites: Array,
+    planTypes: Array,
 });
-
 const capitalize = (text) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -94,11 +90,14 @@ const capitalize = (text) => {
                                                 <InputError class="mt-2" :message="form.errors.site_id" />
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                            <div class="mt-4">
-                                                <InputLabel for="name" :value="$t('Name')" />
-                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
-                                                <InputError class="mt-2" :message="form.errors.name" />
-                                            </div>
+                                                <div class="mt-4">
+                                                    <InputLabel for="plan_type_id" :value="$t('Plan type')" />
+                                                    <select v-model="form.plan_type_id" name="plan_type_id" id="plan_type_id"
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option v-for="(planType, index) in planTypes" :key="index+1" :value="index+1">{{ $t(planType) }} </option>
+                                                    </select>
+                                                    <InputError class="mt-2" :message="form.errors.plan_type_id" />
+                                                </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="description" :value="$t('Description')" />
                                                     <TextInput v-model="form.description" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Description')"/>
@@ -128,7 +127,7 @@ const capitalize = (text) => {
                                                     <InputError class="mt-2" :message="form.errors.billing_frequency" />
                                                 </div>
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Subscription Expiration')" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
                                                 <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                             </div>

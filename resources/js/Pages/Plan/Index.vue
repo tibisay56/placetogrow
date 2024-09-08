@@ -7,8 +7,21 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
 const subscriptions = ref(page.props.subscriptions || []);
-console.log('Subscriptions:', subscriptions.value);
-const sites = ref(page.props.sites || []);
+
+const colorByPlanType = {
+    basic: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    medium: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
+    premium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+};
+const getBadgeClasses = (planType) => {
+    return colorByPlanType[planType] || 'bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-500';
+};
+
+const onDeleteSuccess = (e) => {
+    console.log(e)
+    subscriptions.value = e.props.subscriptions || [];
+}
+
 </script>
 
 <template>
@@ -63,14 +76,7 @@ const sites = ref(page.props.sites || []);
                                         <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Site') }}
-                                              </span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Name') }}
+                                                {{ $t('Plan Type') }}
                                               </span>
                                             </div>
                                         </th>
@@ -103,6 +109,20 @@ const sites = ref(page.props.sites || []);
                                               </span>
                                             </div>
                                         </th>
+                                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                            <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Site') }}
+                                              </span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-end">
+                                            <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Actions') }}
+                                              </span>
+                                            </div>
+                                        </th>
                                     </tr>
                                     </thead>
 
@@ -116,20 +136,12 @@ const sites = ref(page.props.sites || []);
                                                 </label>
                                             </div>
                                         </td>
-                                        <td  class="size-px whitespace-nowrap">
-                                            <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                                <div class="flex items-center gap-x-3">
-                                                    <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.site ? subscription.site.name : 'No Site' }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
                                         <td class="size-px whitespace-nowrap">
                                             <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                                 <div class="flex items-center gap-x-3">
                                                     <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.name }}</span>
+                                                        <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(subscription.plan_type ? subscription.plan_type.name : 'Unknown')}`">
+                                                            {{ subscription.plan_type ? subscription.plan_type.name : 'No Plan Type' }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,6 +164,15 @@ const sites = ref(page.props.sites || []);
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
                                                 <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ subscription.subscription_expiration }}</span>
+                                            </div>
+                                        </td>
+                                        <td  class="size-px whitespace-nowrap">
+                                            <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                                <div class="flex items-center gap-x-3">
+                                                    <div class="grow">
+                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.site ? subscription.site.name : 'No Site' }}</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="size-px whitespace-nowrap">

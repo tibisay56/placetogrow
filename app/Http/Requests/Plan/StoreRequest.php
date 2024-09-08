@@ -16,8 +16,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'name' => 'required|max:100',
+            'plan_type_id' => 'required|exists:plan_types,id',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required',
             'description' => 'nullable|string',

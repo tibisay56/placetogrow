@@ -17,7 +17,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'plan_type_id' => 'required|exists:plan_types,id',
             'description' => 'required|string',
             'amount' => 'required|numeric',
             'currency' => 'required|in:'.implode(',', CurrencyType::toArray()),

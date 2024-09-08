@@ -2,7 +2,7 @@
 
 namespace App\Constants;
 
-enum BillingFrecuency: string
+enum BillingFrequency: string
 {
     case DAILY = 'daily';
     case WEEKLY = 'weekly';

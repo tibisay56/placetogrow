@@ -12,9 +12,10 @@ const sites = ref(page.props.sites || []);
 const subscription = ref(page.props.subscription);
 const billingFrequencies = ref(page.props.billingFrequencies || []);
 const currencies = ref(page.props.currencies || []);
+const planTypes = ref(page.props.planTypes || []);
 
 const form = useForm({
-    name: subscription.value.name,
+    plan_type_id: subscription.value.plan_type_id,
     description: subscription.value.description,
     currency: subscription.value.currency,
     amount: subscription.value.amount,
@@ -24,7 +25,6 @@ const form = useForm({
 });
 
 const submit = () => {
-    console.log('Submitting form:', form);
     form.put(route('subscription.update', subscription.value), {
         onSuccess: (e) => {
             subscription.value = e.props.contact;
@@ -86,9 +86,12 @@ const submit = () => {
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                                 <div>
-                                                    <InputLabel for="name" :value="$t('Name')" />
-                                                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" placeholder="Name"/>
-                                                    <InputError class="mt-2" :message="form.errors.name" />
+                                                    <InputLabel for="plan_type_id" :value="$t('Plan type')" />
+                                                    <select v-model="form.plan_type_id" name="plan_type_id" id="plan_type_id"
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option v-for="(planType, index) in planTypes" :key="index+1" :value="index+1">{{ $t(planType) }} </option>
+                                                    </select>
+                                                    <InputError class="mt-2" :message="form.errors.plan_type_id" />
                                                 </div>
                                                 <div>
                                                     <InputLabel for="description" :value="$t('Description')" />
@@ -119,7 +122,7 @@ const submit = () => {
                                                     <InputError class="mt-2" :message="form.errors.billing_frequency" />
                                                 </div>
                                                 <div>
-                                                    <InputLabel for="subscription_expiration" :value="$t('Subscription Expiration')" />
+                                                    <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
                                                     <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full" />
                                                     <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                                 </div>
