@@ -19,9 +19,6 @@ class PlanController extends Controller
 {
     public function index(): Response
     {
-        if (! Auth::user()->can(PermissionSlug::PLANS_VIEW)) {
-            abort(403);
-        }
 
         $user = auth()->user();
         if ($user->hasRole('Admin')) {
