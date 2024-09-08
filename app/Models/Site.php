@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
 {
-    use HasFactory;
-    use Sluggable;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
         'name',
@@ -44,9 +43,14 @@ class Site extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function subscriptionPlans(): HasMany
+    public function plans(): HasMany
     {
-        return $this->hasMany(SubscriptionPlan::class);
+        return $this->hasMany(Plan::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     public function getRouteKeyName(): string
