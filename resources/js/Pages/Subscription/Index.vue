@@ -1,6 +1,6 @@
 <script setup>
-import {usePage, useForm, Link} from '@inertiajs/vue3';
-import {computed, onMounted, ref, watch} from "vue";
+import { usePage, Link} from '@inertiajs/vue3';
+import { ref } from "vue";
 import Layout from "@/Components/Layout.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -13,6 +13,9 @@ const colorBySubscriptionStatus = {
     active: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     inactive: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
     pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+    expired:  'bg-orange-100 text-orange-800 dark:bg-orange-500/10 dark:text-orange-500',
+    cancelled: 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500',
+    suspended: 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500',
 };
 const getBadgeClasses = (subscriptionStatus) => {
     return colorBySubscriptionStatus[subscriptionStatus] || 'bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-500';
