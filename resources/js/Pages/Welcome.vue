@@ -23,12 +23,6 @@ defineProps({
     },
 });
 
-function handleImageError() {
-    document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-}
 const page = usePage()
 const sites = ref(page.props.sites || []);
 
@@ -127,7 +121,8 @@ const changeLocale = async (item) => {
                         <div v-for="(item, index) in sites.data"  :key="index" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
                             <a :href="`/dashboard/sites/${encodeURIComponent(item.slug)}`" class="flex flex-col items-center">
                                 <img class="inline-block size-[38px]" :src="`/storage/${item.avatar}`" :alt="item.name"/>
-                                <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ item.name }}</p>
+                                <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200 font-bold">{{ item.name }}</p>
+                                <p class="capitalize mt-2 text-center text-sm text-gray-800 dark:text-neutral-200">{{ $t(item.type.name) }}</p>
                             </a>
                         </div>
                     </div>
