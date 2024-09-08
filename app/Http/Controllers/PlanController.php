@@ -2,38 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\BillingFrecuency;
+use App\Constants\BillingFrequency;
 use App\Constants\CurrencyType;
+use App\Constants\PermissionSlug;
 use App\Constants\PlanTypeName;
-use App\Http\Requests\Subscription\StoreRequest;
-use App\Http\Requests\Subscription\UpdateRequest;
+use App\Http\Requests\Plan\StoreRequest;
+use App\Http\Requests\Plan\UpdateRequest;
+use App\Models\Plan;
 use App\Models\Site;
-use App\Models\Subscription;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class SubscriptionController extends Controller
+class PlanController extends Controller
 {
     public function index(): Response
     {
+        if (! Auth::user()->can(PermissionSlug::PLANS_VIEW)) {
+            abort(403);
+        }
 
-        $subscriptionPlans = Subscription::with('planType','site')->get();
+        $user = auth()->user();
+        if ($user->hasRole('Admin')) {
+            $plans = Plan::with('planType', 'site')->get();
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
 
-        return Inertia::render('Subscription/Index', [
-            'subscriptions' => $subscriptionPlans,
+        return Inertia::render('Plan/Index', [
+            'plans' => $plans,
         ]);
     }
 
     public function create(): Response
     {
+        if (! Auth::user()->can(PermissionSlug::PLANS_CREATE)) {
+            abort(403);
+        }
+
         $sites = Site::where('type_id', 3)->get();
 
         $currencies = CurrencyType::toArray();
         $planTypes = PlanTypeName::toArray();
-        $billingFrequencies = BillingFrecuency::toArray();
+        $billingFrequencies = BillingFrequency::toArray();
 
-        return Inertia::render('Subscription/Create', [
+        return Inertia::render('Plan/Create', [
             'sites' => $sites,
             'currencies' => $currencies,
             'billingFrequencies' => $billingFrequencies,
@@ -43,59 +57,78 @@ class SubscriptionController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
+        if (! Auth::user()->can(PermissionSlug::PLANS_CREATE)) {
+            abort(403);
+        }
+
         $validated = $request->validated();
 
-        Subscription::create($validated);
+        Plan::create($validated);
 
-        return redirect()->route('subscription.index')->with('message', 'Subscription plan created successfully');
+        return redirect()->route('plan.index')->with('message', 'Plan plan created successfully');
     }
 
-    public function show(Subscription $subscription): Response
+    public function show(Plan $plan): Response
     {
+        if (! Auth::user()->can(PermissionSlug::PLANS_CREATE)) {
+            abort(403);
+        }
+
         $sites = Site::where('type_id', 3)->get();
         $currencies = CurrencyType::toArray();
-        $billingFrequencies = BillingFrecuency::toArray();
+        $billingFrequencies = BillingFrequency::toArray();
         $planTypes = PlanTypeName::toArray();
 
-        return Inertia::render('Subscription/Show', [
+        return Inertia::render('Plan/Show', [
             'sites' => $sites,
-            'subscription' => $subscription,
+            'plan' => $plan,
             'currencies' => $currencies,
             'billingFrequencies' => $billingFrequencies,
             'planTypes' => $planTypes,
         ]);
     }
 
-    public function edit(Subscription $subscription): Response
+    public function edit(Plan $plan): Response
     {
+
+        if (! Auth::user()->can(PermissionSlug::PLANS_UPDATE)) {
+            abort(403);
+        }
+
         $sites = Site::where('type_id', 3)->get();
         $currencies = CurrencyType::toArray();
-        $billingFrequencies = BillingFrecuency::toArray();
+        $billingFrequencies = BillingFrequency::toArray();
         $planTypes = PlanTypeName::toArray();
 
-        return Inertia::render('Subscription/Edit', [
+        return Inertia::render('Plan/Edit', [
             'sites' => $sites,
-            'subscription' => $subscription,
+            'plan' => $plan,
             'currencies' => $currencies,
             'billingFrequencies' => $billingFrequencies,
             'planTypes' => $planTypes,
         ]);
     }
 
-    public function update(UpdateRequest $request, Subscription $subscription): RedirectResponse
+    public function update(UpdateRequest $request, Plan $plan): RedirectResponse
     {
-
+        if (! Auth::user()->can(PermissionSlug::PLANS_UPDATE)) {
+            abort(403);
+        }
         $validated = $request->validated();
 
-        $subscription->update($validated);
+        $plan->update($validated);
 
-        return redirect()->route('subscription.index')->with('message', 'Subscription plan updated successfully');
+        return redirect()->route('plan.index')->with('message', 'Plan updated successfully');
     }
 
-    public function destroy(Subscription $subscription): RedirectResponse
+    public function destroy(Plan $plan): RedirectResponse
     {
-        $subscription->delete();
+        if (! Auth::user()->can(PermissionSlug::PLANS_DELETE)) {
+            abort(403);
+        }
 
-        return redirect()->route('subscription.index')->with('message', 'Subscription plan deleted successfully');
+        $plan->delete();
+
+        return redirect()->route('plan.index')->with('message', 'Plan deleted successfully');
     }
 }
