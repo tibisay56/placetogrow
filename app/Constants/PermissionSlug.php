@@ -48,6 +48,20 @@ final class PermissionSlug
 
     public const VIEW_TRANSACTIONS = 'view_transactions';
 
+    public const PLANS_VIEW_ANY = 'plans_view_any';
+
+    public const PLANS_VIEW = 'plans_view';
+
+    public const PLANS_CREATE = 'plans_create';
+
+    public const PLANS_UPDATE = 'plans_update';
+
+    public const PLANS_DELETE = 'plans_delete';
+
+    public const SUBSCRIPTIONS_VIEW = 'subscriptions_view';
+
+    public const SUBSCRIPTIONS_DELETE = 'subscription_delete';
+
     public static function toArray(): array
     {
         return (new \ReflectionClass(self::class))->getConstants();
