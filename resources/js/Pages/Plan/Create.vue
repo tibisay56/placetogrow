@@ -5,8 +5,6 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
-import {ref} from "vue";
-
 
 const minExpirationTime = 1;
 const maxExpirationTime = 1440;
@@ -15,26 +13,24 @@ const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationT
 
 
 const form = useForm({
-    name: "",
     description: "",
     currency: "",
     amount:"",
     billing_frequency: "",
     subscription_expiration: getRandomExpirationTime(),
     site_id: null,
+    plan_type_id:"",
 });
-
 const submit = () => {
-    form.post(route('subscription.store'));
+    form.post(route('plan.store'));
 };
-
 
 const props = defineProps({
     billingFrequencies: Array,
     currencies: Array,
     sites: Array,
+    planTypes: Array,
 });
-
 const capitalize = (text) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -65,12 +61,12 @@ const capitalize = (text) => {
                                     </div>
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('subscription.index')">
+                                            <Link :href="route('plan.index')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
                                                     {{ $t('View all') }}
                                                 </a>
                                             </Link>
-                                            <Link :href="route('subscription.create')">
+                                            <Link :href="route('plan.create')">
                                                 <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                     {{ $t('Add plan') }}
@@ -94,11 +90,14 @@ const capitalize = (text) => {
                                                 <InputError class="mt-2" :message="form.errors.site_id" />
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                            <div class="mt-4">
-                                                <InputLabel for="name" :value="$t('Name')" />
-                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
-                                                <InputError class="mt-2" :message="form.errors.name" />
-                                            </div>
+                                                <div class="mt-4">
+                                                    <InputLabel for="plan_type_id" :value="$t('Plan type')" />
+                                                    <select v-model="form.plan_type_id" name="plan_type_id" id="plan_type_id"
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option v-for="(planType, index) in planTypes" :key="index+1" :value="index+1">{{ $t(planType) }} </option>
+                                                    </select>
+                                                    <InputError class="mt-2" :message="form.errors.plan_type_id" />
+                                                </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="description" :value="$t('Description')" />
                                                     <TextInput v-model="form.description" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Description')"/>
@@ -128,7 +127,7 @@ const capitalize = (text) => {
                                                     <InputError class="mt-2" :message="form.errors.billing_frequency" />
                                                 </div>
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Subscription Expiration')" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
                                                 <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                             </div>

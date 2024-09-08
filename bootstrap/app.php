@@ -6,6 +6,26 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Determine if a custom error page should be rendered.
+ *
+ * @return bool
+ */
+if (! function_exists('shouldRenderCustomErrorPage')) {
+    function shouldRenderCustomErrorPage()
+    {
+        if (app()->environment(['local', 'testing'])) {
+            return true;
+        }
+
+        if (config('app.custom_error_pages_enabled')) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -31,21 +51,3 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->create();
-
-/**
- * Determine if a custom error page should be rendered.
- *
- * @return bool
- */
-function shouldRenderCustomErrorPage()
-{
-    if (app()->environment(['local', 'testing'])) {
-        return true;
-    }
-
-    if (config('app.custom_error_pages_enabled')) {
-        return true;
-    }
-
-    return false;
-}

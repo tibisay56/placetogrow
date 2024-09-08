@@ -6,9 +6,22 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
-const subscriptions = ref(page.props.subscriptions || []);
-console.log('Subscriptions:', subscriptions.value);
-const sites = ref(page.props.sites || []);
+const plans = ref(page.props.plans || []);
+
+const colorByPlanType = {
+    basic: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    medium: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
+    premium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+};
+const getBadgeClasses = (planType) => {
+    return colorByPlanType[planType] || 'bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-500';
+};
+
+const onDeleteSuccess = (e) => {
+    console.log(e)
+    plans.value = e.props.plans || [];
+}
+
 </script>
 
 <template>
@@ -34,12 +47,12 @@ const sites = ref(page.props.sites || []);
 
                                     <div>
                                         <div class="inline-flex gap-x-2">
-                                            <Link :href="route('subscription.index')">
+                                            <Link :href="route('plan.index')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
                                                 {{ $t('View all') }}
                                             </a>
                                         </Link>
-                                            <Link :href="route('subscription.create')">
+                                            <Link :href="route('plan.create')">
                                             <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
                                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                 {{ $t('Add plan') }}
@@ -63,14 +76,7 @@ const sites = ref(page.props.sites || []);
                                         <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                             <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Site') }}
-                                              </span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                                            <div class="flex items-center gap-x-2">
-                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Name') }}
+                                                {{ $t('Plan Type') }}
                                               </span>
                                             </div>
                                         </th>
@@ -103,11 +109,25 @@ const sites = ref(page.props.sites || []);
                                               </span>
                                             </div>
                                         </th>
+                                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                            <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Site') }}
+                                              </span>
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-end">
+                                            <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Actions') }}
+                                              </span>
+                                            </div>
+                                        </th>
                                     </tr>
                                     </thead>
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                    <tr v-for="subscription in subscriptions" :key="subscription.id">
+                                    <tr v-for="plan in plans" :key="plan.id">
                                         <td class="size-px whitespace-nowrap">
                                             <div class="ps-6 py-3">
                                                 <label for="hs-at-with-checkboxes-1" class="flex">
@@ -116,42 +136,43 @@ const sites = ref(page.props.sites || []);
                                                 </label>
                                             </div>
                                         </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                                <div class="flex items-center gap-x-3">
+                                                    <div class="grow">
+                                                        <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(plan.plan_type ? plan.plan_type.name : 'Unknown')}`">
+                                                            {{ plan.plan_type ? plan.plan_type.name : 'No Plan Type' }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-6 py-3">
+                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ plan.description }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-6 py-3">
+                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ plan.amount }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-6 py-3">
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ plan.billing_frequency }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-6 py-3">
+                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ plan.subscription_expiration }}</span>
+                                            </div>
+                                        </td>
                                         <td  class="size-px whitespace-nowrap">
                                             <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                                 <div class="flex items-center gap-x-3">
                                                     <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.site ? subscription.site.name : 'No Site' }}</span>
+                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ plan.site ? plan.site.name : 'No Site' }}</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                                <div class="flex items-center gap-x-3">
-                                                    <div class="grow">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.name }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ subscription.description }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ subscription.amount }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ subscription.billing_frequency }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3">
-                                                <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ subscription.subscription_expiration }}</span>
                                             </div>
                                         </td>
                                         <td class="size-px whitespace-nowrap">
@@ -180,9 +201,9 @@ const sites = ref(page.props.sites || []);
                                         </span>
                                                 </template>
                                                 <template #content>
-                                                    <DropdownLink :href="route('subscription.show', subscription)">{{ $t('Show') }}</DropdownLink>
-                                                    <DropdownLink  :href="route('subscription.edit', subscription)"> {{ $t('Edit') }} </DropdownLink>
-                                                    <DropdownLink  @success="onDeleteSuccess" :href="route('subscription.destroy', subscription)" method="delete" as="button">
+                                                    <DropdownLink :href="route('plan.show', plan)">{{ $t('Show') }}</DropdownLink>
+                                                    <DropdownLink :href="route('plan.edit', plan)"> {{ $t('Edit') }} </DropdownLink>
+                                                    <DropdownLink  @success="onDeleteSuccess" :href="route('plan.destroy', plan)" method="delete" as="button">
                                                         {{ $t('Delete') }}
                                                     </DropdownLink>
                                                 </template>

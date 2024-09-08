@@ -14,9 +14,10 @@ import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
 import {faGear, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
+import { faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons';
 
-
-library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash);
+library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash, faCheckToSlot, faCalendarCheck);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

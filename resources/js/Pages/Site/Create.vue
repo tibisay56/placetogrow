@@ -83,12 +83,12 @@ const props = defineProps({
                                         <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                             <div class="mt-4">
-                                                <InputLabel :for="name" :value="$t('Name')" />
+                                                <InputLabel for="name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="type_id" :value="$t('Type')" />
+                                                <InputLabel for="type_id" :value="$t('Type')" />
                                                 <select v-model="form.type_id" name="type_id" id="type_id"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
@@ -97,13 +97,13 @@ const props = defineProps({
                                             </div>
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="category" :value="$t('Category')" />
+                                                <InputLabel for="category" :value="$t('Category')" />
                                                 <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  :placeholder="$t('Category')"/>
                                                 <InputError class="mt-2" :message="form.errors.category" />
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                             <div>
-                                                <InputLabel :for="currency" :value="$t('Currency')" />
+                                                <InputLabel for="currency" :value="$t('Currency')" />
                                                 <select v-model="form.currency" name="currency" id="currency"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="(currency, key) in currencies" :key="key" :value="key">{{ $t(currency) }}</option>
@@ -111,7 +111,7 @@ const props = defineProps({
                                                 <InputError class="mt-2" :message="form.errors.currency" />
                                             </div>
                                             <div>
-                                                <InputLabel :for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
                                                 <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                             </div>

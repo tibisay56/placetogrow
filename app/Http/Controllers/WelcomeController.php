@@ -11,7 +11,7 @@ class WelcomeController extends Controller
 {
     public function __invoke(): \Inertia\Response
     {
-        $sites = Site::paginate(15);
+        $sites = Site::with('Type')->paginate(15);
 
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),

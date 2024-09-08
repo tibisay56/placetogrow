@@ -8,21 +8,13 @@ import {ref} from "vue";
 
 const page = usePage();
 const subscription = ref(page.props.subscription);
-const billingFrequencies = ref(page.props.billingFrequencies);
-const currencies = ref(page.props.currencies);
+const sites = ref(page.props.sites || []);
 
 const form = useForm({
-    name: subscription.value.name,
-    description: subscription.value.description,
-    currency: subscription.value.currency,
-    amount: subscription.value.amount,
-    billingFrequency: subscription.value.billingFrequency,
-    subscription_expiration: subscription.value.subscription_expiration,
+    site_id: subscription.value.site_id || null,
+    status: subscription.value.status,
+    plan: subscription.value.plan || { name: '' },
 });
-
-const submit = () => {
-    form.post(route('subscription.store'));
-};
 
 
 const props = defineProps({
@@ -51,10 +43,10 @@ const capitalize = (text) => {
                             <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                                 <div>
                                     <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ $t('Show Plans') }}
+                                        {{ $t('Show Subscriptions') }}
                                     </h2>
                                     <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                        {{ $t('Add plans, edit and more.') }}
+                                        {{ $t('Add subscriptions, edit and more.') }}
                                     </p>
                                 </div>
                                 <div>
@@ -64,12 +56,6 @@ const capitalize = (text) => {
                                                 {{ $t('View all') }}
                                             </a>
                                         </Link>
-                                        <Link :href="route('subscription.create')">
-                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
-                                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                                {{ $t('Add plan') }}
-                                            </a>
-                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -77,35 +63,46 @@ const capitalize = (text) => {
                             <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                 <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                     <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
+                                        <div>
+                                            <InputLabel for="site_id" :value="$t('Site')" />
+                                            <select v-model="form.site_id" name="sites_id" id="site_id"
+                                                    class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                <option v-for="site in sites" :key="site.id" :value="site.id" >
+                                                    {{ site.name }}
+                                                </option>
+                                            </select>
+                                            <InputError class="mt-2" :message="form.errors.site_id" />
+                                        </div>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+
                                             <div class="mt-4">
-                                                <InputLabel :for="name" :value="$t('Name')" />
-                                                <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
-                                                <InputError class="mt-2" :message="form.errors.name" />
+                                                <InputLabel for="status" :value="$t('Subscription Status')" />
+                                                <TextInput v-model="form.status" id="status" type="text" class="capitalize mt-1 block w-full" readonly />
+                                                <InputError class="mt-2" :message="form.errors.status" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="description" :value="$t('Description')" />
-                                                <TextInput v-model="form.description" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Description')"/>
-                                                <InputError class="mt-2" :message="form.errors.description" />
+                                                <InputLabel for="plan" :value="$t('Plan')" />
+                                                <TextInput v-model="form.plan.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Plan')"/>
+                                                <InputError class="mt-2" :message="form.errors.plan_name" />
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
 
                                             <div>
-                                                <InputLabel :for="amount" :value="$t('Amount')" />
-                                                <input v-model="form.amount" type="number" id="amount" class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Amount"><InputError :message="form.errors.amount" class="mt-2"/>
+                                                <InputLabel for="amount" :value="$t('Amount')" />
+                                                <input v-model="form.plan.amount" type="number" id="amount" class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" placeholder="Amount"><InputError :message="form.errors.plan_amount" class="mt-2"/>
 
                                             </div>
                                             <div>
                                                 <InputLabel for="currency" :value="$t('Currency')" />
-                                                <select v-model="form.currency" name="currency" id="currency"
+                                                <select v-model="form.plan.currency" name="currency" id="currency"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
                                                 </select>
-                                                <InputError class="mt-2" :message="form.errors.currency" />
+                                                <InputError class="mt-2" :message="form.errors.plan_currency" />
                                             </div>
                                             <div>
-                                                <InputLabel :for="billingFrequency" :value="$t('Billing Frequency')" />
+                                                <InputLabel for="billingFrequency" :value="$t('Billing Frequency')" />
                                                 <select v-model="form.billingFrequency" name="billingFrequency" id="billingFrequency"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="frequency in billingFrequencies" :key="frequency.value" :value="frequency.value">{{ capitalize($t(frequency)) }}</option>
@@ -114,9 +111,9 @@ const capitalize = (text) => {
                                             </div>
 
                                             <div>
-                                                <InputLabel :for="subscription_expiration" :value="$t('Subscription Expiration')" />
-                                                <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
-                                                <InputError class="mt-2" :message="form.errors.subscription_expiration" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
+                                                <TextInput v-model="form.plan.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
+                                                <InputError class="mt-2" :message="form.errors.plan_subscription_expiration" />
                                             </div>
                                         </div>
                                     </form>
@@ -130,4 +127,3 @@ const capitalize = (text) => {
         </div>
     </div>
 </template>
-

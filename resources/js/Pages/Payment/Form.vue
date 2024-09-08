@@ -4,6 +4,7 @@ import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {useForm, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
+import Pricing from "@/Components/Pricing.vue";
 
 const { props } = usePage();
 const documentTypes = ref(props.documentTypes || []);
@@ -25,10 +26,6 @@ const form = useForm({
     site_id: site.value.id || null,
     required_Fields: requiredFields,
 });
-
-console.log(props.documentTypes, props.currencies, props.gateways);
-
-
 
 const goBack = () => {
     window.history.back();

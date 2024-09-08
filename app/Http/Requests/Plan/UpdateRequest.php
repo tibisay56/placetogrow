@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Subscription;
+namespace App\Http\Requests\Plan;
 
 use App\Constants\BillingFrecuency;
 use App\Constants\CurrencyType;
@@ -17,8 +17,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'plan_type_id' => 'required|exists:plan_types,id',
+            'details' => 'required|string',
             'amount' => 'required|numeric',
             'currency' => 'required|in:'.implode(',', CurrencyType::toArray()),
             'billing_frequency' => 'required|in:'.implode(',', BillingFrecuency::toArray()),
