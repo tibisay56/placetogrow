@@ -16,8 +16,10 @@ use App\Http\Requests\Site\UpdateRequest;
 use App\Models\Payment;
 use App\Models\Site;
 use App\Models\Type;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -72,7 +74,8 @@ class SiteController extends Controller
 
     public function showBySlug($slug): Response
     {
-        $site = Site::where('slug', $slug)->with('type')->firstOrFail();
+
+        $site = Site::where('slug', $slug)->with('type', 'plans.planType')->firstOrFail();
 
         return Inertia::render('Site/Slug', [
             'site' => $site,
@@ -82,6 +85,11 @@ class SiteController extends Controller
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
             'required_fields' => $site->required_fields,
+            'plans' => $site->plans,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
         ]);
     }
 
