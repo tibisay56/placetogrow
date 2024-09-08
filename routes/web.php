@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
@@ -66,15 +67,28 @@ Route::prefix('dashboard')->group(function () {
     Route::get('payment/form/{siteId}', [PaymentController::class, 'form'])->name('payment.form');
 });
 
-//Subscription
+//Plans
 Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
-    Route::get('subscriptions/create', [SubscriptionController::class, 'create'])->name('subscription.create');
-    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::get('plans', [PlanController::class, 'index'])->name('plan.index');
+    Route::get('plans/create', [PlanController::class, 'create'])->name('plan.create');
+    Route::post('plans', [PlanController::class, 'store'])->name('plan.store');
+    Route::get('plans/{plan}', [PlanController::class, 'show'])->name('plan.show');
+    Route::get('plans/{plan}/edit', [PlanController::class, 'edit'])->name('plan.edit');
+    Route::put('plans/{plan}', [PlanController::class, 'update'])->name('plan.update');
+    Route::delete('plans/{plan}', [PlanController::class, 'destroy'])->name('plan.destroy');
+});
+//Subscription
+Route::prefix('dashboard')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+        Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+    });
+
+    Route::get('subscription/create/{siteId}', [SubscriptionController::class, 'create'])->name('subscription.create');
     Route::get('subscriptions/{subscription}', [SubscriptionController::class, 'show'])->name('subscription.show');
-    Route::get('subscriptions/{subscription}/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
-    Route::put('subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscription.update');
-    Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+    Route::get('/plan', [SubscriptionController::class, 'plan'])->name('plan');
+    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::get('/return/{subscription}', [SubscriptionController::class, 'return'])->name('subscription.return');
 });
 
 //Lang
