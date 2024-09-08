@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             SitesSeeder::class,
             PlanTypeSeeder::class,
             PlanSeeder::class,
+            SubscriptionSeeder::class
         ]);
     }
 }
