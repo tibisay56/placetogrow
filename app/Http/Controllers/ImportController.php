@@ -7,7 +7,6 @@ use App\Imports\InvoiceImportToCollection;
 use App\Imports\InvoiceImportToModel;
 use App\Jobs\ProcessInvoiceFile;
 use App\Models\Import;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
