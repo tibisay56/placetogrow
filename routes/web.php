@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
@@ -89,6 +91,28 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/plan', [SubscriptionController::class, 'plan'])->name('plan');
     Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscription.store');
     Route::get('/return/{subscription}', [SubscriptionController::class, 'return'])->name('subscription.return');
+});
+
+//Import
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('imports', [ImportController::class, 'index'])->name('import.index');
+    Route::get('imports/create', [ImportController::class, 'create'])->name('import.create');
+    Route::post('imports', [ImportController::class, 'store'])->name('import.store');
+    Route::get('imports/{import}', [ImportController::class, 'show'])->name('import.show');
+    Route::get('imports/{import}/edit', [ImportController::class, 'edit'])->name('import.edit');
+    Route::put('imports/{import}', [ImportController::class, 'update'])->name('import.update');
+    Route::delete('imports/{import}', [ImportController::class, 'destroy'])->name('import.destroy');
+});
+
+//Invoice
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('invoices', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoice.create');
+    Route::post('invoices', [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
+    Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
+    Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 });
 
 //Lang
