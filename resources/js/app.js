@@ -16,8 +16,9 @@ import {faGear, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
 import { faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons';
+import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash, faCheckToSlot, faCalendarCheck);
+library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash, faCheckToSlot, faCalendarCheck, faCreditCard, faArrowUpFromBracket);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
