@@ -108,11 +108,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoice.index');
     Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoice.create');
-    Route::post('invoices', [InvoiceController::class, 'store'])->name('invoice.store');
-    Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
-    Route::get('invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
-    Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
-    Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 });
 
 //Lang
