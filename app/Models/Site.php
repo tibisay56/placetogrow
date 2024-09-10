@@ -53,6 +53,11 @@ class Site extends Model
         return $this->hasMany(Subscription::class);
     }
 
+    public function imports(): hasMany
+    {
+        return $this->hasMany(Import::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
