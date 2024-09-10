@@ -40,7 +40,7 @@ class ImportController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        if (!$request->hasFile('file')) {
+        if (! $request->hasFile('file')) {
             return back()->withErrors(['file' => 'No file was uploaded']);
         }
 
