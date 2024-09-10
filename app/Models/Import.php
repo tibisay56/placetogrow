@@ -37,6 +37,11 @@ class Import extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
+    }
+
     public function getFullPath(): string
     {
         return Storage::disk(self::DISK)->path($this->path);
