@@ -104,7 +104,7 @@ const props = defineProps({
                                                 <InputError class="mt-2" :message="form.errors.currency" />
                                             </div>
                                             <div>
-                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (minutes)')" />
+                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (Minutes)')" />
                                                 <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                             </div>
