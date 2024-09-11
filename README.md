@@ -78,6 +78,19 @@ PLACETOPAY_URL=your_placetopay_url
         php artisan serve
 ```
 
+10. User credentials:
+
+```
+        Admin user:
+        Email: admin@admin.com
+        Password: password
+        
+        Customer user:
+        Email: customer@example.com
+        Password: password
+        
+```
+
 
 ## Contributing
 
