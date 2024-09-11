@@ -1,11 +1,10 @@
 <script setup>
-
-import Layout from "@/Components/Layout.vue";
+import { computed, ref } from 'vue';
+import Layout from '@/Components/Layout.vue';
 import {Link, usePage} from "@inertiajs/vue3";
-import {ref} from "vue";
 
-const page = usePage()
-const imports = ref(page.props.imports || []);
+const page = usePage();
+const imports = ref(page.props.imports);
 
 </script>
 
@@ -102,7 +101,7 @@ const imports = ref(page.props.imports || []);
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                <tr>
+                                <tr v-for="importItem in imports" :key="importItem.id">
                                     <td class="size-px whitespace-nowrap">
                                         <div class="ps-6 py-3">
                                             <label for="hs-at-with-checkboxes-1" class="flex">
@@ -116,38 +115,29 @@ const imports = ref(page.props.imports || []);
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
                                                             <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full`">
-                                                                {{  }}</span>
+                                                                {{ importItem.file_name }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{  }}</span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ importItem.status }}</span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{  }}</span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ importItem.created_at }}</span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{  }}</span>
+                                            <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ importItem.updated_at }}</span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{  }}</span>
-                                        </div>
-                                    </td>
-                                    <td  class="size-px whitespace-nowrap">
-                                        <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                            <div class="flex items-center gap-x-3">
-                                                <div class="grow">
-                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{  }}</span>
-                                                </div>
-                                            </div>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">  {{ importItem.elapsed_time }}</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -161,6 +151,8 @@ const imports = ref(page.props.imports || []);
     </div>
 </template>
 
-<style scoped>
 
+
+<style scoped>
+/* Add any scoped styles here */
 </style>

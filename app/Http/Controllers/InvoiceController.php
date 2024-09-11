@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use Illuminate\Contracts\View\View;
+use App\Models\Site;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class InvoiceController extends Controller
 {
-    public function index(): View
+    public function index(Site $site): Response
     {
-        $invoices = Invoice::latest()->paginate();
+        $invoices = Invoice::all();
 
-        return view('invoices.index', [
+        return Inertia::render('Invoice/Index', [
+            'site' => $site,
             'invoices' => $invoices,
         ]);
     }

@@ -19,6 +19,11 @@ return new class extends Migration
             $table->enum('status', ImportStatus::toArray());
             $table->json('errors')->nullable();
 
+            $table->foreignId('site_id')
+                ->nullable()
+                ->constrained('sites')
+                ->onDelete('cascade');
+
             $table->foreignId('user_id');
             $table->foreign('user_id')
                 ->references('id')
