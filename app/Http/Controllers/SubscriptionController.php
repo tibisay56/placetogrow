@@ -68,6 +68,7 @@ class SubscriptionController extends Controller
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
+            'required_fields' => $site->required_fields,
         ]);
     }
 
@@ -122,7 +123,6 @@ class SubscriptionController extends Controller
         ];
 
         $jsonData = json_encode($data);
-        $contentLength = strlen($jsonData);
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
