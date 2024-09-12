@@ -19,7 +19,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255',
             'plan_type_id' => 'required|exists:plan_types,id',
-            'details' => 'required|string',
+            'description' => 'required|string',
             'amount' => 'required|numeric',
             'currency' => 'required|in:'.implode(',', CurrencyType::toArray()),
             'billing_frequency' => 'required|in:'.implode(',', BillingFrequency::toArray()),
