@@ -52,7 +52,9 @@ const changeLocale = async (item) => {
             <header class="fixed top-0 left-0 w-full bg-white border-b border-gray-100 dark:bg-black dark:border-neutral-700 z-50">
                 <div class="relative w-full max-w-9xl px-4 lg:px-6 py-2 flex items-center justify-between">
                     <div class="flex items-center">
+                        <a href="/">
                         <img src="/Documents/logo.png" alt="Logo" class="h-10 w-auto">
+                        </a>
                     </div>
                     <div class="ms-20 relative max-w-xs">
                         <label class="sr-only">Search</label>
