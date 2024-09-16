@@ -5,6 +5,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 import Pagination from "@/Components/Pagination.vue";
+import Footer from "@/Components/Footer.vue";
 
 defineProps({
     canLogin: {
@@ -47,8 +48,6 @@ const changeLocale = async (item) => {
 
 <template>
     <Head title="Welcome" />
-    <div class="bg-white text-black/50 dark:bg-black dark:text-white/50">
-        <div class="relative w-full max-w-7xl px-4 lg:px-6">
             <header class="fixed top-0 left-0 w-full bg-white border-b border-gray-100 dark:bg-black dark:border-neutral-700 z-50">
                 <div class="relative w-full max-w-9xl px-4 lg:px-6 py-2 flex items-center justify-between">
                     <div class="flex items-center">
@@ -109,17 +108,18 @@ const changeLocale = async (item) => {
                     </nav>
                 </div>
             </header>
-            <main class="mt-10 max-w-7xl ml-24 mr-2 pl-24 lg:pl-28 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+            <main class="max-w-full px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mt-10">
+
                 <!-- Clients -->
-                <div>
+                <div class="p-4 bg-white rounded-lg dark:bg-neutral-800 mx-12 lg:mx-12">
                     <!-- Title -->
-                    <div class="sm:w-1/2 xl:w-1/2 mx-auto text-center mb-6">
-                        <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200">{{ $t('Microsites') }}</h2>
+                    <div>
+                        <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200 mb-20 text-center">{{ $t('Microsites') }}</h2>
                     </div>
                     <!-- End Title -->
 
                     <!-- Grid -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 lg:gap-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 lg:gap-6 mr-20 ml-20 mb-20">
                         <div v-for="(item, index) in sites.data"  :key="index" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
                             <a :href="`/dashboard/sites/${encodeURIComponent(item.slug)}`" class="flex flex-col items-center">
                                 <img class="inline-block size-[38px]" :src="`/storage/${item.avatar}`" :alt="item.name"/>
@@ -133,6 +133,6 @@ const changeLocale = async (item) => {
                 <!-- End Clients -->
                <Pagination class="mt-4 flex justify-center items-center" :links="sites.links"/>
             </main>
-        </div>
-    </div>
+    <Footer/>
+
 </template>
