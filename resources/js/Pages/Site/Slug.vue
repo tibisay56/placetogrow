@@ -3,7 +3,6 @@ import {Head, Link, router, useForm, usePage} from '@inertiajs/vue3';
 import InputError from "@/Components/InputError.vue";
 import {onMounted, reactive, ref} from 'vue';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Stepper from "@/Components/Stepper.vue";
 import {loadLanguageAsync} from "laravel-vue-i18n";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Constants\BillingFrequency;
 use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
+use App\Constants\SubscriptionStatus;
 use App\Http\Requests\Subscription\StoreRequest;
+use App\Mail\ConfirmationMail;
 use App\Models\Plan;
 use App\Models\Site;
 use App\Models\Subscription;
@@ -15,6 +17,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -68,6 +71,7 @@ class SubscriptionController extends Controller
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
+            'required_fields' => $site->required_fields,
         ]);
     }
 
@@ -100,7 +104,15 @@ class SubscriptionController extends Controller
             'name' => $validatedData['name'],
             'document_number' => $validatedData['document_number'],
             'document_type' => $validatedData['document_type'],
+            'status' => SubscriptionStatus::PENDING->value,
         ]);
+
+        session([
+            'email' => $validatedData['email'],
+            'password' => $validatedData['password'],
+        ]);
+
+        Mail::to($validatedData['email'])->send(new ConfirmationMail($validatedData['email'], $validatedData['password']));
 
         $data = [
             'auth' => $this->generateAuthData(),

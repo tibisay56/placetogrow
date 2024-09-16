@@ -12,8 +12,9 @@ class Plan extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'amount',
-        'details',
+        'description',
         'currency',
         'billing_frequency',
         'subscription_expiration',

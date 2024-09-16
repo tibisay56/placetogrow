@@ -12,6 +12,7 @@ import InputError from "@/Components/InputError.vue";
 const { props } = usePage();
 const site = ref(props.site || []);
 const documentTypes = ref(props.documentTypes || []);
+const requiredFields = ref(props.required_fields || []);
 
 const step = ref(1);
 const selectedPlan = ref(null);
@@ -45,6 +46,7 @@ const form = useForm({
     document_type: documentTypes.value[0] || null,
     plan_id: null,
     password: '',
+    required_Fields: requiredFields,
 });
 
 defineProps({
@@ -113,7 +115,9 @@ const submitForm = () => {
     <header class="fixed top-0 left-0 w-full bg-white border-b border-gray-100 dark:bg-black dark:border-neutral-700 z-50">
         <div class="relative w-full max-w-9xl px-4 lg:px-6 py-2 flex items-center justify-between">
             <div class="flex items-center">
+                <a href="/">
                 <img src="/Documents/logo.png" alt="Logo" class="h-10 w-auto">
+                </a>
             </div>
             <div class="ms-20 relative max-w-xs">
                 <label class="sr-only">Search</label>
@@ -235,7 +239,6 @@ const submitForm = () => {
                                                     <InputError class="mt-2" :message="form.errors.password" />
                                                 </div>
                                             </div>
-
                                         </form>
                                         <!-- End Form -->
                                     </div>
@@ -268,6 +271,11 @@ const submitForm = () => {
                                                 <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
                                             </select><InputError :message="form.errors.documentType" class="mb-8"/>
                                             <input v-model="form.document_number" type="number" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
+                                        </div>
+                                        <div v-if="form.required_Fields.length" class="relative">
+                                            <div v-for="(field, index) in form.required_Fields" :key="index" class="mb-2">
+                                                <input v-model="field.value" :type="field.field_type" :placeholder="field.name" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="file-error"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

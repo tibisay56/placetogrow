@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->unsignedBigInteger('amount');
             $table->enum('currency', CurrencyType::toArray());
             $table->enum('status', SubscriptionStatus::toArray());

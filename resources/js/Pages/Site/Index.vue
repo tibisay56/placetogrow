@@ -8,6 +8,10 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 const page = usePage()
 const sites = ref(page.props.sites);
 
+const sortedSites = computed(() => {
+    return sites.value.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+});
+
 const colorByType = {
     subscriptions: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     donations: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
@@ -124,7 +128,7 @@ const onDeleteSuccess = (e) => {
                                 </thead>
 
                                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                <tr v-for="site in sites">
+                                <tr v-for="site in sortedSites">
                                     <td class="size-px whitespace-nowrap">
                                         <div class="ps-6 py-3">
                                             <label for="hs-at-with-checkboxes-1" class="flex">

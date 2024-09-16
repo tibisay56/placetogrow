@@ -13,6 +13,7 @@ const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationT
 
 
 const form = useForm({
+    name: "",
     description: "",
     currency: "",
     amount:"",
@@ -79,15 +80,22 @@ const capitalize = (text) => {
                                 <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
                                     <div class="flex justify-center bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                         <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
-                                            <div>
-                                                <InputLabel for="site_id" :value="$t('Site')" />
-                                                <select v-model="form.site_id" name="sites_id" id="site_id"
-                                                        class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                    <option v-for="site in sites" :key="site.id" :value="site.id" >
-                                                        {{ site.name }}
-                                                    </option>
-                                                </select>
-                                                <InputError class="mt-2" :message="form.errors.site_id" />
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                                <div class="mt-4">
+                                                    <InputLabel for="site_id" :value="$t('Site')" />
+                                                    <select v-model="form.site_id" name="sites_id" id="site_id"
+                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option v-for="site in sites" :key="site.id" :value="site.id" >
+                                                            {{ site.name }}
+                                                        </option>
+                                                    </select>
+                                                    <InputError class="mt-2" :message="form.errors.site_id" />
+                                                </div>
+                                                <div class="mt-4">
+                                                    <InputLabel for="Name" :value="$t('Name')" />
+                                                    <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
+                                                    <InputError class="mt-2" :message="form.errors.name" />
+                                                </div>
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                                 <div class="mt-4">
@@ -127,7 +135,7 @@ const capitalize = (text) => {
                                                     <InputError class="mt-2" :message="form.errors.billing_frequency" />
                                                 </div>
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration (Minutes)')" />
                                                 <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                             </div>

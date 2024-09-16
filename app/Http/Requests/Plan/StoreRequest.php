@@ -16,10 +16,11 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|min:3|max:255',
             'plan_type_id' => 'required|exists:plan_types,id',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'subscription_expiration' => 'required|integer|min:1|max:1440',
             'site_id' => 'required|exists:sites,id',
             'billing_frequency' => 'required|in:'.implode(',', BillingFrequency::toArray()),

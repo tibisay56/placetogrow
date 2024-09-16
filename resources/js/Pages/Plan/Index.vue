@@ -1,12 +1,16 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import Layout from "@/Components/Layout.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage()
 const plans = ref(page.props.plans || []);
+
+const sortedPlans = computed(() => {
+    return plans.value.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+});
 
 const colorByPlanType = {
     basic: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
@@ -127,7 +131,7 @@ const onDeleteSuccess = (e) => {
                                     </thead>
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                    <tr v-for="plan in plans" :key="plan.id">
+                                    <tr v-for="plan in sortedPlans" :key="plan.id">
                                         <td class="size-px whitespace-nowrap">
                                             <div class="ps-6 py-3">
                                                 <label for="hs-at-with-checkboxes-1" class="flex">
