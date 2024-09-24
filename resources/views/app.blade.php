@@ -17,5 +17,6 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+        <script src="https://preline.co/assets/js/hs-apexcharts-helpers.js"></script>
     </body>
 </html>

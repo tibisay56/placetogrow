@@ -58,6 +58,11 @@ class Site extends Model
         return $this->hasMany(Import::class);
     }
 
+    public function invoices(): hasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

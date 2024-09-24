@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Constants\CurrencyType;
+use App\Constants\InvoiceStatus;
 use App\Models\Import;
+use App\Models\Subscription;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -21,6 +23,7 @@ class InvoiceFactory extends Factory
     public function definition(): array
     {
         $now = Carbon::now();
+        $subscription = Subscription::inRandomOrder()->first();
 
         return [
             'reference' => $now->format('ymd').'-'.strtoupper(Str::random(6)),
@@ -32,6 +35,10 @@ class InvoiceFactory extends Factory
             'created_at' => $now->toDateTimeString(),
             'expired_at' => $now->addMonth()->toDateTimeString(),
             'import_id' => Import::factory(),
+            'status' => fake()->randomElement(InvoiceStatus::toArray()),
+            'subscription_id' => $subscription->id,
+            'site_id' => $subscription->site_id,
+            'user_id' => $subscription->user_id,
         ];
     }
 }

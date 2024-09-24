@@ -22,6 +22,7 @@ class StoreRequest extends FormRequest
             'document_number' => ['required', 'numeric', 'digits_between:6,20'],
             'document_type' => ['required', Rule::in(DocumentTypes::toArray())],
             'password' => 'required|string|min:8',
+            'site_id' => ['required', 'exists:sites,id'],
         ];
     }
 }

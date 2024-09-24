@@ -27,9 +27,7 @@ class SiteController extends Controller
 {
     public function index(): Response
     {
-        if (! Auth::user()->can(PermissionSlug::SITES_VIEW)) {
-            abort(403);
-        }
+
         $user = Auth::user();
 
         if ($user->hasRole('Admin')) {

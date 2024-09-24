@@ -30,15 +30,16 @@ class SubscriptionController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole('Admin')) {
-            $subscriptions = Subscription::with('plan')->get();
+            $subscriptions = Subscription::with(['plan', 'site'])->get();
         } else {
-            $subscriptions = Subscription::with('plan')
+            $subscriptions = Subscription::with(['plan', 'site'])
                 ->where('user_id', $user->id)
                 ->get();
         }
 
         return Inertia::render('Subscription/Index', [
             'subscriptions' => $subscriptions,
+            'sites' => Site::all(),
         ]);
     }
 
@@ -75,7 +76,7 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    public function store(StoreRequest $request, Site $site): \Symfony\Component\HttpFoundation\Response
+    public function store(StoreRequest $request): \Symfony\Component\HttpFoundation\Response
     {
         $validatedData = $request->validated();
 
@@ -95,6 +96,12 @@ class SubscriptionController extends Controller
                 'password' => Hash::make('password'),
             ]);
         }
+
+        $site = Site::find($validatedData['site_id']);
+        if (! $site) {
+            throw new \Exception('Site not found.');
+        }
+
         $subscription = Subscription::query()->create([
             'reference' => $reference,
             'site_id' => $site->getKey(),
