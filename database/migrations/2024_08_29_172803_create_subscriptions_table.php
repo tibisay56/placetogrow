@@ -18,6 +18,11 @@ return new class extends Migration
                 ->constrained('plans')
                 ->onDelete('cascade');
 
+            $table->foreignId('site_id')
+                ->nullable()
+                ->constrained('sites')
+                ->onDelete('cascade');
+
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
