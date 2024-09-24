@@ -3,9 +3,27 @@
 import Layout from "@/Components/Layout.vue";
 import {Link, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
+import {format} from "date-fns";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+
 
 const page = usePage()
 const invoices = ref(page.props.invoices || []);
+
+const colorByType = {
+    pending: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    overdue: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
+    paid: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+};
+
+const getBadgeClasses = (type) => {
+    return colorByType[type] || 'bg-gray-100 text-gray-800 dark:bg-gray-500/10 dark:text-gray-500';
+};
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, " yyyy-MM-dd ");
+};
 
 </script>
 
@@ -56,6 +74,13 @@ const invoices = ref(page.props.invoices || []);
                                             <span class="sr-only">Checkbox</span>
                                         </label>
                                     </th>
+                                    <th scope="col" class="px-6 py-3 text-start">
+                                        <div class="flex items-center gap-x-2">
+                                              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                {{ $t('Site') }}
+                                              </span>
+                                        </div>
+                                    </th>
                                     <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                         <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
@@ -95,7 +120,7 @@ const invoices = ref(page.props.invoices || []);
                                     <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                         <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Description') }}
+                                                {{ $t('Status') }}
                                               </span>
                                         </div>
                                     </th>
@@ -116,7 +141,7 @@ const invoices = ref(page.props.invoices || []);
                                     <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
                                         <div class="flex items-center gap-x-2">
                                               <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                                {{ $t('Import') }}
+                                                {{ $t('Actions') }}
                                               </span>
                                         </div>
                                     </th>
@@ -130,6 +155,11 @@ const invoices = ref(page.props.invoices || []);
                                                 <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1">
                                                 <span class="sr-only">Checkbox</span>
                                             </label>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">{{ invoice.site ? invoice.site.name : 'Sin sitio' }}</span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
@@ -166,7 +196,7 @@ const invoices = ref(page.props.invoices || []);
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ invoice.description  }}</span>
+                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(invoice.status)}`">  {{ invoice.status  }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,7 +205,7 @@ const invoices = ref(page.props.invoices || []);
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ invoice.expiration_date }}</span>
+                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ formatDate(invoice.expired_at) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -184,7 +214,7 @@ const invoices = ref(page.props.invoices || []);
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ invoice.creation_date }}</span>
+                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ formatDate(invoice.created_at) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,8 +222,12 @@ const invoices = ref(page.props.invoices || []);
                                     <td  class="size-px whitespace-nowrap">
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
-                                                <div class="grow">
-                                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">  {{ invoice.import }}</span>
+                                                <div class="flex justify-center">
+                                                    <Link :href="route('invoice.show', invoice.id)">
+                                                        <PrimaryButton>
+                                                            {{ $t('Pay Now') }}
+                                                        </PrimaryButton>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,6 +235,34 @@ const invoices = ref(page.props.invoices || []);
                                 </tr>
                                 </tbody>
                             </table>
+                            <!-- Footer -->
+                            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+                                <div class="max-w-sm space-y-3">
+                                    <select class="py-2 px-3 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option selected>9</option>
+                                        <option>20</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <div class="inline-flex gap-x-2">
+                                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                                            Prev
+                                        </button>
+
+                                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                                            Next
+                                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Footer -->
                         </div>
                     </div>
                 </div>
