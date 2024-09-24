@@ -22,10 +22,9 @@ class PaymentController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('Admin')) {
-            $payments = Payment::with('site')->get();
+            $payments = Payment::with('site', 'invoice', 'subscription')->get();
         } else {
-            $site = $user->site;
-            $payments = $site ? Payment::where('site_id', $site->id)->with('site')->get() : collect();
+            $payments = $user->payments()->with(['site', 'invoice', 'subscription'])->get();
         }
 
         return Inertia::render('Payment/Index', [
@@ -39,6 +38,8 @@ class PaymentController extends Controller
 
     public function store(StorePaymentRequest $request): \Symfony\Component\HttpFoundation\Response
     {
+
+        $user = Auth::check() ? Auth::user() : null;
         $payment = new Payment();
         $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
         $payment->description = $request->description;
@@ -52,6 +53,10 @@ class PaymentController extends Controller
         $payment->payer_document_type = $request->document_type;
         $payment->payer_document_number = $request->document_number;
         $payment->payer_email = $request->email;
+
+        if ($user) {
+            $payment->user_id = $user->id;
+        }
 
         $payment->required_fields = $request->required_Fields;
         $payment->site_id = $request->site_id;
