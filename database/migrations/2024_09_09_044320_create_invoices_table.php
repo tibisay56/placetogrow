@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\CurrencyType;
+use App\Constants\InvoiceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->enum('currency', CurrencyType::toArray());
             $table->string('customer_name', 100);
             $table->string('dni', 40);
-            $table->string('description', 512);
+            $table->string('description', 100);
 
             $table->foreignId('import_id');
             $table->foreign('import_id')
@@ -28,6 +29,22 @@ return new class extends Migration
 
             $table->date('expired_at');
             $table->date('created_at');
+            $table->enum('status', InvoiceStatus::toArray());
+
+            $table->foreignId('site_id')
+                ->nullable()
+                ->constrained('sites')
+                ->onDelete('cascade');
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('cascade');
+
+            $table->foreignId('subscription_id')
+                ->nullable()
+                ->constrained('subscriptions')
+                ->onDelete('cascade');
         });
     }
 
