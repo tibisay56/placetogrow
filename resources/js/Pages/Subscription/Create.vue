@@ -47,6 +47,7 @@ const form = useForm({
     plan_id: null,
     password: '',
     required_Fields: requiredFields,
+    site_id: site.value.id,
 });
 
 defineProps({
@@ -214,6 +215,7 @@ const submitForm = () => {
                                         </div>
                                         <!-- Form -->
                                         <form @submit.prevent="submitForm">
+                                            <input type="hidden" v-model="form.site_id" />
                                             <div class="grid gap-y-4">
                                                 <div>
                                                     <div class="relative">
