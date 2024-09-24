@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Subscription extends Model
 {
@@ -13,6 +14,7 @@ class Subscription extends Model
     protected $fillable = [
         'plan_id',
         'user_id',
+        'site_id',
         'start_date',
         'end_date',
         'status',
@@ -35,5 +37,10 @@ class Subscription extends Model
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(Invoice::class);
     }
 }
