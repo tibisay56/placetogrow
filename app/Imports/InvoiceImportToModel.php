@@ -71,7 +71,7 @@ class InvoiceImportToModel implements ShouldQueue, ToModel, WithBatchInserts, Wi
             'currency' => ['required', Rule::in(CurrencyType::toArray())],
             'customer_name' => ['required', 'string', 'max:100'],
             'dni' => ['required', 'alpha_num', 'max:40'],
-            'description' => ['required', 'string', 'max:512'],
+            'description' => ['required', 'string', 'max:100'],
             'expired_at' => ['required', 'date'],
             'created_at' => ['required', 'date'],
         ];
