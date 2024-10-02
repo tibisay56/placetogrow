@@ -31,12 +31,11 @@ return new class extends Migration
             $table->foreignId('site_id');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
 
-
             $table->foreignId('user_id')->nullable()->constrained('users');
 
             $table->unsignedBigInteger('subscription_id')->nullable();
             $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
-
+            $table->boolean('collect')->default(false);
             $table->timestamps();
 
             $table->dropForeign(['site_id']);
