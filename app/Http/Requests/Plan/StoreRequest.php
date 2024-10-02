@@ -21,7 +21,6 @@ class StoreRequest extends FormRequest
             'amount' => 'required|numeric|min:0',
             'currency' => 'required',
             'description' => 'required|string',
-            'subscription_expiration' => 'required|integer|min:1|max:1440',
             'site_id' => 'required|exists:sites,id',
             'billing_frequency' => 'required|in:'.implode(',', BillingFrequency::toArray()),
         ];
