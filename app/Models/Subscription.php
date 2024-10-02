@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Subscription extends Model
@@ -22,6 +23,11 @@ class Subscription extends Model
         'name',
         'document_number',
         'document_type',
+        'request_id',
+        'status_message',
+        'token',
+        'sub_token',
+        'last_collected_at',
     ];
 
     public function plan(): BelongsTo
@@ -42,5 +48,10 @@ class Subscription extends Model
     public function invoice(): HasOne
     {
         return $this->hasOne(Invoice::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 }
