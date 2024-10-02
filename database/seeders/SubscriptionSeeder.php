@@ -9,6 +9,6 @@ class SubscriptionSeeder extends Seeder
 {
     public function run(): void
     {
-        Subscription::factory()->count(10)->create();
+        Subscription::factory()->count(100)->create();
     }
 }
