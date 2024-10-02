@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
  */
 class InvoiceFactory extends Factory
 {
+    protected static $usedSubscriptionIds = [];
+
     /**
      * Define the model's default state.
      *
@@ -23,7 +25,11 @@ class InvoiceFactory extends Factory
     public function definition(): array
     {
         $now = Carbon::now();
-        $subscription = Subscription::inRandomOrder()->first();
+        do {
+            $subscription = Subscription::inRandomOrder()->first();
+        } while (in_array($subscription->id, self::$usedSubscriptionIds));
+
+        self::$usedSubscriptionIds[] = $subscription->id;
 
         return [
             'reference' => $now->format('ymd').'-'.strtoupper(Str::random(6)),
@@ -35,7 +41,7 @@ class InvoiceFactory extends Factory
             'created_at' => $now->toDateTimeString(),
             'expired_at' => $now->addMonth()->toDateTimeString(),
             'import_id' => Import::factory(),
-            'status' => fake()->randomElement(InvoiceStatus::toArray()),
+            'status' => InvoiceStatus::PENDING->name,
             'subscription_id' => $subscription->id,
             'site_id' => $subscription->site_id,
             'user_id' => $subscription->user_id,
