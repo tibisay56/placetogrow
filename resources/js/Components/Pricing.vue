@@ -25,9 +25,9 @@ function selectPlan(planId) {
         <div  v-if="plans.length" class="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:items-center">
             <!-- Card -->
             <div v-for="plan in plans" :key="plan.id" class="flex flex-col border border-gray-200 text-center rounded-xl p-8 dark:border-neutral-800">
-                <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-orange-100 text-orange-800 dark:bg-orange-600 dark:text-white">{{ plan.plan_type.name }}</span></p>
+                <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-orange-100 text-orange-800 dark:bg-orange-600 dark:text-white">{{ plan.billing_frequency }}</span></p>
                 <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200"> {{ plan.name }} </h4>
-                <span class="mt-7 font-bold text-5xl text-gray-800 dark:text-neutral-200"> {{ plan.amount }}</span>
+                <span class="mt-7 font-bold text-5xl text-gray-800 dark:text-neutral-200"> ${{ plan.amount }}</span>
                 <p class="mt-2 text-sm text-gray-500 dark:text-neutral-500"> {{ plan.description }}</p>
                 <ul class="mt-7 space-y-2.5 text-sm">
                     <li class="flex gap-x-2">
