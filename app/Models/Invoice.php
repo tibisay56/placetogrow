@@ -23,6 +23,9 @@ class Invoice extends Model
         'status',
         'user_id',
         'site_id',
+        'subscription_id',
+        'retry_count',
+        'next_retry_at',
     ];
 
     /**
