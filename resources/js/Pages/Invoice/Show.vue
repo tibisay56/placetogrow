@@ -62,7 +62,7 @@ console.log('Site:', site.value);
                         <h2 class="text-lg font-semibold">Site Information</h2>
                         <p><strong>Name:</strong> {{ site.name }}</p>
                         <p><strong>ID del sitio:</strong> {{ site.id }}</p>
-                        <!-- Agrega más campos del objeto site según lo necesites -->
+
                     </div>
                     <form @submit.prevent="submit">
                         <input type="hidden" v-model="form.site_id"/>
