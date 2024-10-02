@@ -18,14 +18,22 @@ class PlanFactory extends Factory
 
         $planTypeIds = PlanType::pluck('id')->toArray();
 
+        $billingFrequency = $this->faker->randomElement(BillingFrequency::toArray());
+
+        $frequencyToExpiration = [
+            BillingFrequency::MONTHLY->value => 30,
+        ];
+
+        $subscriptionExpiration = $frequencyToExpiration[$billingFrequency] ?? 30;
+
         return [
             'name' => $this->faker->randomElement(['Basic', 'Medium', 'Premium']),
             'description' => $this->faker->text(30),
             'amount' => $this->faker->numberBetween(100, 10000),
             'currency' => $this->faker->randomElement(CurrencyType::toArray()),
             'status' => $this->faker->randomElement(SubscriptionStatus::toArray()),
-            'subscription_expiration' => $this->faker->numberBetween(1, 365),
-            'billing_frequency' => $this->faker->randomElement(BillingFrequency::toArray()),
+            'subscription_expiration' => $subscriptionExpiration,
+            'billing_frequency' => $billingFrequency,
             'plan_type_id' => $this->faker->randomElement($planTypeIds),
             'site_id' => 3,
             'user_id' => $this->faker->optional()->randomElement([null, $this->faker->numberBetween(1, 10)]),
