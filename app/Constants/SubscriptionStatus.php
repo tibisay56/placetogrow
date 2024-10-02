@@ -4,6 +4,7 @@ namespace App\Constants;
 
 enum SubscriptionStatus: string
 {
+    case APPROVED = 'approved';
     case ACTIVE = 'active';
     case INACTIVE = 'inactive';
     case PENDING = 'pending';
@@ -19,6 +20,7 @@ enum SubscriptionStatus: string
     public function text(): string
     {
         return match ($this) {
+            self::APPROVED => trans('subscriptions.status.approved'),
             self::ACTIVE => trans('subscriptions.status.active'),
             self::INACTIVE => trans('subscriptions.status.inactive'),
             self::PENDING => trans('subscriptions.status.pending'),
