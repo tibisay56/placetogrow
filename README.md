@@ -78,7 +78,7 @@ A web platform for managing microsites, enabling administrators to register user
         php artisan serve
 ```
 
-10. User credentials:
+11. User credentials:
 
 ```
         Admin user:

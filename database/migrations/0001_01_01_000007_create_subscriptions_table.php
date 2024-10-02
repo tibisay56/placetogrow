@@ -35,6 +35,11 @@ return new class extends Migration
             $table->string('document_number');
             $table->string('document_type');
 
+            $table->string('token', 70)->nullable();
+            $table->string('sub_token', 50)->nullable();
+            $table->string('status_message', 255)->nullable();
+            $table->string('request_id', 50)->nullable();
+
             $table->date('start_date')->default(now())->change();
             $table->date('end_date')->nullable()->change();
             $table->enum('status', SubscriptionStatus::toArray());
