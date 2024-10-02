@@ -109,6 +109,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoice.index');
     Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('invoices', [ImportController::class, 'store'])->name('invoice.store');
 });
 
 //Lang
