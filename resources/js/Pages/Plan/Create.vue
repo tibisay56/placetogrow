@@ -5,11 +5,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
-
-const minExpirationTime = 1;
-const maxExpirationTime = 1440;
-
-const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationTime - minExpirationTime + 1)) + minExpirationTime;
+import {watch} from "vue";
 
 
 const form = useForm({
@@ -18,7 +14,7 @@ const form = useForm({
     currency: "",
     amount:"",
     billing_frequency: "",
-    subscription_expiration: getRandomExpirationTime(),
+    subscription_expiration: "",
     site_id: null,
     plan_type_id:"",
 });
@@ -26,16 +22,24 @@ const submit = () => {
     form.post(route('plan.store'));
 };
 
+
 const props = defineProps({
     billingFrequencies: Array,
     currencies: Array,
     sites: Array,
     planTypes: Array,
 });
-const capitalize = (text) => {
-    if (!text) return '';
-    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+
+const frequencyToExpiration = {
+    'daily': 1,
+    'weekly': 7,
+    'monthly': 30,
+    'yearly': 365
 };
+
+watch(() => form.billing_frequency, (newVal) => {
+    form.subscription_expiration = frequencyToExpiration[newVal] || '';
+});
 
 </script>
 
@@ -129,14 +133,14 @@ const capitalize = (text) => {
                                                 <div>
                                                     <InputLabel for="billing_frequency" :value="$t('Billing Frequency')" />
                                                     <select v-model="form.billing_frequency" name="billingFrequency" id="billingFrequency"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                                        <option v-for="frequency in billingFrequencies" :key="frequency" :value="frequency">{{ capitalize($t(frequency)) }}</option>
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                        <option v-for="frequency in props.billingFrequencies" :key="frequency" :value="frequency">{{ $t(frequency) }}</option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.billing_frequency" />
                                                 </div>
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration (Minutes)')" />
-                                                <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration (Days)')" />
+                                                <TextInput v-model="form.subscription_expiration" readonly id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                             </div>
                                             </div>
