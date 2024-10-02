@@ -50,7 +50,7 @@ class StorePaymentTest extends TestCase
             'site_id' => $site->id,
             'currency' => CurrencyType::USD->name,
             'name' => 'Jhon',
-            'lastname' => 'Doe',
+            'last_name' => 'Doe',
             'email' => fake()->freeEmail(),
             'document_number' => 4444444,
             'document_type' => DocumentTypes::CC->name,
