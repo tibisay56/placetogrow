@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Subscription extends Model
 {
@@ -27,7 +26,9 @@ class Subscription extends Model
         'status_message',
         'token',
         'sub_token',
-        'last_collected_at',
+        'next_billing_date',
+        'plan_months',
+        'months_charged',
     ];
 
     public function plan(): BelongsTo
@@ -45,9 +46,9 @@ class Subscription extends Model
         return $this->belongsTo(Site::class);
     }
 
-    public function invoice(): HasOne
+    public function invoices(): HasMany
     {
-        return $this->hasOne(Invoice::class);
+        return $this->hasMany(Invoice::class);
     }
 
     public function payments(): HasMany
