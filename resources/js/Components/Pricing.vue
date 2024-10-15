@@ -25,7 +25,7 @@ function selectPlan(planId) {
         <div  v-if="plans.length" class="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:items-center">
             <!-- Card -->
             <div v-for="plan in plans" :key="plan.id" class="flex flex-col border border-gray-200 text-center rounded-xl p-8 dark:border-neutral-800">
-                <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-orange-100 text-orange-800 dark:bg-orange-600 dark:text-white">{{ plan.billing_frequency }}</span></p>
+                <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-orange-500 text-white dark:bg-orange-600 dark:text-white">{{ plan.billing_frequency }}</span></p>
                 <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200"> {{ plan.name }} </h4>
                 <span class="mt-7 font-bold text-5xl text-gray-800 dark:text-neutral-200"> ${{ plan.amount }}</span>
                 <p class="mt-2 text-sm text-gray-500 dark:text-neutral-500"> {{ plan.description }}</p>
@@ -49,10 +49,12 @@ function selectPlan(planId) {
                       </span>
                     </li>
                 </ul>
+                <br/>
+                <p class="mt-2 text-sm text-gray-500 font-bold dark:text-neutral-500"> Monthly automatic charge</p>
                 <button
                     @click="selectPlan(plan.id)"
-                    class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:bg-orange-600 focus:text-white active:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none">
-                    Sign up
+                    class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-lg border border-gray-200 bg-white text-orange-600 shadow-sm hover:bg-orange-100 focus:bg-orange-600 focus:text-white active:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none">
+                    Subscribe!
                 </button>
             </div>
             <!-- End Card -->
