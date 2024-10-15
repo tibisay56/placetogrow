@@ -166,8 +166,8 @@ const formatDate = (dateString) => {
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                            <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full`">
-                                                                {{ invoice.reference }}</span>
+                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full`">
+                                                        {{ invoice.reference }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -229,9 +229,9 @@ const formatDate = (dateString) => {
                                             <div class="flex items-center gap-x-3">
                                                 <div class="flex justify-center">
                                                     <Link :href="route('invoice.show', invoice.id)">
-                                                        <PrimaryButton>
-                                                            {{ $t('Pay Now') }}
-                                                        </PrimaryButton>
+                                                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                                                            {{ $t('Show') }}
+                                                        </button>
                                                     </Link>
                                                 </div>
                                             </div>
