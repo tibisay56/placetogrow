@@ -32,14 +32,15 @@ class Collect extends Command
     public function handle(): int
     {
         $subscriptions = Subscription::where('status', 'approved')
-        ->whereHas('invoices', function ($query) {
-            $query->whereIn('status', ['pending', 'overdue']);
-        })
+            ->whereHas('invoices', function ($query) {
+                $query->whereIn('status', ['pending', 'overdue']);
+            })
             ->where('next_billing_date', '<=', Carbon::now())
             ->get();
 
         if ($subscriptions->isEmpty()) {
             $this->info('No subscriptions due for collection.');
+
             return Command::SUCCESS;
         }
 
@@ -53,7 +54,7 @@ class Collect extends Command
                 $paymentResult = $paymentService->collect($subscription, User::find($subscription->user_id));
 
                 if ($paymentResult) {
-                    $this->info('Payment collected successfully for subscription ID: ' . $subscription->id);
+                    $this->info('Payment collected successfully for subscription ID: '.$subscription->id);
 
                     $subscription->next_billing_date = Carbon::now()->addMonth();
                     $subscription->months_charged += 1;
@@ -62,10 +63,10 @@ class Collect extends Command
                     $invoice->status = 'paid';
                     $invoice->save();
                 } else {
-                    $this->error('Payment collection failed for subscription ID: ' . $subscription->id);
+                    $this->error('Payment collection failed for subscription ID: '.$subscription->id);
                 }
             } else {
-                $this->info('No pending or overdue invoices for subscription ID: ' . $subscription->id);
+                $this->info('No pending or overdue invoices for subscription ID: '.$subscription->id);
             }
         }
 
