@@ -5,12 +5,10 @@ namespace App\Constants;
 enum SubscriptionStatus: string
 {
     case APPROVED = 'approved';
-    case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
+    case FAILED = 'failed';
+    case REJECTED = 'rejected';
     case PENDING = 'pending';
     case EXPIRED = 'expired';
-    case CANCELLED = 'cancelled';
-    case SUSPENDED = 'suspended';
 
     public static function toArray(): array
     {
