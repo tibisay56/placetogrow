@@ -8,6 +8,7 @@ use App\Models\Plan;
 use App\Models\Site;
 use App\Models\Subscription;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -29,7 +30,7 @@ class SubscriptionFactory extends Factory
             'document_type' => $this->faker->randomElement(DocumentTypes::toArray()),
             'token' => Str::random(70),
             'sub_token' => Str::random(50),
-            'next_payment_at' => now()->toDateString(),
+            'next_billing_date' => $this->nextBillingDate(),
         ];
     }
 
@@ -40,5 +41,14 @@ class SubscriptionFactory extends Factory
                 'status' => SubscriptionStatus::APPROVED,
             ];
         });
+    }
+
+    private function nextBillingDate(): Carbon
+    {
+        if ($this->faker->boolean(50)) {
+            return Carbon::now()->subDays(rand(0, 30));
+        } else {
+            return Carbon::now()->addMonth();
+        }
     }
 }
