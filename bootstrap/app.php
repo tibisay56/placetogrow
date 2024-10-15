@@ -1,5 +1,8 @@
 <?php
 
+use App\Console\Commands\CreateMetrics;
+use App\Jobs\CalculateLateFee;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -49,5 +52,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return $response;
         });
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command(CreateMetrics::class, ['date' => now()->subDay()->toDateString()])->daily();
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->job(new CalculateLateFee)->daily();
     })
     ->create();
