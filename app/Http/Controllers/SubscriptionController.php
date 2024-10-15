@@ -8,6 +8,8 @@ use App\Constants\DocumentTypes;
 use App\Constants\SubscriptionStatus;
 use App\Http\Requests\Subscription\StoreRequest;
 use App\Mail\ConfirmationMail;
+use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\Site;
 use App\Models\Subscription;
@@ -17,6 +19,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -83,7 +86,7 @@ class SubscriptionController extends Controller
         $planId = $validatedData['plan_id'];
         $plan = Plan::find($planId);
 
-        $description = 'Plan '.$plan->type.' COP $'.$plan->price;
+        $description = 'Plan '.$plan->type.' COP $'.$plan->amount;
         $reference = 'PAYMENT_0001'.'_'.Str::random(4);
         $email = $validatedData['email'];
         $name = $validatedData['name'];
@@ -119,41 +122,56 @@ class SubscriptionController extends Controller
             'password' => $validatedData['password'],
         ]);
 
-        Mail::to($validatedData['email'])->send(new ConfirmationMail($validatedData['email'], $validatedData['password']));
+        //Mail::to($validatedData['email'])->send(new ConfirmationMail($validatedData['email'], $validatedData['password']));
 
         $data = [
             'auth' => $this->generateAuthData(),
-            'buyer' => ['email' => $user['email']],
+            'buyer' => [
+                'email' => $user['email'],
+                'name' => $user['name'],
+                'document' => $user['document'],
+                'documentType' => 'CC',
+                'mobile' => $user['mobile'],
+            ],
             'reference' => $reference,
             'description' => $description,
+            'amount' => [
+                'currency' => CurrencyType::COP->value,
+                'total' => $plan->amount,
+            ],
+            'subscribe' => true,
             'expiration' => now()->addMinutes(6)->toIso8601String(),
             'ipAddress' => $request->Ip(),
             'userAgent' => $request->UserAgent(),
             'returnUrl' => route('subscription.return', [
-                'slug' => $subscription->slug,
+                'site' => $site->slug,
                 'reference' => $reference,
                 'subscription' => $subscription->getKey(),
             ]),
-            'subscription' => [
+            'payment' => [
                 'reference' => $reference,
                 'description' => $description,
+                'amount' => [
+                    'currency' => CurrencyType::COP->value,
+                    'total' => $plan->amount,
+                ],
+                'subscribe' => true,
             ],
         ];
 
-        $jsonData = json_encode($data);
-        $contentLength = strlen($jsonData);
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            //'Content-Length' => $contentLength,
-        ])->post(env('PLACETOPAY_URL'), $data);
+        $response = Http::post(env('PLACETOPAY_URL'), $data);
 
         $result = $response->json();
 
         if (! $response->ok()) {
-            return redirect()->route('subscription.show', ['subscription' => $subscription->id])
-                ->withErrors(['subscription' => $result['status']['message']]);
+            return redirect()->route('subscription.show', $site->slug)
+                ->withErrors(['payment' => $result['status']['message']]);
         }
+        $subscription->update([
+            'request_id' => $result['requestId'],
+            'process_url' => $result['processUrl'],
+            'status_message' => $result['status']['message'],
+        ]);
 
         return Inertia::location($result['processUrl']);
     }
@@ -166,11 +184,67 @@ class SubscriptionController extends Controller
         $siteName = $subscription->site ? $subscription->site->name : 'Site not found';
         $planName = $subscription->plan ? $subscription->plan->name : 'Plan not found';
 
+        $sessionInformationResponse = Http::post(env('PLACETOPAY_URL').'/'.$subscription->request_id, [
+            'auth' => $this->generateAuthData(),
+        ]);
+
+        Log::info('Response from Placetopay:', $sessionInformationResponse->json());
+
+        $subscription->update([
+            'status' => $sessionInformationResponse['status']['status'],
+            'token' => $sessionInformationResponse['subscription']['instrument'][0]['value'],
+            'sub_token' => $sessionInformationResponse['subscription']['instrument'][1]['value'],
+        ]);
+
+        if ($subscription->status === 'APPROVED') {
+            $this->createInvoiceForSubscription($subscription, $sessionInformationResponse);
+            $this->createPaymentTransaction($subscription, $sessionInformationResponse);
+        }
+
         return Inertia::render('Subscription/Return', [
             'subscription' => $subscription,
             'username' => $subscription->user->name,
             'sitename' => $siteName,
             'planname' => $planName,
+        ]);
+    }
+
+    public function createInvoiceForSubscription(Subscription $subscription, $sessionInformationResponse): void
+    {
+        $now = Carbon::now();
+        $reference = $now->format('ymd').'-'.strtoupper(Str::random(6));
+        $invoiceStatus = ($subscription->status === 'APPROVED') ? 'paid' : 'pending';
+
+        Invoice::create([
+            'reference' => $reference,
+            'amount' => $subscription->plan->amount,
+            'currency' => CurrencyType::COP->name,
+            'customer_name' => $subscription->user->name,
+            'dni' => str_pad(7, '7', STR_PAD_LEFT),
+            'description' => 'Descripción de la suscripción al plan '.$subscription->plan->name,
+            'created_at' => $now->toDateTimeString(),
+            'expired_at' => $now->addMonth()->toDateTimeString(),
+            'status' => $invoiceStatus,
+            'subscription_id' => $subscription->id,
+            'site_id' => $subscription->site_id,
+            'user_id' => $subscription->user_id,
+        ]);
+    }
+
+    public function createPaymentTransaction(Subscription $subscription, $sessionInformationResponse): void
+    {
+        $paymentReference = 'PAY_'.strtoupper(Str::random(8));
+
+        Payment::create([
+            'reference' => $paymentReference,
+            'amount' => $subscription->plan->amount,
+            'currency' => CurrencyType::COP->name,
+            'status' => $sessionInformationResponse['status']['status'],
+            'description' => 'Payment for subscription to plan: '.$subscription->plan->name,
+            'transaction_id' => $sessionInformationResponse['requestId'],
+            'subscription_id' => $subscription->id,
+            'user_id' => $subscription->user_id,
+            'site_id' => $subscription->site_id,
         ]);
     }
 
@@ -192,10 +266,38 @@ class SubscriptionController extends Controller
         ];
     }
 
-    public function destroy(Subscription $Subscription): RedirectResponse
+    public function destroy(Subscription $subscription): RedirectResponse
     {
-        $Subscription->delete();
+        if ($subscription->token) {
+            $this->invalidateToken($subscription->token);
+        } else {
+            Log::info("No token to invalidate for subscription ID: {$subscription->id}");
+        }
+
+        $subscription->delete();
 
         return redirect()->route('subscription.index')->with('message', 'Subscription deleted successfully');
+    }
+
+    protected function invalidateToken(string $token): void
+    {
+        $authData = $this->generateAuthData();
+
+        $data = [
+            'auth' => $authData,
+            'locale' => 'en_US',
+            'instrument' => [
+                'token' => [
+                    'token' => $token,
+                ],
+            ],
+        ];
+
+        $response = Http::post(env('PLACETOPAY_INVALIDATE_URL').'/api/instrument/invalidate', $data);
+
+        if (! $response->successful()) {
+            Log::error('Failed to invalidate token: '.$response->body());
+            throw new \Exception('Could not invalidate the token. Please try again later.');
+        }
     }
 }

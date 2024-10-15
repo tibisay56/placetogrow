@@ -18,7 +18,7 @@
         "@preline/stepper": "^2.4.1",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-vue": "^5.0.4",
-        "apexcharts": "^3.49.2",
+        "apexcharts": "^3.54.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
         "datatables.net-dt": "^2.1.2",
@@ -37,7 +37,11 @@
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
+        "chart.js": "^4.4.4",
+        "dayjs": "^1.11.13",
+        "vue-chartjs": "^5.3.1",
         "vue-router": "^4.4.3",
-        "vue-stepper": "^1.4.2"
+        "vue-stepper": "^1.4.2",
+        "vue3-apexcharts": "^1.7.0"
     }
 }

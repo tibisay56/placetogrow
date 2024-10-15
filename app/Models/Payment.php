@@ -28,10 +28,12 @@ class Payment extends Model
         'required_fields',
         'invoice_id',
         'subscription_id',
+        'collect',
     ];
 
     protected $casts = [
         'required_fields' => 'array',
+        'collect' => 'boolean',
     ];
 
     public function site(): BelongsTo

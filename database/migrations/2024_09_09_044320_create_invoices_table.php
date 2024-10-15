@@ -21,15 +21,21 @@ return new class extends Migration
             $table->string('customer_name', 100);
             $table->string('dni', 40);
             $table->string('description', 100);
+            $table->integer('retry_count')->default(0);
+            $table->timestamp('next_retry_at')->nullable();
+            $table->unsignedInteger('payment_attempts')->default(0);
+            $table->decimal('late_fee', 10, 2)->nullable();
+            $table->date('due_date')->nullable();
+            $table->integer('delay_days')->nullable();
+            $table->decimal('total_amount', 10, 2)->default(0);
+            $table->enum('status', InvoiceStatus::toArray());
+            $table->date('expired_at');
+            $table->date('created_at');
 
-            $table->foreignId('import_id');
+            $table->foreignId('import_id')->nullable();
             $table->foreign('import_id')
                 ->references('id')
                 ->on('imports');
-
-            $table->date('expired_at');
-            $table->date('created_at');
-            $table->enum('status', InvoiceStatus::toArray());
 
             $table->foreignId('site_id')
                 ->nullable()

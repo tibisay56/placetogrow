@@ -1,132 +1,189 @@
 <script setup>
 
-import Form from "@/Pages/Payment/Form.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputError from "@/Components/InputError.vue";
-import {useForm, usePage} from "@inertiajs/vue3";
-import {ref, watch} from "vue";
+import {Link, useForm, usePage} from "@inertiajs/vue3";
 import Layout from "@/Components/Layout.vue";
-
-
+import dayjs from 'dayjs';
 
 const { props } = usePage();
-const documentTypes = ref(props.documentTypes || []);
-const currencies = ref(props.currencies || []);
-const gateways = ref(props.gateways || []);
-const site = ref(props.site || {});
-const requiredFields = ref(props.required_fields || []);
-const invoiceId = ref(props.invoiceId || null);
+const invoice = props.invoice;
 
-const form = useForm({
-    name: '',
-    last_name: '',
-    email: '',
-    document_number: '',
-    document_type: documentTypes.value[0] || null,
-    description: '',
-    amount: '',
-    currency: currencies.value[0] || null,
-    gateway: gateways.value[0] || null,
-    site_id: site.value.id || null,
-    required_Fields: requiredFields,
-    invoice_id: invoiceId.value,
-});
-
-watch(site, (newSite) => {
-    if (newSite && newSite.id) {
-        form.site_id = newSite.id;
-    }
-});
-
-const goBack = () => {
-    window.history.back();
+const formatDate = (date) => {
+    return dayjs(date).format('DD/MM/YYYY');
 };
-const submit = () => {
-    form.post(route('payment.store'), {
-        onSuccess: () => {
-            console.log('Form submitted successfully');
-        }
-    });
-};
-
-console.log('Site:', site.value);
 </script>
 
 <template>
     <Layout></Layout>
-    <div class="max-w-[85rem] px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mx-auto">
-        <div class="p-4 bg-white rounded-lg shadow-md dark:bg-neutral-800 mx-12 lg:mx-64">
-            <div class="space-y-8">
-                <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
-                    <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
-                        <h2 class="text-lg font-semibold">Site Information</h2>
-                        <p><strong>Name:</strong> {{ site.name }}</p>
-                        <p><strong>ID del sitio:</strong> {{ site.id }}</p>
-                        <!-- Agrega más campos del objeto site según lo necesites -->
-                    </div>
-                    <form @submit.prevent="submit">
-                        <input type="hidden" v-model="form.site_id"/>
-                        <input type="hidden" v-model="form.invoice_id" />
-                        <div v-if="form.required_Fields.length" class="flex flex-col sm:flex-row gap-4">
-                            <label class="inline-block text-sm font-medium dark:text-white">Required Fields:</label>
-                            <div v-for="(field, index) in form.required_Fields" :key="index" class="mb-2">
-                                <input v-model="field.value" :type="field.field_type" :placeholder="field.name" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"/>
+    <!-- Content -->
+    <div class="w-full lg:ps-64 -mt-12">
+        <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <!-- Card -->
+            <div class="flex flex-col">
+                <div class="-m-1.5 overflow-x-auto">
+                    <div class="p-1.5 min-w-full inline-block align-middle">
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
+                            <!-- Header -->
+                            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                                <div>
+                                    <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                                        {{ $t('Show Invoice') }}
+                                    </h2>
+                                    <p class="text-sm text-gray-600 dark:text-neutral-400">
+                                        {{ $t('Add invoices, edit and more.') }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <div class="inline-flex gap-x-2">
+                                        <Link :href="route('invoice.index')">
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
+                                                {{ $t('View all') }}
+                                            </a>
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <!-- End Header -->
+                                <!-- Invoice -->
+                                <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
+                                    <div class="sm:w-11/12 lg:w-3/4 mx-auto">
+                                        <!-- Card -->
+                                        <div class="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-neutral-800">
+                                            <!-- Grid -->
+                                            <div class="flex justify-between">
+                                                <div>
+                                                    <h1 class="mt-2 text-lg md:text-xl font-semibold text-orange-500 dark:text-white">Evertec</h1>
+                                                </div>
+                                                <!-- Col -->
 
-                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                            <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Billing contact
-                            </label>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <input v-model="form.name" id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><InputError :message="form.errors.name" class="mt-2" />
-                                    <input v-model="form.last_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Last Name"><InputError :message="form.errors.last_name" class="mt-2" />
-                                    <input v-model="form.email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Email"><InputError :message="form.errors.email" class="mt-2" />
+                                                <div class="text-end">
+                                                    <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-neutral-200">Invoice #</h2>
+                                                    <span class="mt-1 block text-gray-500 dark:text-neutral-500">{{ invoice.reference }}</span>
+                                                </div>
+                                                <!-- Col -->
+                                            </div>
+                                            <!-- End Grid -->
+
+                                            <!-- Grid -->
+                                            <div class="mt-8 grid sm:grid-cols-2 gap-3">
+                                                <div>
+                                                    <h3 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">Bill to:</h3>
+                                                    <h3 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">{{ invoice.customer_name }}</h3>
+                                                </div>
+                                                <!-- Col -->
+
+                                                <div class="sm:text-end space-y-2">
+                                                    <!-- Grid -->
+                                                    <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+                                                        <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                            <dt class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">Invoice date:</dt>
+                                                            <dd class="col-span-2 text-gray-500 dark:text-neutral-500">{{ formatDate(invoice.created_at) }}</dd>
+                                                        </dl>
+                                                        <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                            <dt class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">Due date:</dt>
+                                                            <dd class="col-span-2 text-gray-500 dark:text-neutral-500">{{ formatDate(invoice.expired_at) }}</dd>
+                                                        </dl>
+                                                    </div>
+                                                    <!-- End Grid -->
+                                                </div>
+                                                <!-- Col -->
+                                            </div>
+                                            <!-- End Grid -->
+
+                                            <!-- Table -->
+                                            <div class="mt-6">
+                                                <div class="border border-gray-200 p-4 rounded-lg space-y-4 dark:border-neutral-700">
+                                                    <div class="hidden sm:grid sm:grid-cols-5">
+                                                        <div class="sm:col-span-2 text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Item</div>
+                                                        <div class="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Qty</div>
+                                                        <div class="text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Rate</div>
+                                                        <div class="text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Amount</div>
+                                                    </div>
+
+                                                    <div class="hidden sm:block border-b border-gray-200 dark:border-neutral-700"></div>
+
+                                                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                                        <div class="col-span-full sm:col-span-2">
+                                                            <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Item</h5>
+                                                            <p class="font-medium text-gray-800 dark:text-neutral-200">{{ invoice.description }}</p>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Qty</h5>
+                                                            <p class="text-gray-800 dark:text-neutral-200">1</p>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Rate</h5>
+                                                            <p class="text-gray-800 dark:text-neutral-200">5</p>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">Amount</h5>
+                                                            <p class="sm:text-end text-gray-800 dark:text-neutral-200">${{ invoice.amount }}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="sm:hidden border-b border-gray-200 dark:border-neutral-700"></div>
+                                                </div>
+                                            </div>
+                                            <!-- End Table -->
+
+                                            <!-- Flex -->
+                                            <div class="mt-8 flex sm:justify-end">
+                                                <div class="w-full max-w-2xl sm:text-end space-y-2">
+                                                    <!-- Grid -->
+                                                    <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+                                                        <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                            <dt class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">Subtotal:</dt>
+                                                            <dd class="col-span-2 text-gray-500 dark:text-neutral-500">${{ invoice.amount }}</dd>
+                                                        </dl>
+
+                                                        <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                            <dt class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">Fee:</dt>
+                                                            <dd class="col-span-2 text-gray-500 dark:text-neutral-500">${{ invoice.late_fee }}</dd>
+                                                        </dl>
+
+                                                        <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                            <dt class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200">Total:</dt>
+                                                            <dd class="col-span-2 text-gray-500 dark:text-neutral-500">${{ invoice.total_amount }}</dd>
+                                                        </dl>
+
+                                                    </div>
+                                                    <!-- End Grid -->
+                                                </div>
+                                            </div>
+                                            <!-- End Flex -->
+
+                                            <div class="mt-8 sm:mt-12">
+                                                <h4 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">Thank you!</h4>
+                                                <p class="text-gray-500 dark:text-neutral-500">If you have any questions concerning this invoice, use the following contact information:</p>
+                                                <div class="mt-2">
+                                                    <p class="block text-sm font-medium text-gray-800 dark:text-neutral-200">example@site.com</p>
+                                                    <p class="block text-sm font-medium text-gray-800 dark:text-neutral-200">+1 (062) 109-9222</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Card -->
+
+                                        <!-- Buttons -->
+                                        <div class="mt-6 flex justify-end gap-x-3">
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                                Invoice PDF
+                                            </a>
+                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
+                                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                                                Print
+                                            </a>
+                                        </div>
+                                        <!-- End Buttons -->
+                                    </div>
                                 </div>
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <select v-model="form.document_type" id="document_type" name="document_type" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option :value="null">Select option...</option>
-                                        <option v-for="documentType in documentTypes" :key="documentType" :value="documentType">{{ documentType }}</option>
-                                    </select><InputError :message="form.errors.document_type" class="mt-2"/>
-                                    <input v-model="form.document_number" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Document Number"><InputError :message="form.errors.document_number" class="mt-2" />
-                                </div>
-                            </div>
+                                <!-- End Invoice -->
                         </div>
-                    </form>
-                </div>
-                <div class="bg-white dark:bg-neutral-800 p-4 border border-gray-200 rounded-lg">
-                    <form @submit.prevent="submit">
-                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                            <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Payment Method
-                            </label>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <textarea v-model="form.description" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600 resize-none overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500" placeholder="Description" rows="1" data-hs-default-height="48"></textarea><InputError :message="form.errors.description"/>
-                                    <select v-model="form.currency" id="currency" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option v-for="currency in currencies" :key="currency" :value="currency">{{ currency }}</option>
-                                    </select><InputError :message="form.errors.currency" class="mt-2" />
-                                </div>
-                                <div class="mt-2 space-y-3 sm:w-1/2">
-                                    <input v-model="form.amount" type="number" id="amount" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Amount"><InputError :message="form.errors.amount" class="mt-2"/>
-                                    <select v-model="form.gateway" id="gateway" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                                        <option v-for="gateway in gateways" :key="gateway.value" :value="gateway.value">{{ gateway.text }}</option>
-                                    </select><InputError :message="form.errors.gateway" class="mt-2" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-5 flex justify-end gap-x-2">
-                            <button @click="goBack" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                                {{ $t('Cancel') }}
-                            </button>
-                            <PrimaryButton type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none">{{ $t('Submit') }}</PrimaryButton>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <style scoped>

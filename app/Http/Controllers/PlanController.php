@@ -60,6 +60,11 @@ class PlanController extends Controller
 
         $validated = $request->validated();
 
+        $frequencyToExpiration = [
+            BillingFrequency::MONTHLY->value => 30,
+        ];
+
+        $validated['subscription_expiration'] = $frequencyToExpiration[$validated['billing_frequency']] ?? 30;
         Plan::create($validated);
 
         return redirect()->route('plan.index')->with('message', 'Plan plan created successfully');

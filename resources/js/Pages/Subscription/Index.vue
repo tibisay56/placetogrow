@@ -4,13 +4,14 @@ import { ref } from "vue";
 import Layout from "@/Components/Layout.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 
 const { props } = usePage();
 const subscriptions = ref(props.subscriptions || []);
 
 const colorBySubscriptionStatus = {
-    active: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    approved: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     inactive: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
     pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
     expired:  'bg-orange-100 text-orange-800 dark:bg-orange-500/10 dark:text-orange-500',
@@ -163,8 +164,12 @@ const onDeleteSuccess = (e) => {
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                        <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(subscription.status ? subscription.status : 'Unknown')}`">
-                                                            {{ subscription.status }}</span>
+                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(subscription.status ? subscription.status : 'Unknown')}`">
+                                                         <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                                        </svg>
+                                                        {{ subscription.status }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

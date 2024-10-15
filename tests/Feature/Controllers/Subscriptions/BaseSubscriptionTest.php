@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers\Subscriptions;
 
 use App\Constants\SubscriptionStatus;
 use App\Models\Site;
+use App\Models\Subscription;
 use App\Models\Type;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -40,6 +41,28 @@ class BaseSubscriptionTest extends TestCase
             'request_id' => '1',
             'status' => SubscriptionStatus::PENDING->value,
             'price' => '10.000',
+        ]);
+    }
+
+    public function test_return_and_store_token()
+    {
+        $type = Type::factory()->create([
+            'id' => 3,
+            'name' => 'subscriptions',
+        ]);
+
+        $subscriptions = Subscription::factory()->create([
+            'request_id' => '3',
+            'type_id' => $type->id,
+        ]);
+
+        $this->getJson(route('subscription.return', $subscriptions))->assertOk();
+
+        $this->assertDatabaseHas('subscription', [
+            'site_id' => $subscriptions->site_id,
+            'request_id' => '1',
+            'token' => $subscriptions->token,
+            'sub_token' => $subscriptions->sub_token,
         ]);
     }
 }

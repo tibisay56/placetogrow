@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
@@ -109,6 +110,14 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('invoices', [InvoiceController::class, 'index'])->name('invoice.index');
     Route::get('invoices/create', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('invoices', [ImportController::class, 'store'])->name('invoice.store');
+    Route::post('/invoice-metrics/update/{siteId}', [InvoiceController::class, 'updateInvoiceMetrics']);
+});
+
+//Metrics
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('metrics', [MetricsController::class, 'index'])->name('metrics.index');
+    Route::post('metrics', [MetricsController::class, 'store'])->name('metrics.store');
 });
 
 //Lang

@@ -17,12 +17,20 @@ class Invoice extends Model
         'customer_name',
         'dni',
         'description',
+        'retry_count',
+        'next_retry_at',
+        'payment_attempts',
+        'late_fee',
+        'due_date',
         'expired_at',
         'created_at',
-        'import_id',
+        'total_amount',
         'status',
+        'import_id',
         'user_id',
         'site_id',
+        'subscription_id',
+        'delay_days',
     ];
 
     /**

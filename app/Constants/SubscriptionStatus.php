@@ -4,12 +4,11 @@ namespace App\Constants;
 
 enum SubscriptionStatus: string
 {
-    case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
+    case APPROVED = 'approved';
+    case FAILED = 'failed';
+    case REJECTED = 'rejected';
     case PENDING = 'pending';
     case EXPIRED = 'expired';
-    case CANCELLED = 'cancelled';
-    case SUSPENDED = 'suspended';
 
     public static function toArray(): array
     {
@@ -19,6 +18,7 @@ enum SubscriptionStatus: string
     public function text(): string
     {
         return match ($this) {
+            self::APPROVED => trans('subscriptions.status.approved'),
             self::ACTIVE => trans('subscriptions.status.active'),
             self::INACTIVE => trans('subscriptions.status.inactive'),
             self::PENDING => trans('subscriptions.status.pending'),

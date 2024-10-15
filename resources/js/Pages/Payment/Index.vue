@@ -41,6 +41,14 @@ const formatDate = (dateString) => {
                     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                         <!-- Header -->
                         <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                                    {{ $t('Transactions') }}
+                                </h2>
+                                <p class="text-sm text-gray-600 dark:text-neutral-400">
+                                    {{ $t('View your transactions') }}
+                                </p>
+                            </div>
                             <!-- Input -->
                             <div class="sm:col-span-1">
                                 <label for="hs-as-table-product-review-search" class="sr-only">Search</label>

@@ -11,9 +11,9 @@ const page = usePage()
 const invoices = ref(page.props.invoices || []);
 
 const colorByType = {
-    pending: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
+    paid: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     overdue: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
-    paid: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
+    pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500',
 };
 
 const getBadgeClasses = (type) => {
@@ -166,8 +166,8 @@ const formatDate = (dateString) => {
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                            <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full`">
-                                                                {{ invoice.reference }}</span>
+                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full`">
+                                                        {{ invoice.reference }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,7 +196,12 @@ const formatDate = (dateString) => {
                                         <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
                                             <div class="flex items-center gap-x-3">
                                                 <div class="grow">
-                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(invoice.status)}`">  {{ invoice.status  }}</span>
+                                                    <span :class="`capitalize py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full ${getBadgeClasses(invoice.status)}`">
+                                                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                                        </svg>
+                                                        {{ invoice.status  }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -224,9 +229,9 @@ const formatDate = (dateString) => {
                                             <div class="flex items-center gap-x-3">
                                                 <div class="flex justify-center">
                                                     <Link :href="route('invoice.show', invoice.id)">
-                                                        <PrimaryButton>
-                                                            {{ $t('Pay Now') }}
-                                                        </PrimaryButton>
+                                                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+                                                            {{ $t('Show') }}
+                                                        </button>
                                                     </Link>
                                                 </div>
                                             </div>

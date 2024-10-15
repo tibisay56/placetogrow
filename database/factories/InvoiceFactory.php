@@ -34,6 +34,7 @@ class InvoiceFactory extends Factory
             'description' => fake()->sentence(),
             'created_at' => $now->toDateTimeString(),
             'expired_at' => $now->addMonth()->toDateTimeString(),
+            'due_date' => Carbon::createFromDate(2024, 10, 10)->toDateTimeString(),
             'import_id' => Import::factory(),
             'status' => fake()->randomElement(InvoiceStatus::toArray()),
             'subscription_id' => $subscription->id,

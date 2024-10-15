@@ -35,8 +35,16 @@ return new class extends Migration
             $table->string('document_number');
             $table->string('document_type');
 
+            $table->string('token', 70)->nullable();
+            $table->string('sub_token', 50)->nullable();
+            $table->string('status_message', 255)->nullable();
+            $table->string('request_id', 50)->nullable();
+
             $table->date('start_date')->default(now())->change();
             $table->date('end_date')->nullable()->change();
+            $table->date('next_billing_date')->nullable();
+            $table->integer('plan_months')->default(12);
+            $table->integer('months_charged')->default(0);
             $table->enum('status', SubscriptionStatus::toArray());
             $table->timestamps();
         });

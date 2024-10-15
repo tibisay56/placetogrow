@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\CurrencyType;
-use App\Constants\DocumentTypes;
-use App\Constants\PaymentGateway;
 use App\Models\Invoice;
 use App\Models\Site;
 use Illuminate\Support\Facades\Auth;
@@ -32,20 +29,12 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function show($invoiceId): Response
+    public function show($id): Response
     {
-        $invoice = Invoice::with('site')->findOrFail($invoiceId);
-        $currencies = CurrencyType::toArray();
-        $documentTypes = DocumentTypes::toArray();
-        $site = $invoice->site;
+        $invoice = Invoice::findOrFail($id);
 
         return Inertia::render('Invoice/Show', [
             'invoice' => $invoice,
-            'currencies' => $currencies,
-            'documentTypes' => $documentTypes,
-            'gateways' => PaymentGateway::toOptions(),
-            'site' => $site,
-            'invoiceId' => $invoice->id,
         ]);
     }
 }

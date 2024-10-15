@@ -10,15 +10,25 @@ import { i18nVue } from 'laravel-vue-i18n'
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
+import { faCreditCard, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faFileLines } from '@fortawesome/free-regular-svg-icons';
-import {faBan, faGear, faHourglassHalf, faTrash, faUserCheck} from '@fortawesome/free-solid-svg-icons';
+import {
+    faBan,
+    faGear,
+    faHourglassHalf,
+    faTrash,
+    faUserCheck,
+    faChevronDown,
+    faChartSimple, faReceipt
+} from '@fortawesome/free-solid-svg-icons';
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
 import { faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarCheck } from '@fortawesome/free-regular-svg-icons';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash, faCheckToSlot, faCalendarCheck, faCreditCard, faArrowUpFromBracket, faUserCheck, faBan, faHourglassHalf);
+library.add(faAddressCard, faCreditCard, faFileLines, faGear, faTrash, faCheckToSlot, faCalendarCheck,
+    faCreditCard, faArrowUpFromBracket, faUserCheck, faBan, faHourglassHalf, faCalendar, faChevronDown,
+    faChartSimple, faReceipt);
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
