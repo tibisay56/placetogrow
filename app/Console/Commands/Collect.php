@@ -31,52 +31,45 @@ class Collect extends Command
      */
     public function handle(): int
     {
-        $today = Carbon::today();
-        $subscriptions = Subscription::where('next_payment_at', $today)
-            ->where('status', 'approved')
+        $subscriptions = Subscription::where('status', 'approved')
+        ->whereHas('invoices', function ($query) {
+            $query->whereIn('status', ['pending', 'overdue']);
+        })
+            ->where('next_billing_date', '<=', Carbon::now())
             ->get();
 
         if ($subscriptions->isEmpty()) {
-            $this->info('No subscriptions found for today.');
-
+            $this->info('No subscriptions due for collection.');
             return Command::SUCCESS;
         }
 
         foreach ($subscriptions as $subscription) {
-            $payment = new Payment();
-            $gateway = app(PlacetoPayGateway::class);
-            $paymentService = new PaymentService($payment, $gateway);
+            $invoice = $subscription->invoices()->whereIn('status', ['pending', 'overdue'])->latest()->first();
 
-            $paymentResult = $paymentService->collect($subscription, User::find($subscription->user_id));
+            if ($invoice) {
+                $payment = new Payment();
+                $gateway = app(PlacetoPayGateway::class);
+                $paymentService = new PaymentService($payment, $gateway);
+                $paymentResult = $paymentService->collect($subscription, User::find($subscription->user_id));
 
-            if ($paymentResult) {
-                $invoice = $subscription->invoice;
-                $invoice->status = 'paid';
-                $invoice->save();
+                if ($paymentResult) {
+                    $this->info('Payment collected successfully for subscription ID: ' . $subscription->id);
 
-                switch ($subscription->plan->billing_frequency) {
-                    case 'daily':
-                        $subscription->next_payment_at = $today->addDay();
-                        break;
-                    case 'weekly':
-                        $subscription->next_payment_at = $today->addWeek();
-                        break;
-                    case 'monthly':
-                        $subscription->next_payment_at = $today->addMonth();
-                        break;
-                    case 'yearly':
-                        $subscription->next_payment_at = $today->addYear();
-                        break;
+                    $subscription->next_billing_date = Carbon::now()->addMonth();
+                    $subscription->months_charged += 1;
+                    $subscription->save();
+
+                    $invoice->status = 'paid';
+                    $invoice->save();
+                } else {
+                    $this->error('Payment collection failed for subscription ID: ' . $subscription->id);
                 }
-                $subscription->save();
-
-                $this->info("Payment collected and invoice updated for subscription ID: {$subscription->id}");
             } else {
-                $this->error("Payment failed for subscription ID: {$subscription->id}");
+                $this->info('No pending or overdue invoices for subscription ID: ' . $subscription->id);
             }
         }
 
-        $this->info('Collection command executed successfully');
+        $this->info('Collect test data command executed');
 
         return Command::SUCCESS;
     }
