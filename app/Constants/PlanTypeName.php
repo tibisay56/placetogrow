@@ -21,4 +21,13 @@ enum PlanTypeName: string
             self::PREMIUM => trans('types.premium'),
         };
     }
+
+    public function description(): string
+    {
+        return match ($this) {
+            self::BASIC => 'Ideal for individuals.',
+            self::MEDIUM => 'Perfect for small teams.',
+            self::PREMIUM => 'Best for large organizations.',
+        };
+    }
 }
