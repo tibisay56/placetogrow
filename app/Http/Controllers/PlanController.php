@@ -61,10 +61,7 @@ class PlanController extends Controller
         $validated = $request->validated();
 
         $frequencyToExpiration = [
-            BillingFrequency::DAILY->value => 1,
-            BillingFrequency::WEEKLY->value => 7,
             BillingFrequency::MONTHLY->value => 30,
-            BillingFrequency::YEARLY->value => 365,
         ];
 
         $validated['subscription_expiration'] = $frequencyToExpiration[$validated['billing_frequency']] ?? 30;
