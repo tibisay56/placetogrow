@@ -42,8 +42,9 @@ return new class extends Migration
 
             $table->date('start_date')->default(now())->change();
             $table->date('end_date')->nullable()->change();
-            $table->timestamp('last_collected_at')->nullable();
-            $table->timestamp('next_payment_at')->nullable();
+            $table->date('next_billing_date')->nullable();
+            $table->integer('plan_months')->default(12);
+            $table->integer('months_charged')->default(0);
             $table->enum('status', SubscriptionStatus::toArray());
             $table->timestamps();
         });
