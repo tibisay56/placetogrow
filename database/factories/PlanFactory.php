@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Constants\BillingFrequency;
 use App\Constants\CurrencyType;
+use App\Constants\PlanTypeName;
 use App\Constants\SubscriptionStatus;
 use App\Models\Plan;
 use App\Models\PlanType;
@@ -26,9 +27,11 @@ class PlanFactory extends Factory
 
         $subscriptionExpiration = $frequencyToExpiration[$billingFrequency] ?? 30;
 
+        $planName = $this->faker->randomElement(PlanTypeName::toArray());
+
         return [
-            'name' => $this->faker->randomElement(['Basic', 'Medium', 'Premium']),
-            'description' => $this->faker->text(30),
+            'name' => $planName,
+            'description' => PlanTypeName::from($planName)->description(),
             'amount' => $this->faker->numberBetween(100, 10000),
             'currency' => $this->faker->randomElement(CurrencyType::toArray()),
             'status' => $this->faker->randomElement(SubscriptionStatus::toArray()),
