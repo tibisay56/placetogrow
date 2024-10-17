@@ -11,6 +11,10 @@ class Subscription extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'next_billing_date' => 'datetime',
+    ];
+
     protected $fillable = [
         'plan_id',
         'user_id',
@@ -20,6 +24,7 @@ class Subscription extends Model
         'status',
         'email',
         'name',
+        'surname',
         'document_number',
         'document_type',
         'request_id',

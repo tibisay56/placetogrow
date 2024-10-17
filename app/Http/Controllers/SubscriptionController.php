@@ -112,6 +112,7 @@ class SubscriptionController extends Controller
             'email' => $validatedData['email'],
             'plan_id' => $validatedData['plan_id'],
             'name' => $validatedData['name'],
+            'surname' => $validatedData['surname'],
             'document_number' => $validatedData['document_number'],
             'document_type' => $validatedData['document_type'],
             'status' => SubscriptionStatus::PENDING->value,
@@ -129,17 +130,13 @@ class SubscriptionController extends Controller
             'buyer' => [
                 'email' => $user['email'],
                 'name' => $user['name'],
+                'surname' => $user['surname'],
                 'document' => $user['document'],
                 'documentType' => 'CC',
                 'mobile' => $user['mobile'],
             ],
             'reference' => $reference,
             'description' => $description,
-            'amount' => [
-                'currency' => CurrencyType::COP->value,
-                'total' => $plan->amount,
-            ],
-            'subscribe' => true,
             'expiration' => now()->addMinutes(6)->toIso8601String(),
             'ipAddress' => $request->Ip(),
             'userAgent' => $request->UserAgent(),
@@ -148,14 +145,9 @@ class SubscriptionController extends Controller
                 'reference' => $reference,
                 'subscription' => $subscription->getKey(),
             ]),
-            'payment' => [
+            'subscription' => [
                 'reference' => $reference,
                 'description' => $description,
-                'amount' => [
-                    'currency' => CurrencyType::COP->value,
-                    'total' => $plan->amount,
-                ],
-                'subscribe' => true,
             ],
         ];
 
@@ -165,7 +157,7 @@ class SubscriptionController extends Controller
 
         if (! $response->ok()) {
             return redirect()->route('subscription.show', $site->slug)
-                ->withErrors(['payment' => $result['status']['message']]);
+                ->withErrors(['subscription' => $result['status']['message']]);
         }
         $subscription->update([
             'request_id' => $result['requestId'],
@@ -199,6 +191,8 @@ class SubscriptionController extends Controller
         if ($subscription->status === 'APPROVED') {
             $this->createInvoiceForSubscription($subscription, $sessionInformationResponse);
             $this->createPaymentTransaction($subscription, $sessionInformationResponse);
+
+            $this->chargeUsingToken($subscription);
         }
 
         return Inertia::render('Subscription/Return', [
@@ -209,11 +203,79 @@ class SubscriptionController extends Controller
         ]);
     }
 
+    public function chargeUsingToken(Subscription $subscription): void
+    {
+        $paymentReference = 'PAY_'.strtoupper(Str::random(8));
+
+        $data = [
+            'auth' => $this->generateAuthData(),
+            'payment' => [
+                'reference' => $paymentReference,
+                'description' => 'Cobro automático para la suscripción al plan: '.$subscription->plan->name,
+                'amount' => [
+                    'currency' => CurrencyType::COP->name,
+                    'total' => $subscription->plan->amount,
+                ],
+            ],
+            'buyer' => [
+                'name' => $subscription->user->name,
+                'surname' => $subscription->user->surname ?? 'No aplica',
+                'email' => $subscription->user->email,
+                'document' => '54534534',
+                'documentType' => 'CC',
+                'mobile' => $subscription->user->phone ?? '',
+            ],
+            'payer' => [
+                'name' => $subscription->user->name,
+                'surname' => $subscription->user->surname ?? 'No aplica',
+                'email' => $subscription->user->email,
+                'document' => '4243242',
+                'documentType' => 'CC',
+                'mobile' => $subscription->user->phone ?? '',
+            ],
+            'instrument' => [
+                'token' => [
+                    'token' => $subscription->token,
+                ],
+            ],
+            'expiration' => now()->addMonth()->toIso8601String(),
+            'returnUrl' => route('subscription.return', [
+                'site' => $subscription->site->slug,
+                'reference' => $paymentReference,
+                'subscription' => $subscription->getKey(),
+            ]),
+            'ipAddress' => request()->ip(),
+            'userAgent' => request()->userAgent(),
+        ];
+
+        Log::info('Sending payment data to PlacetoPay:', $data);
+
+        $response = Http::post(env('PLACETOPAY_COLLECT_URL'), $data);
+
+        Log::info('Response from PlacetoPay:', $response->json());
+
+        if ($response->successful()) {
+            Log::info('Cobro realizado con éxito', $response->json());
+
+            $this->createPaymentTransaction($subscription, $response->json());
+        } else {
+            Log::error('Error al realizar el cobro: '.$response->body());
+            throw new \Exception('Error al realizar el cobro usando el token.');
+        }
+    }
+
     public function createInvoiceForSubscription(Subscription $subscription, $sessionInformationResponse): void
     {
         $now = Carbon::now();
         $reference = $now->format('ymd').'-'.strtoupper(Str::random(6));
         $invoiceStatus = ($subscription->status === 'APPROVED') ? 'paid' : 'pending';
+
+        $existingInvoice = Invoice::where('subscription_id', $subscription->id)->first();
+        if ($existingInvoice) {
+            Log::info('Invoice already exists for this subscription. Skipping invoice creation.');
+
+            return;
+        }
 
         Invoice::create([
             'reference' => $reference,
@@ -234,6 +296,13 @@ class SubscriptionController extends Controller
     public function createPaymentTransaction(Subscription $subscription, $sessionInformationResponse): void
     {
         $paymentReference = 'PAY_'.strtoupper(Str::random(8));
+
+        $existingPayment = Payment::where('subscription_id', $subscription->id)->first();
+        if ($existingPayment) {
+            Log::info('Payment already exists for this subscription. Skipping payment creation.');
+
+            return;
+        }
 
         Payment::create([
             'reference' => $paymentReference,
