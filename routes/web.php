@@ -112,12 +112,14 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
     Route::post('invoices', [ImportController::class, 'store'])->name('invoice.store');
     Route::post('/invoice-metrics/update/{siteId}', [InvoiceController::class, 'updateInvoiceMetrics']);
+    Route::get('/invoices/check', [InvoiceController::class, 'checkInvoices'])->name('invoices.check');
 });
 
 //Metrics
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('metrics', [MetricsController::class, 'index'])->name('metrics.index');
     Route::post('metrics', [MetricsController::class, 'store'])->name('metrics.store');
+
 });
 
 //Lang
