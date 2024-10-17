@@ -42,7 +42,7 @@ const buildHorizontalBarChart = () => {
                 },
                 series: [
                     { name: 'Pending', data: [totalPendingAmount] },
-                    { name: 'Overdue', data: [totalOverdueAmount] }
+                    { name: 'InvoiceOverdue', data: [totalOverdueAmount] }
                 ],
                 colors: ['#22d3ee', '#e5e7eb'],
                 plotOptions: {
