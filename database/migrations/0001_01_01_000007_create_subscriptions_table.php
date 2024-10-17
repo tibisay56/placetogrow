@@ -32,6 +32,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('email');
             $table->string('name');
+            $table->string('surname');
             $table->string('document_number');
             $table->string('document_type');
 
@@ -45,6 +46,7 @@ return new class extends Migration
             $table->date('next_billing_date')->nullable();
             $table->integer('plan_months')->default(12);
             $table->integer('months_charged')->default(0);
+            $table->boolean('notified_before_charge')->default(false);
             $table->enum('status', SubscriptionStatus::toArray());
             $table->timestamps();
         });
