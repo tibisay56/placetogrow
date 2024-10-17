@@ -26,6 +26,7 @@ class SubscriptionFactory extends Factory
             'status' => $this->faker->randomElement(SubscriptionStatus::toArray()),
             'email' => $this->faker->unique()->safeEmail(),
             'name' => $this->faker->word(),
+            'surname' => $this->faker->word(),
             'document_number' => $this->faker->unique()->numerify('##########'),
             'document_type' => $this->faker->randomElement(DocumentTypes::toArray()),
             'token' => Str::random(70),
