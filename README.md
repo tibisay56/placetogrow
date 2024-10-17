@@ -31,15 +31,64 @@ A web platform for managing microsites, enabling administrators to register user
         cp .env.example .env
         php artisan key:generate
 ```
-4. Run migrations to create the database tables:
+4. Edit the .env file to configure the database connection for MySQL.
+```
+        DB_CONNECTION=mysql
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE=microsites
+        DB_USERNAME=root
+        DB_PASSWORD=your_password
+```
+
+5. Add PlaceToPay credentials to the .env file.
+```
+        PLACETOPAY_LOGIN=your_placetopay_login
+        PLACETOPAY_SECRET_KEY=your_placetopay_secret_key
+        PLACETOPAY_URL=your_placetopay_url
+```
+
+6. Run migrations to create the database tables:
 
 ```
         php artisan migrate
 ```
-5. Start the development server:
+
+7. Seed the database with initial data:
+
+```
+        php artisan db:seed
+```
+
+8. Create a symbolic link for storage:
+
+```
+        php artisan storage:link
+```
+
+9. Compile and watch frontend assets:
+
+```
+        npm run dev
+```
+
+10. Start the development server:
 
 ```
         php artisan serve
+```
+
+11. User credentials:
+
+```
+        Admin user:
+        Email: admin@admin.com
+        Password: password
+        
+        Customer user:
+        Email: customer@example.com
+        Password: password
+        
 ```
 
 
@@ -52,5 +101,4 @@ Contributions are welcome. If you find any issues or have a suggestion, please o
 
 Microsites is licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-=======
 

@@ -40,6 +40,16 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
                     PermissionSlug::PAYMENTS_DELETE,
 
                     PermissionSlug::VIEW_TRANSACTIONS,
+
+                    PermissionSlug::PLANS_VIEW_ANY,
+                    PermissionSlug::PLANS_VIEW,
+                    PermissionSlug::PLANS_CREATE,
+                    PermissionSlug::PLANS_UPDATE,
+                    PermissionSlug::PLANS_DELETE,
+
+                    PermissionSlug::SUBSCRIPTIONS_VIEW,
+                    PermissionSlug::SUBSCRIPTIONS_DELETE,
+
                 ]),
             ],
             [
@@ -49,6 +59,9 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
                     PermissionSlug::SITES_VIEW,
 
                     PermissionSlug::VIEW_TRANSACTIONS,
+
+                    PermissionSlug::SUBSCRIPTIONS_VIEW,
+                    PermissionSlug::SUBSCRIPTIONS_DELETE,
                 ],
             ],
             [

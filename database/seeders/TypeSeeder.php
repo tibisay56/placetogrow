@@ -13,11 +13,14 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $types = array_map(function (string $name) {
+        Type::query()->delete();
 
-            return ['name' => $name, 'created_at' => now(), 'updated_at' => now()];
-        }, TypeName::toArray());
+        $types = TypeName::toArray();
 
-        Type::insert($types);
+        foreach ($types as $name) {
+            Type::create([
+                'name' => $name,
+            ]);
+        }
     }
 }

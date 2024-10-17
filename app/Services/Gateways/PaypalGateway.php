@@ -49,7 +49,7 @@ class PaypalGateway implements PaymentGateway
     {
         $this->data['buyer'] = [
             'name' => $data['name'],
-            'surname' => $data['lastname'],
+            'surname' => $data['last_name'],
             'email' => $data['email'],
             'documentType' => $data['documentType'],
             'document' => $data['document'],

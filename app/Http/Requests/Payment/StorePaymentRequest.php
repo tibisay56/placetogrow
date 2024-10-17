@@ -22,7 +22,7 @@ class StorePaymentRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:1', 'max:999999999999'],
             'currency' => ['required', Rule::in(CurrencyType::toArray())],
             'name' => ['required', 'string', 'min:3', 'max:20'],
-            'lastname' => ['required', 'string', 'min:3', 'max:20'],
+            'last_name' => ['required', 'string', 'min:3', 'max:20'],
             'email' => ['required', 'string', 'email'],
             'document_number' => ['required', 'numeric', 'digits_between:6,20'],
             'document_type' => ['required', Rule::in(DocumentTypes::toArray())],

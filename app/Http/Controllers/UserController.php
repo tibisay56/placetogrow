@@ -23,7 +23,7 @@ class UserController extends Controller
             ABORT(403);
         }
 
-        $users = User::with(['sites', 'roles'])->get();
+        $users = User::with(['site', 'roles'])->get();
 
         return inertia('User/Index', [
             'users' => $users,
@@ -36,11 +36,11 @@ class UserController extends Controller
             abort(403);
         }
 
-        $sites = Site::all();
+        $site = Site::all();
         $roles = Role::all();
 
         return inertia('User/Create', [
-            'sites' => $sites,
+            'site' => $site,
             'roles' => $roles,
         ]);
     }
@@ -53,6 +53,7 @@ class UserController extends Controller
 
         $data = $request->only(['name', 'email', 'password']);
         $data['password'] = bcrypt($data['password']);
+
         $storeUserAction->execute($data);
 
         return to_route('user.index')->with('message', 'User was created successfully!');
@@ -63,12 +64,14 @@ class UserController extends Controller
         if (! Auth::user()->can(PermissionSlug::USERS_VIEW)) {
             abort(403);
         }
-        $user->load(['roles', 'sites']);
+        $user->load(['roles', 'site']);
+        $sites = Site::all();
 
         return inertia('User/Show', [
             'user' => $user,
             'roles' => $user->roles,
-            'sites' => $user->sites,
+            'site' => $user->site,
+            'sites' => $sites,
         ]);
     }
 
@@ -77,9 +80,9 @@ class UserController extends Controller
         if (! Auth::user()->can(PermissionSlug::USERS_UPDATE)) {
             abort(403);
         }
-        $user->load(['roles', 'sites']);
-        $roles = Role::all();
+        $user->load(['roles', 'site']);
         $sites = Site::all();
+        $roles = Role::all();
 
         return inertia('User/Edit', [
             'user' => $user,

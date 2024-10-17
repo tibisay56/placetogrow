@@ -7,6 +7,7 @@ readonly class PaymentResponse
     public function __construct(
         public int $processIdentifier,
         public string $url,
+        public string $status,
     ) {
     }
 
@@ -15,6 +16,7 @@ readonly class PaymentResponse
         return [
             'url' => $this->url,
             'process_Identifier' => $this->processIdentifier,
+            'status' => $this->status,
         ];
     }
 }

@@ -63,7 +63,7 @@ const filteredPermissions = (category) => {
                                                 </a>
                                             </Link>
                                             <Link :href="route('role.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-600 text-white hover:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none">
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M5 12h14"/>
                                                         <path d="M12 5v14"/>
@@ -98,7 +98,7 @@ const filteredPermissions = (category) => {
                                                                     <td class="py-3 ps-4">
                                                                         <div class="flex space-x-20 ml-6">
                                                                             <div v-for="permission in filteredPermissions('users')" :key="permission.id" class="flex items-center h-5">
-                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-orange-600 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-orange-500 dark:checked:border-orange-500 dark:focus:ring-offset-gray-800">
                                                                                 <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
                                                                                     {{ $t (permission.name) }}
                                                                                 </label>
@@ -111,7 +111,7 @@ const filteredPermissions = (category) => {
                                                                     <td class="py-3 ps-4">
                                                                         <div class="flex space-x-20 ml-6">
                                                                             <div v-for="permission in filteredPermissions('sites')" :key="permission.id" class="flex items-center h-5">
-                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-orange-600 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-orange-500 dark:checked:border-orange-500 dark:focus:ring-offset-gray-800">
                                                                                 <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
                                                                                     {{ $t (permission.name) }}
                                                                                 </label>
@@ -124,7 +124,7 @@ const filteredPermissions = (category) => {
                                                                     <td class="py-3 ps-4">
                                                                         <div class="flex space-x-20 ml-6">
                                                                             <div v-for="permission in filteredPermissions('roles')" :key="permission.id" class="flex items-center h-5">
-                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-orange-600 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-orange-500 dark:checked:border-orange-500 dark:focus:ring-offset-gray-800">
                                                                                 <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
                                                                                     {{ $t (permission.name) }}
                                                                                 </label>
@@ -137,7 +137,7 @@ const filteredPermissions = (category) => {
                                                                     <td class="py-3 ps-4">
                                                                         <div class="flex space-x-20 ml-6">
                                                                             <div v-for="permission in filteredPermissions('payments')" :key="permission.id" class="flex items-center h-5">
-                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                                                                <input id="hs-table-search-checkbox-1" type="checkbox" v-model="selectedPermissions" :value="permission.id" class="border-gray-200 rounded text-orange-600 focus:ring-orange-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-orange-500 dark:checked:border-orange-500 dark:focus:ring-offset-gray-800">
                                                                                 <label class="ml-2 text-sm text-gray-800 dark:text-neutral-200">
                                                                                     {{ $t (permission.name) }}
                                                                                 </label>
