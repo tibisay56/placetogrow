@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\InvoiceDueSoon;
 use App\Mail\InvoiceOverdue;
 use App\Models\Invoice;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,13 +13,16 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class SendOverdueInvoiceAlert implements ShouldQueue
+class SendInvoiceAlerts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $invoice;
+
     protected $user;
+
     protected $alertType;
+
     /**
      * Create a new job instance.
      */
@@ -38,7 +40,6 @@ class SendOverdueInvoiceAlert implements ShouldQueue
     {
         $invoice = $this->invoice;
         $user = $invoice->user;
-
 
         Log::info("Enviando correo para la factura: {$invoice->reference} al usuario: {$this->user->email}");
 
