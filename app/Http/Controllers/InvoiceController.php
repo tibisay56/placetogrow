@@ -6,7 +6,6 @@ use App\Jobs\SendInvoiceAlerts;
 use App\Models\Invoice;
 use App\Models\Site;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -76,5 +75,4 @@ class InvoiceController extends Controller
 
         return response()->json(['message' => 'Alerts sent successfully.']);
     }
-
 }
