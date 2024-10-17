@@ -59,7 +59,7 @@ const buildPieChart = () => {
             }
         },
         series: [percentagePaid, percentagePending, percentageOverdue],
-        labels: ['Paid', 'Pending','Overdue'],
+        labels: ['Paid', 'Pending','InvoiceOverdue'],
         dataLabels: {
             style: {
                 fontSize: '20px',
