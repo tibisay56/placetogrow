@@ -2,6 +2,8 @@
 
 use App\Console\Commands\CreateMetrics;
 use App\Jobs\CalculateLateFee;
+use App\Jobs\SendInvoiceAlerts;
+use App\Models\Invoice;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -54,9 +56,20 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withSchedule(function (Schedule $schedule) {
+
         $schedule->command(CreateMetrics::class, ['date' => now()->subDay()->toDateString()])->daily();
-    })
-    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('app:before-payment')->daily();
+
         $schedule->job(new CalculateLateFee)->daily();
+
+        $invoicesToAlert = Invoice::where('due_date', '<=', now())
+            ->where('status', '!=', 'paid')
+            ->get();
+
+        foreach ($invoicesToAlert as $invoice) {
+            $user = $invoice->user;
+            $alertType = 'overdue';
+            $schedule->job(new SendInvoiceAlerts($invoice, $user, $alertType))->daily();
+        }
     })
     ->create();
