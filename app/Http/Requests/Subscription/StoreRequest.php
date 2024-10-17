@@ -19,6 +19,7 @@ class StoreRequest extends FormRequest
             'email' => ['required', 'string', 'email'],
             'plan_id' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:100'],
+            'surname' => ['required', 'string', 'max:100'],
             'document_number' => ['required', 'numeric', 'digits_between:6,20'],
             'document_type' => ['required', Rule::in(DocumentTypes::toArray())],
             'password' => 'required|string|min:8',
