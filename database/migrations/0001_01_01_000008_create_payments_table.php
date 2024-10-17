@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('reference')->unique();
+            $table->string('reference');
             $table->string('description', 100);
             $table->unsignedBigInteger('amount');
             $table->enum('currency', CurrencyType::toArray());
@@ -37,6 +37,8 @@ return new class extends Migration
             $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
             $table->boolean('collect')->default(false);
             $table->timestamps();
+
+            $table->unique(['reference', 'subscription_id'], 'unique_payment_reference_subscription');
 
             $table->dropForeign(['site_id']);
             $table->dropForeign(['subscription_id']);
