@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Mail\InvoiceDueSoon;
+use App\Mail\InvoiceOverdue;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -10,17 +12,23 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class SendInvoiceAlerts implements ShouldQueue
+class SendOverdueInvoiceAlert implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $invoice;
+    protected $user;
+    protected $alertType;
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(Invoice $invoice, $user, $alertType)
     {
-        //
+        $this->invoice = $invoice;
+        $this->user = $user;
+        $this->alertType = $alertType;
     }
 
     /**
@@ -28,24 +36,16 @@ class SendInvoiceAlerts implements ShouldQueue
      */
     public function handle(): void
     {
+        $invoice = $this->invoice;
+        $user = $invoice->user;
 
-        $upcomingInvoices = Invoice::where('status', 'pending')
-            ->where('due_date', '<=', Carbon::now()->addDays(3))
-            ->where('due_date', '>', Carbon::now())
-            ->get();
 
-        foreach ($upcomingInvoices as $invoice) {
-            Log::info("Factura próxima a vencer: {$invoice->reference}");
-            // Mail::to($invoice->customer_email)->send(new InvoiceDueSoon($invoice));
-        }
+        Log::info("Enviando correo para la factura: {$invoice->reference} al usuario: {$this->user->email}");
 
-        $overdueInvoices = Invoice::where('status', '!=', 'paid')
-            ->where('due_date', '<', Carbon::now())
-            ->get();
-
-        foreach ($overdueInvoices as $invoice) {
-            Log::info("Factura vencida: {$invoice->reference}");
-            // Mail::to($invoice->customer_email)->send(new InvoiceOverdue($invoice));
+        if ($this->alertType === 'due_soon') {
+            Mail::to($user->email)->send(new InvoiceDueSoon($user, $invoice->reference, $invoice->amount));
+        } elseif ($this->alertType === 'overdue') {
+            Mail::to($user->email)->send(new InvoiceOverdue($user, $invoice->reference, $invoice->amount));
         }
     }
 }
