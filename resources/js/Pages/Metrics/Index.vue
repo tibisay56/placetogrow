@@ -102,7 +102,7 @@ function handleSiteChange() {
                         <div class="p-4 md:p-5 flex justify-between gap-x-3">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-                                    Total invoices
+                                    {{$t('Total invoices')}}
                                 </p>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
@@ -117,7 +117,7 @@ function handleSiteChange() {
                                 </div>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        Amount:
+                                        {{$t('Amount')}}:
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         ${{ metric.totalAmount}}
@@ -131,7 +131,7 @@ function handleSiteChange() {
                         </div>
 
                         <a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-                            View reports
+                            {{$t('View reports')}}
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </a>
                     </div>
@@ -142,14 +142,14 @@ function handleSiteChange() {
                         <div class="p-4 md:p-5 flex justify-between gap-x-3">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-                                    Paid
+                                    {{$t('Paid')}}
                                 </p>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalPaid }}
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        from
+                                        {{$t('from')}}
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalInvoices }}
@@ -157,7 +157,7 @@ function handleSiteChange() {
                                 </div>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        Amount:
+                                        {{$t('Amount')}}:
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         ${{ metric.totalPaidAmount}}
@@ -170,7 +170,7 @@ function handleSiteChange() {
                         </div>
 
                         <a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-                            View reports
+                            {{$t('View reports')}}
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </a>
                     </div>
@@ -181,14 +181,14 @@ function handleSiteChange() {
                         <div class="p-4 md:p-5 flex justify-between gap-x-3">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-                                    Pending
+                                    {{$t('Pending')}}
                                 </p>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalPending }}
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        from
+                                        {{$t('from')}}
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalInvoices }}
@@ -196,7 +196,7 @@ function handleSiteChange() {
                                 </div>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        Amount:
+                                        {{$t('Amount')}}:
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         ${{ metric.totalPendingAmount}}
@@ -209,7 +209,7 @@ function handleSiteChange() {
                         </div>
 
                         <a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-                            View reports
+                            {{$t('View reports')}}
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </a>
                     </div>
@@ -220,14 +220,14 @@ function handleSiteChange() {
                         <div class="p-4 md:p-5 flex justify-between gap-x-3">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
-                                    Overdue
+                                    {{$t('Overdue')}}
                                 </p>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalOverdue }}
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        from
+                                        {{$t('from')}}
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         {{ metric.totalInvoices }}
@@ -235,7 +235,7 @@ function handleSiteChange() {
                                 </div>
                                 <div class="mt-1 flex items-center gap-x-2">
                                     <p class="mt-1 text-sm text-gray-800 dark:text-neutral-200">
-                                        Amount:
+                                        {{$t('Amount')}}:
                                     </p>
                                     <h3 class="mt-1 text-xl font-medium text-gray-800 dark:text-neutral-200">
                                         ${{ metric.totalOverdueAmount}}
@@ -248,7 +248,7 @@ function handleSiteChange() {
                         </div>
 
                         <a class="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 rounded-b-xl dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
-                            View reports
+                            {{$t('View reports')}}
                             <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                         </a>
 
@@ -260,13 +260,13 @@ function handleSiteChange() {
                 <!-- Card -->
                 <div  v-if="form.site_id && form.site_id !== 'all'" class="mt-10 p-4 md:p-5 min-h-[410px] flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
                     <!-- Header -->
-                    <div class="flex justify-between items-center">
+                    <div  v-for="metric in filteredMetrics" :key="metric.site.id"  class="flex justify-between items-center">
                         <div>
                             <h2 class="text-sm text-gray-500 dark:text-neutral-500">
-                                Total Invoices
+                                {{$t('Total Invoices')}}
                             </h2>
                             <p class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                               Amount
+                                ${{ metric.totalAmount}}
                             </p>
                         </div>
 
@@ -286,13 +286,13 @@ function handleSiteChange() {
                 <!-- Card -->
                 <div  v-if="form.site_id && form.site_id !== 'all'" class="mt-10 p-4 md:p-5 min-h-[410px] flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
                     <!-- Header -->
-                    <div class="flex justify-between items-center">
+                    <div v-for="metric in filteredMetrics" :key="metric.site.id" class="flex justify-between items-center">
                         <div>
                             <h2 class="text-sm text-gray-500 dark:text-neutral-500">
-                                Paid Invoices vs Pending Invoices
+                                {{$t('Paid Invoices vs Pending Invoices')}}
                             </h2>
                             <p class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                                Amount
+                                ${{ metric.totalPaidAmount}}
                             </p>
                         </div>
                         <div>
@@ -314,10 +314,10 @@ function handleSiteChange() {
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-sm text-gray-500 dark:text-neutral-500">
-                                Pending Invoices vs Overdue Invoices
+                                {{$t('Pending Invoices vs Overdue Invoices')}}
                             </h2>
                             <p class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                                ${{ metric.pendingMinusOverdueAmount }}
+                                ${{ metric.totalPendingAmount}}
                             </p>
                         </div>
 
