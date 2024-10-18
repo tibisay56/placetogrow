@@ -10,4 +10,11 @@ enum BillingFrequency: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function text(): string
+    {
+        return match ($this) {
+            self::MONTHLY => 'Monthly',
+        };
+    }
 }
