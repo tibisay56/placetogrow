@@ -7,15 +7,15 @@
             <div class="flex justify-center sm:justify-end items-center gap-x-4 mt-3 sm:mt-6">
                 <div class="inline-flex items-center">
                     <span class="size-2.5 inline-block bg-blue-600 rounded-sm me-2"></span>
-                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">Paid</span>
+                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">{{$t('Paid')}}</span>
                 </div>
                 <div class="inline-flex items-center">
                     <span class="size-2.5 inline-block bg-cyan-500 rounded-sm me-2"></span>
-                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">Pending</span>
+                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">{{$t('Pending')}}</span>
                 </div>
                 <div class="inline-flex items-center">
                     <span class="size-2.5 inline-block bg-gray-300 rounded-sm me-2 dark:bg-neutral-700"></span>
-                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">Overdue</span>
+                    <span class="text-[13px] text-gray-600 dark:text-neutral-400">{{$t('Overdue')}}</span>
                 </div>
             </div>
             <!-- End Legend Indicator -->
