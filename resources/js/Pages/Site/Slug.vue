@@ -168,7 +168,7 @@ onMounted(() => {
 
                         <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
                             <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Billing contact
+                                {{ $t( 'Billing contact')}}
                             </label>
                             <div class="flex flex-col sm:flex-row gap-4">
                                 <div class="mt-2 space-y-3 sm:w-1/2">
@@ -191,7 +191,7 @@ onMounted(() => {
                     <form @submit.prevent="submit">
                         <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
                             <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
-                                Payment Method
+                                {{ $t ('Payment Method')}}
                             </label>
                             <div class="flex flex-col sm:flex-row gap-4">
                                 <div class="mt-2 space-y-3 sm:w-1/2">
