@@ -102,7 +102,7 @@ const capitalize = (text) => {
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
 
                                             <div class="mt-4">
-                                                <InputLabel for="plan_type_id" :value="$t('Plan type')" />
+                                                <InputLabel for="plan_type_id" :value="$t('Plan Type')" />
                                                 <select v-model="form.plan_type_id" name="plan_type_id" id="plan_type_id"
                                                         class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="(planType, index) in planTypes" :key="index+1" :value="index+1">{{ $t(planType) }} </option>
@@ -140,7 +140,7 @@ const capitalize = (text) => {
                                             </div>
 
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration (Days)')" />
                                                 <TextInput v-model="form.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.subscription_expiration" />
                                             </div>

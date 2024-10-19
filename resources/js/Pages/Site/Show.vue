@@ -123,9 +123,9 @@ const props = defineProps({
                                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                                                     <thead class="bg-gray-50 dark:bg-neutral-700">
                                                     <tr>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Name</th>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Email</th>
-                                                        <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Action</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Name')}}</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Email')}}</th>
+                                                        <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Action')}} </th>
                                                     </tr>
                                                     </thead>
                                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
@@ -136,7 +136,7 @@ const props = defineProps({
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
                                                                 {{ site.user.email }}</td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                                                <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">Delete</button>
+                                                                <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">{{ $t ('Delete') }}</button>
                                                             </td>
                                                         </tr>
                                                     </template>
@@ -165,11 +165,11 @@ const props = defineProps({
                                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                                                     <thead class="bg-gray-50 dark:bg-neutral-700">
                                                     <tr>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Order</th>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Amount</th>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Date</th>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Customer</th>
-                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Payment Status</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Order') }}</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Amount') }}</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Date') }}</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Customer') }}</th>
+                                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Payment Status') }}</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">

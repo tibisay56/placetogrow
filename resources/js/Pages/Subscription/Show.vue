@@ -46,7 +46,7 @@ const capitalize = (text) => {
                                         {{ $t('Show Subscriptions') }}
                                     </h2>
                                     <p class="text-sm text-gray-600 dark:text-neutral-400">
-                                        {{ $t('Add subscriptions, edit and more.') }}
+                                        {{ $t('Add Subscriptions, edit and more.') }}
                                     </p>
                                 </div>
                                 <div>
@@ -111,7 +111,7 @@ const capitalize = (text) => {
                                             </div>
 
                                             <div>
-                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration')" />
+                                                <InputLabel for="subscription_expiration" :value="$t('Plan Expiration (Days)')" />
                                                 <TextInput v-model="form.plan.subscription_expiration" id="subscription_expiration" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.plan_subscription_expiration" />
                                             </div>
