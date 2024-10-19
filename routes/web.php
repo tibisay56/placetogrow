@@ -94,6 +94,12 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/return/{subscription}', [SubscriptionController::class, 'return'])->name('subscription.return');
 });
 
+Route::post('/subscriptions/{subscription}/pay', [SubscriptionController::class, 'paySubscription'])
+    ->name('subscriptions.pay');
+
+Route::post('/subscriptions/{subscription}/retry', [SubscriptionController::class, 'retryPayment'])
+    ->name('subscriptions.retry');
+
 //Import
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('imports', [ImportController::class, 'index'])->name('import.index');
