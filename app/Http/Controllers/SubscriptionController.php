@@ -388,6 +388,7 @@ class SubscriptionController extends Controller
             return response()->json(['message' => 'Payment successful']);
         } else {
             RetryPaymentJob::dispatch($subscription);
+
             return response()->json(['message' => 'Payment failed, retrying...']);
         }
     }
@@ -399,6 +400,7 @@ class SubscriptionController extends Controller
         }
 
         RetryPaymentJob::dispatch($subscription);
+
         return response()->json(['message' => 'Retry payment job dispatched']);
     }
 }
