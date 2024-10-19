@@ -43,6 +43,10 @@ return new class extends Migration
 
             $table->date('start_date')->default(now())->change();
             $table->date('end_date')->nullable()->change();
+
+            $table->integer('retry_count')->default(0);
+            $table->timestamp('next_retry_at')->nullable();
+            $table->unsignedInteger('payment_attempts')->default(0);
             $table->date('next_billing_date')->nullable();
             $table->integer('plan_months')->default(12);
             $table->integer('months_charged')->default(0);
