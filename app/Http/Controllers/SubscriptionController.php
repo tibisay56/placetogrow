@@ -7,6 +7,7 @@ use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
 use App\Constants\SubscriptionStatus;
 use App\Http\Requests\Subscription\StoreRequest;
+use App\Jobs\RetryPaymentJob;
 use App\Mail\ConfirmationMail;
 use App\Models\Invoice;
 use App\Models\Payment;
@@ -14,9 +15,12 @@ use App\Models\Plan;
 use App\Models\Site;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Services\Gateways\PlacetoPayGateway;
+use App\Services\Payments\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -368,5 +372,33 @@ class SubscriptionController extends Controller
             Log::error('Failed to invalidate token: '.$response->body());
             throw new \Exception('Could not invalidate the token. Please try again later.');
         }
+    }
+
+    public function paySubscription(Subscription $subscription, Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find($subscription->user_id);
+
+        $gateway = app(PlacetoPayGateway::class);
+        $payment = new Payment();
+        $paymentService = new PaymentService($payment, $gateway);
+
+        $paymentResult = $paymentService->collect($subscription, $user);
+
+        if ($paymentResult) {
+            return response()->json(['message' => 'Payment successful']);
+        } else {
+            RetryPaymentJob::dispatch($subscription);
+            return response()->json(['message' => 'Payment failed, retrying...']);
+        }
+    }
+
+    public function retryPayment(Subscription $subscription): \Illuminate\Http\JsonResponse
+    {
+        if ($subscription->status !== 'pending') {
+            return response()->json(['message' => 'Payment retry not needed'], 400);
+        }
+
+        RetryPaymentJob::dispatch($subscription);
+        return response()->json(['message' => 'Retry payment job dispatched']);
     }
 }
