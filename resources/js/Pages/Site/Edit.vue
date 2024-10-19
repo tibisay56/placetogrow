@@ -202,7 +202,7 @@ return dynamicFields.value.every(field => field.name.trim() !== '' && field.fiel
                                                     <div v-for="(field, index) in dynamicFields" :key="index" class="flex items-center gap-4 mb-4">
                                                         <div class="flex-1">
                                                             <!-- Nombre del campo -->
-                                                            <InputLabel :for="'name_' + index" :value="$t('Name')" />
+                                                            <InputLabel :for="'name_' + index" :value="$t('Field Name')" />
                                                             <TextInput
                                                                 :id="'name_' + index"
                                                                 type="text"
