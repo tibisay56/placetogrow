@@ -373,7 +373,6 @@ class SubscriptionController extends Controller
             throw new \Exception('Could not invalidate the token. Please try again later.');
         }
     }
-
     public function paySubscription(Subscription $subscription, Request $request): \Illuminate\Http\JsonResponse
     {
         $user = User::find($subscription->user_id);
