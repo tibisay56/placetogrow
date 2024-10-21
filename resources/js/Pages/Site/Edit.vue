@@ -5,13 +5,15 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {ref, watch} from 'vue';
+import { computed, ref } from 'vue';
 import Layout from "@/Components/Layout.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const page = usePage();
 const site = ref(page.props.site);
 const types = ref(page.props.types);
 const currencies = ref(page.props.currencies);
+const field_types = ref(page.props.field_types);
 
 const form = useForm({
     name: site.value.name,
@@ -20,9 +22,10 @@ const form = useForm({
     user_id: site.value.user_id,
     category: site.value.category,
     currency: site.value.currency,
-    payment_expiration_time: 30,
+    payment_expiration_time: String(30),
+    required_fields: site.value.required_fields,
+    field_type: site.value.field_type,
 });
-
 const onSelectAvatar = (e) => {
     const files = e.target.files;
     if (files.length) {
@@ -31,22 +34,63 @@ const onSelectAvatar = (e) => {
 };
 
 const submit = () => {
+    if(dynamicFields.value[dynamicFields.value.length - 1].name=="" && dynamicFields.value[dynamicFields.value.length - 1].field_type=="" ){
+        dynamicFields.value.pop();
+    }
+
+    dynamicFields.value.forEach(item => {
+        item.required = true;
+        item.value = "";
+    });
+    console.log(form.required_fields);
+    form.required_fields = [...form.required_fields, ...dynamicFields.value];
+
     form.post(route('site.update', site.value),{
         onSuccess: (e) => {
             site.value = e.props.contact;
         }
     })
+
 }
 
-watch(site, (newValue) => {
-    console.log('Updated Site:', newValue);
-});
-
 const props = defineProps({
-    types: Array,
-    currencies: Array,
+types: Array,
+currencies: Array,
+field_types: Array,
 });
 
+const dynamicFields = ref([
+{ name: '', field_type: '' }
+]);
+
+const addField = () => {
+const allFieldsValid = dynamicFields.value.every(field => field.name.trim() !== '' && field.field_type.trim() !== '');
+
+if (allFieldsValid) {
+    dynamicFields.value.push({
+        name: '',
+        field_type: ''
+    });
+} else {
+    alert('Please fill out all fields before adding a new row.');
+}
+};
+const removeField = (index) => {
+if (dynamicFields.value.length > 1) {
+    dynamicFields.value.splice(index, 1);
+}
+};
+
+const removeFieldRequire = (index) => {
+    if (form.required_fields.length > 1) {
+        form.required_fields.splice(index, 1);
+        console.log(form.required_fields);
+    }
+};
+
+const canAddField = computed(() => {
+return dynamicFields.value.every(field => field.name.trim() !== '' && field.field_type.trim() !== '');
+});
 
 </script>
 
@@ -101,7 +145,7 @@ const props = defineProps({
                                                 <div>
                                                     <InputLabel for="type_id" :value="$t('Type')" />
                                                     <select v-model="form.type_id" name="type_id" id="type_id"
-                                                            class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                            class="capitalize w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                         <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
                                                     </select>
                                                     <InputError class="mt-2" :message="form.errors.type_id" />
@@ -122,7 +166,7 @@ const props = defineProps({
                                                     <InputError class="mt-2" :message="form.errors.currency" />
                                                 </div>
                                                 <div>
-                                                    <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                    <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (Minutes)')" />
                                                     <TextInput id="payment_expiration_time" type="number" class="mt-1 block w-full" v-model="form.payment_expiration_time" />
                                                     <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                                 </div>
@@ -138,6 +182,91 @@ const props = defineProps({
                                                         <InputError class="mt-2" :message="form.errors.avatar" />
                                                     </form>
                                                 </div>
+                                                <!--FIELD-->
+                                                <div class="space-y-4">
+                                                    <div v-for="(field, index) in form.required_fields" :key="index" class="flex items-center gap-2 ml-1.3">
+                                                    <input v-model="form[field.name]" :id="field.name" :type="field.field_type" :placeholder="field.name.charAt(0).toUpperCase() + field.name.slice(1)" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"><InputError :message="form.errors[field.name]" class="mt-2" />
+                                                        <button
+                                                            type="button"
+                                                            class="inline-flex items-center justify-center gap-x-2 p-2 text-sm font-medium bg-transparent text-red-500 focus:outline-none focus:ring-0 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-700 dark:focus:bg-red-700"
+                                                            @click="removeFieldRequire(index)"
+                                                            aria-label="Remove Field"
+                                                        >
+                                                            <font-awesome-icon :icon="['fas', 'trash']" class="text-lg"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Campos dinámicos -->
+                                                <div>
+                                                    <div v-for="(field, index) in dynamicFields" :key="index" class="flex items-center gap-4 mb-4">
+                                                        <div class="flex-1">
+                                                            <!-- Nombre del campo -->
+                                                            <InputLabel :for="'name_' + index" :value="$t('Field Name')" />
+                                                            <TextInput
+                                                                :id="'name_' + index"
+                                                                type="text"
+                                                                class="mt-1 block w-full"
+                                                                autocomplete="name"
+                                                                placeholder="Name"
+                                                                v-model="field.name"
+                                                            />
+                                                            <InputError class="mt-2" :message="form.errors.name" />
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <!-- Tipo de campo -->
+                                                            <InputLabel :for="'field_type_' + index" :value="$t('Field Type')" />
+                                                            <select
+                                                                v-model="field.field_type"
+                                                                :name="'field_type_' + index"
+                                                                :id="'field_type_' + index"
+                                                                class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                                            >
+                                                                <option v-for="fieldType in field_types" :key="fieldType" :value="fieldType">
+                                                                    {{ fieldType }}
+                                                                </option>
+                                                            </select>
+                                                            <InputError class="mt-2" :message="form.errors.field_type" />
+                                                        </div>
+
+                                                        <div class="flex items-center gap-2 ml-4">
+                                                            <button
+                                                                type="button"
+                                                                class="mt-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+                                                                @click="addField"
+                                                                :disabled="!canAddField"
+                                                                aria-label="Add Field"
+                                                            >
+                                                                <svg
+                                                                    class="shrink-0 size-6"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="32"
+                                                                    height="32"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="2"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                >
+                                                                    <path d="M5 12h14"></path>
+                                                                    <path d="M12 5v14"></path>
+                                                                </svg>
+                                                            </button>
+
+                                                            <!-- Botón de eliminar -->
+                                                            <button
+                                                                type="button"
+                                                                class="mt-6 inline-flex items-center justify-center gap-x-2 p-2 text-sm font-medium bg-transparent text-red-500 focus:outline-none focus:ring-0 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-700 dark:focus:bg-red-700"
+                                                                @click="removeField(index)"
+                                                                aria-label="Remove Field"
+                                                            >
+                                                                <font-awesome-icon :icon="['fas', 'trash']" class="text-lg"/>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="flex justify-center">
                                                     <PrimaryButton>
                                                         {{ $t('Update Site') }}
@@ -157,20 +286,20 @@ const props = defineProps({
                                                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                                                             <thead class="bg-gray-50 dark:bg-neutral-700">
                                                             <tr>
-                                                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Name</th>
-                                                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Email</th>
-                                                                <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">Action</th>
+                                                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Name') }}</th>
+                                                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-400">{{ $t ('Email') }}</th>
+                                                                <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-400"> {{ $t ('Action') }}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                                            <template v-if="site.users.length > 0">
-                                                            <tr v-for="user in site.users" :key="user.id">
+                                                            <template v-if="site.user">
+                                                            <tr>
                                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                                                    {{ user.name }}</td>
+                                                                    {{ site.user.name }}</td>
                                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                                                    {{ user.email }}</td>
+                                                                    {{ site.user.email }}</td>
                                                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                                                    <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">Delete</button>
+                                                                    <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">{{ $t ('Delete')}}</button>
                                                                 </td>
                                                             </tr>
                                                             </template>

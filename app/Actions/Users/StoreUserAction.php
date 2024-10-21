@@ -3,7 +3,6 @@
 namespace App\Actions\Users;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class StoreUserAction
 {
@@ -12,7 +11,7 @@ class StoreUserAction
         $user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->password = Hash::make('password');
+        $user->password = $data['password'];
         $user->save();
 
         return $user;

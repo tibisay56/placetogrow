@@ -7,13 +7,19 @@ import FileInput from "@/Components/FileInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
 
+const minExpirationTime = 1;
+const maxExpirationTime = 1440;
+
+const getRandomExpirationTime = () => Math.floor(Math.random() * (maxExpirationTime - minExpirationTime + 1)) + minExpirationTime;
+
+
 const form = useForm({
     name: "",
     avatar: null,
     type_id: "",
     category: "",
     currency: "",
-    payment_expiration_time: 30,
+    payment_expiration_time: getRandomExpirationTime(),
 });
 
 const onSelectAvatar = (e) => {
@@ -21,7 +27,6 @@ const onSelectAvatar = (e) => {
     if (files.length) {
         form.avatar = files[0];
     }
-    console.log(form.avatar);
 };
 
 const submit = () => {
@@ -64,7 +69,7 @@ const props = defineProps({
                                                 </a>
                                             </Link>
                                             <Link :href="route('site.create')">
-                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" >
+                                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" >
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                                                     {{ $t('Add site') }}
                                                 </a>
@@ -78,12 +83,12 @@ const props = defineProps({
                                         <form class="w-1/2 py-5 space-y-3" @submit.prevent="submit">
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                             <div class="mt-4">
-                                                <InputLabel :for="name" :value="$t('Name')" />
+                                                <InputLabel for="name" :value="$t('Name')" />
                                                 <TextInput v-model="form.name" id="name" type="text" class="mt-1 block w-full" autocomplete="name" :placeholder="$t('Name')"/>
                                                 <InputError class="mt-2" :message="form.errors.name" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="type_id" :value="$t('Type')" />
+                                                <InputLabel for="type_id" :value="$t('Type')" />
                                                 <select v-model="form.type_id" name="type_id" id="type_id"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="(type, index) in types" :key="index+1" :value="index+1">{{ $t(type) }}</option>
@@ -92,13 +97,13 @@ const props = defineProps({
                                             </div>
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel :for="category" :value="$t('Category')" />
+                                                <InputLabel for="category" :value="$t('Category')" />
                                                 <TextInput v-model="form.category" id="category" type="text" class="mt-1 block w-full"  :placeholder="$t('Category')"/>
                                                 <InputError class="mt-2" :message="form.errors.category" />
                                             </div>
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                             <div>
-                                                <InputLabel :for="currency" :value="$t('Currency')" />
+                                                <InputLabel for="currency" :value="$t('Currency')" />
                                                 <select v-model="form.currency" name="currency" id="currency"
                                                         class="w-full mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                                     <option v-for="(currency, key) in currencies" :key="key" :value="key">{{ $t(currency) }}</option>
@@ -106,7 +111,7 @@ const props = defineProps({
                                                 <InputError class="mt-2" :message="form.errors.currency" />
                                             </div>
                                             <div>
-                                                <InputLabel :for="payment_expiration_time" :value="$t('Payment Expiration Time')" />
+                                                <InputLabel for="payment_expiration_time" :value="$t('Payment Expiration Time (Minutes)')" />
                                                 <TextInput v-model="form.payment_expiration_time" id="payment_expiration_time" type="number" class="mt-1 block w-full"  />
                                                 <InputError class="mt-2" :message="form.errors.payment_expiration_time" />
                                             </div>

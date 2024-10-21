@@ -6,6 +6,7 @@ use App\Constants\CurrencyType;
 use App\Constants\PaymentGateway;
 use App\Constants\PaymentStatus;
 use App\Models\Site;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -28,8 +29,10 @@ class PaymentFactory extends Factory
             'currency' => CurrencyType::USD->name,
             'gateway' => PaymentGateway::PLACETOPAY->value,
             'status' => $this->faker->randomElement(PaymentStatus::toArray()),
-            'site_id' => Site::inRandomOrder()->first()->id,
+            'site_id' => Site::factory(),
+            'user_id' => User::factory(),
             'payer_name' => $this->faker->name(),
+            'required_fields' => [],
         ];
     }
 }

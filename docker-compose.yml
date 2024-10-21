@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: microsites
+      DB_USERNAME: root
+      DB_PASSWORD: silver182
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: microsites
+      MYSQL_USER: user
+      MYSQL_PASSWORD: silver182
+      MYSQL_ROOT_PASSWORD: silver182
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  db_data:

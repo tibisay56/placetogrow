@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('category', 100);
             $table->enum('currency', CurrencyType::toArray());
             $table->integer('payment_expiration_time')->default(1440);
-            $table->foreignId('type_id')->constrained();
+            $table->foreignId('type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->json('required_fields')->nullable();
             $table->timestamps();
         });
     }

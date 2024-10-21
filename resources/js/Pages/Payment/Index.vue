@@ -8,6 +8,8 @@ import {format} from "date-fns";
 const page = usePage()
 const payments = ref(page.props.payments || []);
 
+payments.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
 const colorByStatus = {
     approved: 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500',
     approved_partial: 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500',
@@ -39,6 +41,14 @@ const formatDate = (dateString) => {
                     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                         <!-- Header -->
                         <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                                    {{ $t('Transactions') }}
+                                </h2>
+                                <p class="text-sm text-gray-600 dark:text-neutral-400">
+                                    {{ $t('View your transactions') }}
+                                </p>
+                            </div>
                             <!-- Input -->
                             <div class="sm:col-span-1">
                                 <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
@@ -65,11 +75,17 @@ const formatDate = (dateString) => {
                                         <span class="sr-only">Checkbox</span>
                                     </label>
                                 </th>
-
                                 <th scope="col" class="pe-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200 ms-4">
-                                          Order
+                                          {{ $t ('Site')}}
+                                        </span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="pe-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200 ms-4">
+                                          {{ $t ('Order')}}
                                         </span>
                                     </div>
                                 </th>
@@ -77,7 +93,14 @@ const formatDate = (dateString) => {
                                 <th scope="col" class="pe-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                          Amount
+                                          {{ $t ('Amount')}}
+                                        </span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                          {{ $t ('Date')}}
                                         </span>
                                     </div>
                                 </th>
@@ -85,7 +108,7 @@ const formatDate = (dateString) => {
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                          Date
+                                          {{ $t ('Customer')}}
                                         </span>
                                     </div>
                                 </th>
@@ -93,7 +116,7 @@ const formatDate = (dateString) => {
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                          Customer
+                                          {{ $t ('Payment Status')}}
                                         </span>
                                     </div>
                                 </th>
@@ -101,7 +124,7 @@ const formatDate = (dateString) => {
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                          Payment Status
+                                          {{ $t ('Payment Method')}}
                                         </span>
                                     </div>
                                 </th>
@@ -109,7 +132,7 @@ const formatDate = (dateString) => {
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                          Payment Method
+                                          {{ $t ('Required Field')}}
                                         </span>
                                     </div>
                                 </th>
@@ -127,6 +150,11 @@ const formatDate = (dateString) => {
                                             <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-2">
                                             <span class="sr-only">Checkbox</span>
                                         </label>
+                                    </div>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="text-sm text-gray-600 dark:text-neutral-400">{{ payment.site.name }}</span>
                                     </div>
                                 </td>
                                 <td class="size-px whitespace-nowrap">
@@ -178,6 +206,16 @@ const formatDate = (dateString) => {
                                         </div>
                                     </div>
                                 </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="pe-6 py-2">
+                                        <span
+                                            v-for="(field, index) in payment.required_fields"
+                                            :key="index"
+                                            class="text-sm text-gray-600 dark:text-neutral-400">
+                                            {{ field.name }}: {{ field.value }}
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
 
                             </tbody>
@@ -201,11 +239,11 @@ const formatDate = (dateString) => {
                                 <div class="inline-flex gap-x-2">
                                     <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
                                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                                        Prev
+                                        {{ $t('Prev')}}
                                     </button>
 
                                     <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                                        Next
+                                        {{ $t('Next')}}
                                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                                     </button>
                                 </div>

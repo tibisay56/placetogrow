@@ -1,25 +1,27 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Layout from "@/Components/Layout.vue";
-import {ref} from "vue";
+import FileInput from "@/Components/FileInput.vue";
 
-const { props } = usePage();
-const roles = ref(props.roles || []);
-
-console.log(props.roles);
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    photo: null,
     roles: [],
 });
 
+const onSelectPhoto = (e) => {
+    const files = e.target.files;
+    if (files.length) {
+        form.avatar = files[0];
+    }
+};
 
 const submit = () => {
     form.post(route('user.store'));
@@ -82,6 +84,15 @@ const submit = () => {
                                                     <TextInput v-model="form.password_confirmation" id="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" :placeholder="$t('Confirm Password')"/>
                                                     <InputError :message="form.errors.password_confirmation" class="mt-2" />
                                                 </div>
+                                                <form class="max-w-sm">
+                                                    <InputLabel for="photo" :value="$t('Photo')" />
+                                                    <FileInput name="photo" @change="onSelectPhoto" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
+                                                                file:bg-gray-50 file:border-0
+                                                                file:me-4
+                                                                file:py-3 file:px-4
+                                                                dark:file:bg-neutral-700 dark:file:text-neutral-400"/>
+                                                    <InputError class="mt-2" :message="form.errors.photo" />
+                                                </form>
                                             </div>
                                             <div class="flex justify-center">
                                                 <PrimaryButton>

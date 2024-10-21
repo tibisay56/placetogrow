@@ -7,6 +7,7 @@ use App\Actions\Sites\StoreAction;
 use App\Actions\Sites\UpdateAction;
 use App\Constants\CurrencyType;
 use App\Constants\DocumentTypes;
+use App\Constants\FieldType;
 use App\Constants\PaymentGateway;
 use App\Constants\PermissionSlug;
 use App\Constants\TypeName;
@@ -15,8 +16,10 @@ use App\Http\Requests\Site\UpdateRequest;
 use App\Models\Payment;
 use App\Models\Site;
 use App\Models\Type;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,10 +27,14 @@ class SiteController extends Controller
 {
     public function index(): Response
     {
-        if (! Auth::user()->can(PermissionSlug::SITES_VIEW)) {
-            abort(403);
+
+        $user = Auth::user();
+
+        if ($user->hasRole('Admin')) {
+            $sites = Site::with('type')->get();
+        } else {
+            $sites = $user->site()->with('type')->get();
         }
-        $sites = Site::with('type')->get();
 
         return Inertia::render('Site/Index', [
             'sites' => $sites,
@@ -65,15 +72,40 @@ class SiteController extends Controller
 
     public function showBySlug($slug): Response
     {
-        $site = Site::where('slug', $slug)->with('type')->firstOrFail();
 
-        return Inertia::render('Site/Show', [
+        $site = Site::where('slug', $slug)->with('type', 'plans.planType')->firstOrFail();
+
+        return Inertia::render('Site/Slug', [
             'site' => $site,
             'types' => Type::all(['id', 'name']),
             'currencies' => CurrencyType::toArray(),
             'documentTypes' => DocumentTypes::toArray(),
             'payments' => Payment::all(),
             'gateways' => PaymentGateway::toOptions(),
+            'required_fields' => $site->required_fields,
+            'plans' => $site->plans,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
+    }
+
+    public function showTransactions($slug): Response
+    {
+
+        $site = Site::where('slug', $slug)->firstOrFail();
+        $site->load('user');
+        $site->load('payments');
+        $payments = $site->payments()->paginate(10);
+        $currencies = CurrencyType::toArray();
+        $types = TypeName::toArray();
+
+        return Inertia::render('Site/Show', [
+            'site' => $site,
+            'currencies' => $currencies,
+            'payments' => $payments,
+            'types' => $types,
         ]);
     }
 
@@ -82,15 +114,17 @@ class SiteController extends Controller
         if (! Auth::user()->can(PermissionSlug::SITES_UPDATE)) {
             abort(403);
         }
-        $site->load('users');
+        $site->load('user');
 
         $types = TypeName::toArray();
         $currencies = CurrencyType::toArray();
+        $field_types = FieldType::toArray();
 
         return Inertia::render('Site/Edit', [
             'site' => $site,
             'types' => $types,
             'currencies' => $currencies,
+            'field_types' => $field_types,
         ]);
     }
 
