@@ -96,7 +96,6 @@ class PaymentController extends Controller
 
         Log::info('Data sent to the payment service:', $paymentData);
 
-
         /** @var PaymentService $paymentService */
         $paymentService = app(PaymentService::class, [
             'payment' => $payment,
@@ -115,7 +114,6 @@ class PaymentController extends Controller
 
         return Inertia::location($response->url);
     }
-
 
     public function show(Payment $payment): Response
     {
