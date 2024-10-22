@@ -79,6 +79,7 @@ class InvoiceController extends Controller
             }
         }
         Log::info('Alert process completed.');
+
         return response()->json(['message' => 'Alerts sent successfully.']);
     }
 }
