@@ -53,8 +53,15 @@ class PaymentService implements PaymentServiceContract
             ->payment($this->payment)
             ->process();
 
+        if ($response->status === 'error') {
+
+            Log::error('Error processing the payment', ['response' => $response]);
+            throw new \Exception('Error processing the payment');
+        }
+
         $this->payment->update([
             'process_identifier' => $response->processIdentifier,
+            'status' => $response->status,
         ]);
 
         return $response;
@@ -64,6 +71,7 @@ class PaymentService implements PaymentServiceContract
     {
         $response = $this->gateway->prepare()
             ->get($this->payment);
+
         Log::info('Payment status response from gateway', [
             'payment_id' => $this->payment->id,
             'response' => $response,

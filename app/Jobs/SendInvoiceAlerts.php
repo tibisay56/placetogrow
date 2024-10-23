@@ -17,20 +17,12 @@ class SendInvoiceAlerts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $invoice;
-
-    protected $user;
-
-    protected $alertType;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Invoice $invoice, $user, $alertType)
+    public function __construct()
     {
-        $this->invoice = $invoice;
-        $this->user = $user;
-        $this->alertType = $alertType;
+        //
     }
 
     /**
@@ -38,15 +30,29 @@ class SendInvoiceAlerts implements ShouldQueue
      */
     public function handle(): void
     {
-        $invoice = $this->invoice;
-        $user = $invoice->user;
+        $invoicesToAlert = Invoice::where('due_date', '<=', now())
+            ->where('status', '!=', 'paid')
+            ->get();
 
-        Log::info("Enviando correo para la factura: {$invoice->reference} al usuario: {$this->user->email}");
+        foreach ($invoicesToAlert as $invoice) {
+            $user = $invoice->user;
+            $alertType = 'overdue';
 
-        if ($this->alertType === 'due_soon') {
-            Mail::to($user->email)->send(new InvoiceDueSoon($user, $invoice->reference, $invoice->amount));
-        } elseif ($this->alertType === 'overdue') {
-            Mail::to($user->email)->send(new InvoiceOverdue($user, $invoice->reference, $invoice->amount));
+            Log::info("Sending email for the invoice: {$invoice->reference} to the user: {$user->email}");
+
+            if ($alertType === 'due_soon') {
+                Mail::to($user->email)->send(new InvoiceDueSoon($user, $invoice->reference, $invoice->amount));
+            } elseif ($alertType === 'overdue') {
+                Mail::to($user->email)->send(new InvoiceOverdue($user, $invoice->reference, $invoice->amount));
+            }
+            $this->invoice->update(['email_sent' => true]);
+            $this->delay(5);
         }
+
+    }
+
+    public function delay(int $seconds)
+    {
+        $this->release($seconds);
     }
 }

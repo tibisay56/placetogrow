@@ -1,11 +1,12 @@
 <script setup>
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { ref, reactive } from "vue";
+import {ref, reactive, computed} from "vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 import Pagination from "@/Components/Pagination.vue";
 import Footer from "@/Components/Footer.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 defineProps({
     canLogin: {
@@ -26,6 +27,16 @@ defineProps({
 
 const page = usePage()
 const sites = ref(page.props.sites || []);
+const selectedType = ref('');
+
+const filteredSites = computed(() => {
+    if (!selectedType.value) return sites.value.data;
+    return sites.value.data.filter(site => site.type.name === selectedType.value);
+});
+
+const filterByType = (type) => {
+    selectedType.value = type;
+};
 
 //Language
 
@@ -57,7 +68,11 @@ const changeLocale = async (item) => {
                     </div>
                     <div class="ms-20 relative max-w-xs">
                         <label class="sr-only">Search</label>
-                        <input type="text" name="hs-table-with-pagination-search" id="hs-table-with-pagination-search" class="py-2 px-3 ps-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Search for items">
+                        <input type="text"
+                               name="hs-table-with-pagination-search"
+                               id="hs-table-with-pagination-search"
+                               class="py-2 px-3 ps-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                               placeholder="Search for items">
                         <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-3">
                             <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
@@ -109,18 +124,37 @@ const changeLocale = async (item) => {
                 </div>
             </header>
             <main class="max-w-full px-6 py-10 sm:px-8 lg:px-10 lg:py-14 mt-10">
+                <div>
+                    <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200 mb-10 text-center">{{ $t('Categories') }}</h2>
+                </div>
+                <!-- Filter Buttons -->
+                <div class="flex space-x-4 mb-4 ml-36">
+                    <button @click="filterByType('donations')" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1 flex items-center">
+                        <font-awesome-icon :icon="['fas', 'hand-holding-heart']"  class="mr-2 text-orange-500"/>
+                        {{ $t('Donations') }}
+                    </button>
+                    <button @click="filterByType('invoicing')" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
+                        <font-awesome-icon :icon="['fas', 'receipt']" class="mr-2 text-orange-500"/>
+                        {{ $t('Invoicing') }}
+                    </button>
+                    <button @click="filterByType('subscriptions')" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
+                        <font-awesome-icon :icon="['far', 'calendar-check']" class="mr-2 text-orange-500"/>
+                        {{ $t('Subscriptions') }}
+                    </button>
+                    <button @click="filterByType('')" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">Reset Filter</button>
+                </div>
 
                 <!-- Clients -->
                 <div class="p-4 bg-white rounded-lg dark:bg-neutral-800 mx-12 lg:mx-12">
                     <!-- Title -->
                     <div>
-                        <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200 mb-20 text-center">{{ $t('Microsites') }}</h2>
+                        <h2 class="text-xl font-semibold md:text-2xl md:leading-tight text-gray-800 dark:text-neutral-200 mb-20 mt-10 text-center">{{ $t('Microsites') }}</h2>
                     </div>
                     <!-- End Title -->
 
                     <!-- Grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 lg:gap-6 mr-20 ml-20 mb-20">
-                        <div v-for="(item, index) in sites.data"  :key="index" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
+                        <div v-for="(item, index) in filteredSites"  :key="index" class="p-4 md:p-7 bg-gray-100 rounded-lg dark:bg-neutral-800 shrink-0 transition hover:-translate-y-1">
                             <a :href="`/dashboard/sites/${encodeURIComponent(item.slug)}`" class="flex flex-col items-center">
                                 <img class="inline-block size-[38px]" :src="`/storage/${item.avatar}`" :alt="item.name"/>
                                 <p class="mt-2 text-center text-sm text-gray-800 dark:text-neutral-200 font-bold">{{ item.name }}</p>

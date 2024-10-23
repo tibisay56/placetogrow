@@ -25,7 +25,6 @@ class SiteFactory extends Factory
             'required_fields' => [],
             'type_id' => $this->faker->randomElement($typeIds),
             'avatar' => $this->generateRandomImage(),
-
         ];
     }
 
