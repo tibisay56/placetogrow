@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Payment;
+use App\Models\Setting;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Notifications\PaymentDueNotification;
@@ -22,11 +23,17 @@ class RetryPaymentJob implements ShouldQueue
 
     protected $subscription;
 
+    protected $retryInterval;
+
+    protected $maxRetries;
+
     protected $attempts;
 
     public function __construct(Subscription $subscription, int $attempts = 0)
     {
         $this->subscription = $subscription;
+        $this->retryInterval = Setting::get('retry_interval', 1);
+        $this->maxRetries = Setting::get('max_retries', 3);
         $this->attempts = $attempts;
     }
 
@@ -65,15 +72,14 @@ class RetryPaymentJob implements ShouldQueue
 
     protected function handleFailedPayment(): void
     {
-        if ($this->attempts < config('payment.max_retries')) {
-
-            $this->subscription->next_retry_at = now()->addDays(config('payment.retry_interval'));
+        if ($this->attempts < $this->maxRetries) {
+            $this->subscription->next_retry_at = now()->addDays($this->retryInterval);
             $this->subscription->save();
 
             Notification::send($this->subscription->user, new PaymentRetryNotification($this->subscription, $this->attempts));
 
-            RetryPaymentJob::dispatch($this->subscription, $this->attempts)
-                ->delay(now()->addDays(config('payment.retry_interval')));
+            RetryPaymentJob::dispatch($this->subscription, $this->attempts + 1)
+                ->delay(now()->addDays($this->retryInterval));
         } else {
             Notification::send($this->subscription->user, new PaymentDueNotification($this->subscription));
 
