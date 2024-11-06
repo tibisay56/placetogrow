@@ -3,9 +3,45 @@
 import {Link, useForm, usePage} from "@inertiajs/vue3";
 import Layout from "@/Components/Layout.vue";
 import dayjs from 'dayjs';
+import {onMounted, ref} from "vue";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const { props } = usePage();
 const invoice = props.invoice;
+const datePaid = ref(invoice.created_at);
+const description = ref(invoice.description);
+const amountPaid = ref(invoice.amount);
+const late_fee = ref(invoice.late_fee);
+const total_amount = ref(invoice.total_amount);
+
+onMounted(() => {
+    const printButton = document.getElementById('printButton');
+    if (printButton) {
+        printButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.print();
+        });
+    }
+});
+
+const generatePDF = () => {
+    const invoiceElement = document.querySelector("#invoice-container");
+
+    html2canvas(invoiceElement, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("invoice.pdf");
+    }).catch(error => {
+        console.error("Error al generar el PDF:", error);
+    });
+};
 
 const formatDate = (date) => {
     return dayjs(date).format('DD/MM/YYYY');
@@ -47,7 +83,7 @@ const formatDate = (date) => {
                                 <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
                                     <div class="sm:w-11/12 lg:w-3/4 mx-auto">
                                         <!-- Card -->
-                                        <div class="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-neutral-800">
+                                        <div id="invoice-container" class="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-neutral-800">
                                             <!-- Grid -->
                                             <div class="flex justify-between">
                                                 <div>
@@ -164,11 +200,11 @@ const formatDate = (date) => {
 
                                         <!-- Buttons -->
                                         <div class="mt-6 flex justify-end gap-x-3">
-                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
+                                            <button @click="generatePDF" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" href="#">
                                                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                                                 {{ $t ('Invoice PDF')}}
-                                            </a>
-                                            <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
+                                            </button>
+                                            <a  id="printButton"  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:bg-orange-600 disabled:opacity-50 disabled:pointer-events-none" href="#">
                                                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                                                 {{ $t ('Print')}}
                                             </a>
