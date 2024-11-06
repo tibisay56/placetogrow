@@ -13,37 +13,27 @@ class RetryPaymentCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:retry-payment {subscriptionId}';
+    protected $signature = 'app:retry-payment';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Retry the payment for a subscription';
+    protected $description = 'Retry the payment for all subscriptions with failed payments';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        $subscriptionId = $this->argument('subscriptionId');
-        $subscription = Subscription::with('invoices')->find($subscriptionId);
 
-        if (! $subscription) {
-            $this->error('Subscription not found.');
+        $subscriptions = Subscription::where('status', 'failed')->get();
 
-            return;
+        foreach ($subscriptions as $subscription) {
+            $job = new RetryPaymentJob($subscription, 0);
+            dispatch($job);
         }
-
-        if (! ($subscription instanceof Subscription)) {
-            $this->error('Expected a Subscription instance.');
-
-            return;
-        }
-
-        $job = new RetryPaymentJob($subscription);
-        $job->handle();
 
         $this->info('Payment retry job executed successfully.');
     }

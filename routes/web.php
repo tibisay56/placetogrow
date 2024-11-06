@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
@@ -126,6 +127,13 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('metrics', [MetricsController::class, 'index'])->name('metrics.index');
     Route::post('metrics', [MetricsController::class, 'store'])->name('metrics.store');
 
+});
+
+//Setting
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('settings', [SettingController::class, 'index'])->name('setting.index');
+    Route::get('settings/{setting}/edit', [SettingController::class, 'edit'])->name('setting.edit');
+    Route::put('settings/{setting}', [SettingController::class, 'update'])->name('setting.update');
 });
 
 //Lang

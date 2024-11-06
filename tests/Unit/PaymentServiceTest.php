@@ -7,6 +7,8 @@ use App\Constants\PaymentGateway as PaymentGateways;
 use App\Contracts\PaymentGateway;
 use App\Contracts\PaymentService as PaymentServiceContract;
 use App\Models\Payment;
+use App\Models\Site;
+use App\Models\Type;
 use App\Services\Gateways\PlacetoPayGateway;
 use App\Services\Payments\PaymentResponse;
 use App\Services\Payments\PaymentService;
@@ -23,7 +25,15 @@ class PaymentServiceTest extends TestCase
     /** @test */
     public function itProcessPaymentSuccessfullyUsingContainer(): void
     {
-        $payment = Payment::factory()->create();
+        $type = Type::factory()->create();
+
+        $site = Site::factory()->create([
+            'type_id' => $type->id,
+        ]);
+
+        $payment = Payment::factory()->create([
+            'site_id' => $site->id,
+        ]);
 
         $data = [
             'name' => 'John',
@@ -34,7 +44,7 @@ class PaymentServiceTest extends TestCase
         ];
 
         $this->app->bind(PaymentGateway::class, fn () => new PlacetoPayGatewayMock(function () {
-            return new PaymentResponse(1, 'https://google.com');
+            return new PaymentResponse(1, 'https://google.com', 'approved');
         }));
 
         /** @var PaymentService $paymentService */
@@ -43,12 +53,21 @@ class PaymentServiceTest extends TestCase
 
         $this->assertEquals(1, $response->processIdentifier);
         $this->assertEquals('https://google.com', $response->url);
+        $this->assertEquals('approved', $response->status);
     }
 
     /** @test */
     public function itProcessPaymentSuccessfullyUsingMocks(): void
     {
-        $payment = Payment::factory()->create();
+        $type = Type::factory()->create();
+
+        $site = Site::factory()->create([
+            'type_id' => $type->id,
+        ]);
+
+        $payment = Payment::factory()->create([
+            'site_id' => $site->id,
+        ]);
 
         $data = [
             'name' => 'John',
@@ -75,7 +94,7 @@ class PaymentServiceTest extends TestCase
             ->willReturnSelf();
 
         $placetopay->method('process')
-            ->willReturn(new PaymentResponse(1, 'https://placetopay.com'));
+            ->willReturn(new PaymentResponse(1, 'https://placetopay.com', 'approved'));
 
         $paymentService = new PaymentService($payment, $placetopay);
         $paymentService->create($data);
@@ -84,7 +103,15 @@ class PaymentServiceTest extends TestCase
     /** @test */
     public function itProcessPaymentSuccessfullyUsingStubs(): void
     {
-        $payment = Payment::factory()->create();
+        $type = Type::factory()->create();
+
+        $site = Site::factory()->create([
+            'type_id' => $type->id,
+        ]);
+
+        $payment = Payment::factory()->create([
+            'site_id' => $site->id,
+        ]);
 
         $data = [
             'name' => 'John',
@@ -106,12 +133,13 @@ class PaymentServiceTest extends TestCase
             ->willReturnSelf();
 
         $placetopay->method('process')
-            ->willReturn(new PaymentResponse(1111, 'https://placetopay.com'));
+            ->willReturn(new PaymentResponse(1111, 'https://placetopay.com', 'approved'));
 
         $paymentService = new PaymentService($payment, $placetopay);
         $response = $paymentService->create($data);
 
         $this->assertEquals(1111, $response->processIdentifier);
         $this->assertEquals('https://placetopay.com', $response->url);
+        $this->assertEquals('approved', $response->status);
     }
 }

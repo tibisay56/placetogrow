@@ -42,7 +42,7 @@ class PaymentController extends Controller
 
         $user = Auth::check() ? Auth::user() : null;
 
-        Log::info('Datos de la solicitud de pago:', $request->all());
+        Log::info('Payment request data:', $request->all());
 
         $payment = new Payment();
         $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
@@ -52,7 +52,7 @@ class PaymentController extends Controller
         $payment->gateway = $request->gateway;
         $payment->status = PaymentStatus::PENDING;
 
-        Log::info('Datos del pago antes de guardar:', [
+        Log::info('Payment data before saving:', [
             'reference' => $payment->reference,
             'description' => $payment->description,
             'amount' => $payment->amount,
@@ -69,20 +69,32 @@ class PaymentController extends Controller
 
         if ($user) {
             $payment->user_id = $user->id;
-            Log::info('Usuario autenticado', ['user_id' => $user->id]);
+            Log::info('Authenticated user', ['user_id' => $user->id]);
         }
 
         $payment->required_fields = $request->required_Fields;
         $payment->site_id = $request->site_id;
 
-        Log::info('Campos requeridos y site_id:', [
+        Log::info('Required fields and site_id:', [
             'required_fields' => $payment->required_fields,
             'site_id' => $payment->site_id,
         ]);
 
         $payment->save();
 
-        Log::info('Pago guardado con éxito', ['payment_id' => $payment->id]);
+        Log::info('Payment saved successfully', ['payment_id' => $payment->id]);
+
+        $paymentData = [
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'document_number' => $request->document_number,
+            'document_type' => $request->document_type,
+            'amount' => $request->amount,
+            'currency' => $request->currency,
+        ];
+
+        Log::info('Data sent to the payment service:', $paymentData);
 
         /** @var PaymentService $paymentService */
         $paymentService = app(PaymentService::class, [
@@ -98,7 +110,7 @@ class PaymentController extends Controller
             'document_type' => $request->document_type,
         ]);
 
-        Log::info('Respuesta del servicio de pagos', ['response' => $response]);
+        Log::info('Response from the payment service', ['response' => $response]);
 
         return Inertia::location($response->url);
     }

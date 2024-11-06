@@ -373,6 +373,7 @@ class SubscriptionController extends Controller
             throw new \Exception('Could not invalidate the token. Please try again later.');
         }
     }
+
     public function paySubscription(Subscription $subscription, Request $request): \Illuminate\Http\JsonResponse
     {
         $user = User::find($subscription->user_id);
@@ -387,6 +388,7 @@ class SubscriptionController extends Controller
             return response()->json(['message' => 'Payment successful']);
         } else {
             RetryPaymentJob::dispatch($subscription);
+
             return response()->json(['message' => 'Payment failed, retrying...']);
         }
     }
@@ -398,6 +400,7 @@ class SubscriptionController extends Controller
         }
 
         RetryPaymentJob::dispatch($subscription);
+
         return response()->json(['message' => 'Retry payment job dispatched']);
     }
 }
